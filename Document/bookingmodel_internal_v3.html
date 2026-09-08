@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BookingModel — Internal Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0D0D0D;--ink2:#1A1A1A;
+  --white:#fff;--bg:#F4F4F4;--bg2:#EBEBEB;
+  --muted:#6B6B6B;--muted2:#9A9A9A;
+  --border:#E0E0E0;--border2:#D0D0D0;
+  --blue:#1A56DB;--blue-l:rgba(26,86,219,.08);
+  --green:#059669;--green-l:rgba(5,150,105,.1);
+  --amber:#B45309;--amber-l:rgba(180,83,9,.1);
+  --red:#B91C1C;--red-l:rgba(185,28,28,.08);
+  --mont:"Montserrat",sans-serif;
+  --sh:0 1px 4px rgba(0,0,0,.08);
+  --sh2:0 4px 20px rgba(0,0,0,.12);
+}
+html,body{height:100%;font-family:var(--mont);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999}
+.lbox{background:var(--white);border-radius:12px;padding:36px 32px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.lbox-logo{font-size:20px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.lbox-logo em{color:var(--blue)}
+.lbox-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+.lbox-tabs{display:flex;gap:6px;margin-bottom:20px}
+.ltab{flex:1;padding:8px;border:1.5px solid var(--border);border-radius:6px;background:transparent;font-family:var(--mont);font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s}
+.ltab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lfg{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.lfg label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted2)}
+.lfg input{padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:13.5px;font-family:var(--mont);outline:none;transition:border .15s}
+.lfg input:focus{border-color:var(--blue)}
+.lbtn{width:100%;background:var(--blue);color:#fff;border:none;padding:11px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--mont);margin-top:4px;transition:all .15s}
+.lbtn:hover{background:#1546C0}
+.lhint{font-size:11.5px;color:var(--muted2);text-align:center;margin-top:10px}
+.lerr{font-size:12px;color:var(--red);text-align:center;margin-top:6px;display:none}
+
+/* ── APP SHELL ── */
+#app{display:none;height:100%;flex-direction:column}
+#app.show{display:flex}
+
+/* ── TOPBAR ── */
+#topbar{height:56px;background:var(--ink);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08)}
+.tb-logo{font-size:16px;font-weight:800;color:#fff;white-space:nowrap}
+.tb-logo em{color:var(--blue)}
+.tb-badge{background:var(--blue);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.3px;vertical-align:middle;margin-left:5px}
+.tb-view{display:flex;align-items:center;gap:6px;margin-left:16px;border-left:1px solid rgba(255,255,255,.12);padding-left:16px}
+.tb-view span{font-size:11px;color:rgba(255,255,255,.45)}
+.view-btn{padding:5px 12px;border-radius:5px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);font-family:var(--mont);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s}
+.view-btn.on{background:#fff;color:var(--ink);border-color:#fff}
+.tb-spacer{flex:1}
+.tb-user{display:flex;align-items:center;gap:10px}
+.tb-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff}
+.tb-uname{font-size:13px;color:rgba(255,255,255,.85);font-weight:600}
+.tb-act{padding:5px 12px;border-radius:5px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.65);font-family:var(--mont);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tb-act:hover{border-color:rgba(255,255,255,.5);color:#fff}
+
+/* ── BODY LAYOUT ── */
+#body{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sb-section{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted2);padding:16px 16px 6px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;border:none;background:transparent;width:100%;text-align:left;font-family:var(--mont);font-size:13px;font-weight:500;color:var(--muted);border-left:3px solid transparent}
+.sb-item:hover{background:var(--bg);color:var(--ink)}
+.sb-item.on{background:var(--blue-l);color:var(--blue);border-left-color:var(--blue);font-weight:700}
+.sb-ico{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:10px}
+.sb-badge.blue{background:var(--blue-l);color:var(--blue)}
+.sb-badge.amber{background:var(--amber-l);color:var(--amber)}
+.sb-badge.green{background:var(--green-l);color:var(--green)}
+.sb-sep{height:1px;background:var(--border);margin:8px 16px}
+
+/* ── MAIN CONTENT ── */
+#main{flex:1;overflow-y:auto;padding:28px 32px}
+.page-section{display:none}.page-section.on{display:block}
+.pg-title{font-size:22px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.pg-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px 22px;box-shadow:var(--sh)}
+.card-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2);margin-bottom:14px}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px 20px;box-shadow:var(--sh)}
+.sc-n{font-size:28px;font-weight:800;color:var(--ink);margin-bottom:4px;letter-spacing:-1px}
+.sc-l{font-size:12px;color:var(--muted);margin-bottom:4px}
+.sc-d{font-size:11.5px;font-weight:600;color:var(--green)}
+.sc-d.amber{color:var(--amber)}
+.sc-d.blue{color:var(--blue)}
+
+/* ── QUICK ACTION CARDS ── */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.qa-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;transition:all .18s;box-shadow:var(--sh)}
+.qa-card:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(26,86,219,.12);transform:translateY(-1px)}
+.qa-ico{font-size:24px;margin-bottom:10px}
+.qa-label{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.qa-sub{font-size:12px;color:var(--muted)}
+
+/* ── TABLE ── */
+.tbl-wrap{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--sh);margin-bottom:20px}
+.tbl-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+.tbl-title{font-size:14px;font-weight:700;color:var(--ink)}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 14px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2);text-align:left;border-bottom:1px solid var(--border);background:var(--bg)}
+td{padding:11px 14px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--border2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+
+/* ── STATUS BADGES ── */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 9px;border-radius:4px;text-transform:uppercase;letter-spacing:.3px}
+.badge-green{background:var(--green-l);color:var(--green)}
+.badge-amber{background:var(--amber-l);color:var(--amber)}
+.badge-blue{background:var(--blue-l);color:var(--blue)}
+.badge-red{background:var(--red-l);color:var(--red)}
+.badge-gray{background:var(--bg2);color:var(--muted)}
+
+/* ── BUTTONS ── */
+.btn{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--mont);transition:all .15s;border:none}
+.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:#1546C0}
+.btn-ghost{background:transparent;border:1.5px solid var(--border2);color:var(--ink)}.btn-ghost:hover{border-color:var(--ink)}
+.btn-danger{background:transparent;border:1.5px solid var(--red);color:var(--red)}.btn-danger:hover{background:var(--red-l)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:#047857}
+.btn-sm{padding:4px 11px;font-size:11.5px}
+.btn-xs{padding:3px 9px;font-size:11px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── CREATOR CARDS ── */
+.creator-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.creator-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--sh);transition:all .18s;cursor:pointer}
+.creator-card:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(26,86,219,.1);transform:translateY(-1px)}
+.cc-photo{height:140px;background:var(--bg);position:relative;overflow:hidden}
+.cc-photo img{width:100%;height:100%;object-fit:cover;object-position:top}
+.cc-photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 60%)}
+.cc-platform{position:absolute;bottom:8px;left:9px;font-size:10px;font-weight:700;color:#fff;background:rgba(26,86,219,.85);padding:2px 8px;border-radius:4px}
+.cc-avail{position:absolute;bottom:8px;right:9px;font-size:10px;font-weight:700;color:#fff;background:rgba(5,150,105,.85);padding:2px 8px;border-radius:4px}
+.cc-body{padding:12px 14px}
+.cc-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.cc-handle{font-size:11.5px;color:var(--muted2);margin-bottom:6px}
+.cc-niche{font-size:11px;color:var(--muted);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-stats{display:flex;gap:8px;margin-bottom:10px}
+.cc-stat{flex:1;background:var(--bg);border-radius:5px;padding:5px 7px;text-align:center}
+.cc-stat-n{font-size:12.5px;font-weight:700;color:var(--ink)}
+.cc-stat-l{font-size:9.5px;color:var(--muted2)}
+.cc-contact{font-size:11.5px;color:var(--ink);padding:6px 8px;background:var(--blue-l);border-radius:5px;margin-bottom:8px;word-break:break-all;border:1px solid rgba(26,86,219,.15)}
+.cc-actions{display:flex;gap:6px}
+
+/* ── FORM ELEMENTS ── */
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:13px}
+.fg label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted2)}
+.fg input,.fg select,.fg textarea{padding:8px 11px;border:1.5px solid var(--border);border-radius:6px;font-size:13.5px;font-family:var(--mont);outline:none;transition:border .15s;background:var(--white)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue)}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── DEAL / APPLICANT CARDS ── */
+.deal-row td:first-child{font-family:monospace;color:var(--blue);font-weight:700}
+.app-card{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:15px 17px;display:grid;grid-template-columns:50px 1fr auto;gap:13px;align-items:start;margin-bottom:10px;box-shadow:var(--sh)}
+.app-ava{width:50px;height:50px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--muted);overflow:hidden;flex-shrink:0}
+.app-ava img{width:100%;height:100%;object-fit:cover;object-position:top}
+
+/* ── IMPORT ── */
+.drop-zone{border:2px dashed var(--border2);border-radius:8px;padding:28px;text-align:center;background:var(--bg);cursor:pointer;transition:all .2s}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--blue);background:var(--blue-l)}
+.drop-ico{font-size:32px;margin-bottom:10px}
+
+/* ── SEARCH / FILTER BAR ── */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-bar input{padding:7px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--mont);outline:none;flex:1;min-width:180px;max-width:280px}
+.filter-bar input:focus{border-color:var(--blue)}
+.filter-bar select{padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--mont);outline:none;background:var(--white)}
+.pill-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.pill{padding:5px 13px;border:1.5px solid var(--border2);border-radius:20px;background:transparent;font-size:12.5px;color:var(--muted);cursor:pointer;font-family:var(--mont);font-weight:500;transition:all .15s}
+.pill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ── BRIEF BUILDER ── */
+.brief-grid{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:start}
+.brief-sidebar{position:sticky;top:0}
+.brief-preview{background:var(--ink);color:#fff;border-radius:10px;padding:18px;font-size:12.5px;line-height:1.8}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:800;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex}
+.modal-box{background:var(--white);border-radius:14px;width:100%;max-width:680px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-hd{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1}
+.modal-title{font-size:16px;font-weight:800;color:var(--ink)}
+.modal-close{background:transparent;border:none;font-size:18px;cursor:pointer;color:var(--muted);font-family:var(--mont);line-height:1}
+.modal-body{padding:22px}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:var(--white)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;display:none;align-items:center;gap:10px;box-shadow:var(--sh2);border-bottom:3px solid var(--blue);white-space:nowrap}
+#toast.show{display:flex}
+
+/* ── PLAN CARDS ── */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.plan-card{border:2px solid var(--border);border-radius:12px;padding:24px;position:relative}
+.plan-card.current{border-color:var(--blue)}
+.plan-current-badge{position:absolute;top:-10px;right:14px;background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:10px}
+.plan-price{font-size:32px;font-weight:800;color:var(--ink);letter-spacing:-1px;margin:8px 0 4px}
+.plan-price span{font-size:14px;font-weight:500;color:var(--muted)}
+.plan-feature{font-size:12.5px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:7px}
+.plan-feature::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- ════ LOGIN SCREEN ════ -->
+<div id="login-screen">
+  <div class="lbox">
+    <div class="lbox-logo">Booking<em>Model</em> <span style="font-size:11px;font-weight:500;color:var(--muted)">Internal</span></div>
+    <div class="lbox-sub">VEA Group — Brand & Admin Access</div>
+    <div class="lbox-tabs">
+      <button class="ltab on" onclick="setLoginRole('brand',this)" id="ltab-brand">🏢 Brand</button>
+      <button class="ltab" onclick="setLoginRole('admin',this)" id="ltab-admin">⚙️ Admin</button>
+    </div>
+    <div class="lfg"><label>Email</label>
+      <input type="email" id="l-email" placeholder="brand@company.com or admin@bookingmodel.com" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="lfg"><label>Password</label>
+      <input type="password" id="l-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="lhint" id="l-hint" style="margin-bottom:8px;color:#9A9A9A;font-size:11.5px">Demo — Brand: admin@demo.com / 123456 &nbsp;|&nbsp; Admin: admin@bookingmodel.com / Admin@BM2026</div>
+    <button class="lbtn" onclick="doLogin()">Sign in →</button>
+    <div class="lerr" id="l-err">Incorrect credentials. Check hint above.</div>
+  </div>
+</div>
+
+<!-- ════ APP SHELL ════ -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div class="tb-logo">Booking<em>Model</em><span class="tb-badge" id="tb-plan-badge">PRO</span></div>
+    <div class="tb-view" id="tb-view-toggle">
+      <span>View as:</span>
+      <button class="view-btn on" id="vbtn-brand" onclick="switchView('brand',this)">Brand</button>
+      <button class="view-btn" id="vbtn-admin" onclick="switchView('admin',this)">Admin</button>
+    </div>
+    <div class="tb-spacer"></div>
+    <div class="tb-user">
+      <div class="tb-avatar" id="tb-avatar">L</div>
+      <div class="tb-uname" id="tb-uname">LuminaSkin</div>
+      <button class="tb-act" onclick="window.open('bookingmodel_public_v3_final.html','_blank')">Public site</button>
+      <button class="tb-act" onclick="doLogout()">Sign out</button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- MAIN -->
+    <div id="main">
+
+      <!-- ══ BRAND: DASHBOARD ══ -->
+      <div class="page-section on" id="sec-b-dashboard">
+        <div class="pg-title">Dashboard</div>
+        <div class="pg-sub" id="b-dash-sub">Welcome back, LuminaSkin. Here is your campaign overview.</div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="sc-n">3</div><div class="sc-l">Active campaigns</div><div class="sc-d">+1 this month</div></div>
+          <div class="stat-card"><div class="sc-n">24</div><div class="sc-l">Creators booked total</div><div class="sc-d">+8 this month</div></div>
+          <div class="stat-card"><div class="sc-n">$2,880</div><div class="sc-l">Campaign spend this month</div><div class="sc-d blue">On budget</div></div>
+          <div class="stat-card"><div class="sc-n" id="b-contacts-today">6/10</div><div class="sc-l">Creator contacts used today</div><div class="sc-d amber">Resets at midnight EST</div></div>
+        </div>
+        <div class="qa-grid">
+          <div class="qa-card" onclick="showSec('b-creators')"><div class="qa-ico">👥</div><div class="qa-label">Browse Creators</div><div class="qa-sub">Search 40 vetted creators</div></div>
+          <div class="qa-card" onclick="showSec('b-campaigns')"><div class="qa-ico">🚀</div><div class="qa-label">My Campaigns</div><div class="qa-sub">3 active</div></div>
+          <div class="qa-card" onclick="showSec('b-brief')"><div class="qa-ico">✏️</div><div class="qa-label">New Campaign Brief</div><div class="qa-sub">Launch a campaign</div></div>
+          <div class="qa-card" onclick="showSec('b-plan')"><div class="qa-ico">💳</div><div class="qa-label">My Plan</div><div class="qa-sub">Upgrade or manage</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><span class="tbl-title">Recent campaigns</span><button class="btn btn-ghost btn-sm" onclick="showSec('b-campaigns')">View all</button></div>
+          <table>
+            <thead><tr><th>Campaign</th><th>Platform</th><th>Creators</th><th>Spend</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><strong>Skincare UGC Batch Q3</strong><br><span style="font-size:11px;color:var(--muted)">Testimonial · 30sec</span></td><td>TikTok + Meta</td><td>4 / 8</td><td>$960</td><td><span class="badge badge-blue">Active</span></td><td><button class="btn btn-ghost btn-xs" onclick="showSec('b-campaigns')">Manage</button></td></tr>
+              <tr><td><strong>Summer Lookbook</strong><br><span style="font-size:11px;color:var(--muted)">Lifestyle · 60sec</span></td><td>Instagram</td><td>6 / 6</td><td>$1,440</td><td><span class="badge badge-green">Completed</span></td><td><button class="btn btn-ghost btn-xs" onclick="showSec('b-campaigns')">View</button></td></tr>
+              <tr><td><strong>Fall Product Launch</strong><br><span style="font-size:11px;color:var(--muted)">UGC Unboxing</span></td><td>TikTok</td><td>0 / 5</td><td>—</td><td><span class="badge badge-amber">Draft</span></td><td><button class="btn btn-ghost btn-xs" onclick="showSec('b-brief')">Edit brief</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ BRAND: BROWSE CREATORS ══ -->
+      <div class="page-section" id="sec-b-creators">
+        <div class="pg-title">Browse Creators</div>
+        <div class="pg-sub">40 vetted KOL/KOC — contact info included with your plan</div>
+        <div class="filter-bar">
+          <input placeholder="Search name, niche, handle..." id="b-creator-search" oninput="renderBrandCreators()">
+          <select onchange="renderBrandCreators()" id="b-creator-platform">
+            <option value="">All platforms</option><option>TikTok</option><option>YouTube</option><option>Instagram</option><option>Facebook</option>
+          </select>
+          <select onchange="renderBrandCreators()" id="b-creator-sort">
+            <option value="er">Sort: Highest ER</option><option value="audience">Sort: Most Followers</option><option value="rate">Sort: Lowest Rate</option>
+          </select>
+        </div>
+        <div class="creator-grid" id="b-creator-grid"></div>
+      </div>
+
+      <!-- ══ BRAND: CAMPAIGNS ══ -->
+      <div class="page-section" id="sec-b-campaigns">
+        <div class="pg-title">My Campaigns</div>
+        <div class="pg-sub">Track your active and past campaigns</div>
+        <div class="btn-row" style="margin-bottom:16px"><button class="btn btn-primary" onclick="showSec('b-brief')">+ New Campaign</button></div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><span class="tbl-title">All campaigns</span></div>
+          <table>
+            <thead><tr><th>Campaign</th><th>Platform</th><th>Creators</th><th>Budget</th><th>Spend</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><strong>Skincare UGC Batch Q3</strong><br><small style="color:var(--muted)">Testimonial · 30sec · TikTok + Meta</small></td><td>TikTok + Meta</td><td>4 / 8</td><td>$2,400</td><td>$960</td><td><span class="badge badge-blue">Active</span></td><td><button class="btn btn-ghost btn-xs" onclick="showCampDetail('Skincare UGC Batch Q3')">Manage</button></td></tr>
+              <tr><td><strong>Summer Lookbook</strong><br><small style="color:var(--muted)">Lifestyle · 60sec · Instagram</small></td><td>Instagram</td><td>6 / 6</td><td>$1,800</td><td>$1,440</td><td><span class="badge badge-green">Completed</span></td><td><button class="btn btn-ghost btn-xs" onclick="showCampDetail('Summer Lookbook')">View</button></td></tr>
+              <tr><td><strong>Fall Product Launch</strong><br><small style="color:var(--muted)">UGC Unboxing · TikTok</small></td><td>TikTok</td><td>0 / 5</td><td>$1,200</td><td>—</td><td><span class="badge badge-amber">Draft</span></td><td><button class="btn btn-ghost btn-xs" onclick="showSec('b-brief')">Edit brief</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ BRAND: BRIEF BUILDER ══ -->
+      <div class="page-section" id="sec-b-brief">
+        <div class="pg-title">New Campaign Brief</div>
+        <div class="pg-sub">Fill in your requirements — we'll match the right creators</div>
+        <div class="brief-grid">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-title">Campaign Details</div>
+              <div class="fg"><label>Campaign name *</label><input id="bf-name" placeholder="e.g. Summer Skincare UGC Q3"></div>
+              <div class="fg-row">
+                <div class="fg"><label>Category *</label>
+                  <select id="bf-cat"><option>Beauty</option><option>Fitness</option><option>Food & Bev</option><option>Tech</option><option>Fashion</option><option>Lifestyle</option></select>
+                </div>
+                <div class="fg"><label>Content type *</label>
+                  <select id="bf-type"><option>UGC Video</option><option>Testimonial</option><option>Unboxing</option><option>Recipe Integration</option><option>Review</option><option>Lifestyle Integration</option></select>
+                </div>
+              </div>
+              <div class="fg-row">
+                <div class="fg"><label>Platform *</label>
+                  <select id="bf-platform"><option>TikTok</option><option>Instagram Reels</option><option>YouTube Shorts</option><option>TikTok + Meta</option><option>All platforms</option></select>
+                </div>
+                <div class="fg"><label>Video length</label>
+                  <select id="bf-length"><option>15-30 sec</option><option>30-60 sec</option><option>60-90 sec</option><option>2-5 min</option></select>
+                </div>
+              </div>
+              <div class="fg-row">
+                <div class="fg"><label>Creator spots</label><input type="number" id="bf-spots" value="5" min="1"></div>
+                <div class="fg"><label>Budget per creator (USD)</label><input type="number" id="bf-rate" placeholder="e.g. 200"></div>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-title">Creator Requirements</div>
+              <div class="fg"><label>Min. followers</label>
+                <select id="bf-minfollow"><option value="">Any</option><option>10K+</option><option>50K+</option><option>100K+</option><option>500K+</option></select>
+              </div>
+              <div class="fg"><label>Min. engagement rate</label>
+                <select id="bf-miner"><option value="">Any</option><option>5%+</option><option>7%+</option><option>10%+</option></select>
+              </div>
+              <div class="fg"><label>Preferred platforms</label>
+                <select id="bf-prefplat"><option value="">No preference</option><option>TikTok only</option><option>YouTube only</option><option>Instagram only</option></select>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Brief / Instructions</div>
+              <div class="fg"><label>Campaign brief *</label><textarea id="bf-brief" rows="5" placeholder="Describe what the content should cover, key messages, do's and don'ts, brand voice..."></textarea></div>
+              <div class="fg"><label>Key talking points (one per line)</label><textarea id="bf-points" rows="3" placeholder="- Highlight the new SPF formula&#10;- Mention the scent-free formula&#10;- Include promo code SUMMER20"></textarea></div>
+              <div class="btn-row" style="margin-top:4px">
+                <button class="btn btn-primary" onclick="submitBrief()">Submit Campaign Brief →</button>
+                <button class="btn btn-ghost" onclick="saveDraftBrief()">Save Draft</button>
+              </div>
+            </div>
+          </div>
+          <div class="brief-sidebar">
+            <div class="brief-preview">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.4);margin-bottom:10px">Brief Preview</div>
+              <div id="bf-preview-content" style="color:rgba(255,255,255,.85);font-size:13px;line-height:1.8">Fill in the form to preview your brief...</div>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <div class="card-title">Matching Creators</div>
+              <div id="bf-matches" style="font-size:13px;color:var(--muted)">Complete the brief to see creator matches.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BRAND: PLAN ══ -->
+      <div class="page-section" id="sec-b-plan">
+        <div class="pg-title">My Plan</div>
+        <div class="pg-sub">Manage your subscription and usage</div>
+        <div style="background:var(--blue-l);border:1px solid rgba(26,86,219,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px">
+          <div style="font-size:28px">💳</div>
+          <div><div style="font-size:14px;font-weight:700;color:var(--blue)">You are on the <strong>Pro Plan</strong> — $149/month</div><div style="font-size:12.5px;color:var(--muted);margin-top:2px">Next billing: September 15, 2026 · Unlimited creator contacts · Priority support</div></div>
+          <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="showToast('Subscription management — available in production')">Manage billing</button>
+        </div>
+        <div class="plan-grid">
+          <div class="plan-card">
+            <div style="font-size:13px;font-weight:700;color:var(--muted)">Free</div>
+            <div class="plan-price">$0<span>/mo</span></div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Browse only</div>
+            <div class="plan-feature">Browse creator profiles</div>
+            <div class="plan-feature">See follower counts & ER</div>
+            <div style="font-size:12.5px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:7px"><span style="color:var(--red)">✕</span> Contact info locked</div>
+            <div style="font-size:12.5px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:7px"><span style="color:var(--red)">✕</span> Brief builder</div>
+          </div>
+          <div class="plan-card">
+            <div style="font-size:13px;font-weight:700;color:var(--muted)">Standard</div>
+            <div class="plan-price">$49<span>/mo</span></div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Growing brands</div>
+            <div class="plan-feature">10 contact reveals/day</div>
+            <div class="plan-feature">Brief builder</div>
+            <div class="plan-feature">Campaign tracking</div>
+            <div style="font-size:12.5px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:7px"><span style="color:var(--red)">✕</span> Unlimited contacts</div>
+            <button class="btn btn-ghost" style="width:100%;margin-top:14px" onclick="showToast('Upgrade — available in production')">Upgrade</button>
+          </div>
+          <div class="plan-card current">
+            <div class="plan-current-badge">CURRENT</div>
+            <div style="font-size:13px;font-weight:700;color:var(--blue)">Pro</div>
+            <div class="plan-price">$149<span>/mo</span></div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Agencies & power users</div>
+            <div class="plan-feature">Unlimited contact reveals</div>
+            <div class="plan-feature">Brief builder</div>
+            <div class="plan-feature">Deal tracking</div>
+            <div class="plan-feature">Priority support</div>
+            <div class="plan-feature">API access (coming soon)</div>
+            <button class="btn btn-ghost" style="width:100%;margin-top:14px" onclick="showToast('You are already on Pro!')">Current plan</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ADMIN: DASHBOARD ══ -->
+      <div class="page-section" id="sec-a-dashboard">
+        <div class="pg-title">Admin Dashboard</div>
+        <div class="pg-sub">Full platform overview — VEA Group internal</div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="sc-n" id="a-stat-creators">40</div><div class="sc-l">Vetted creators in DB</div><div class="sc-d">+3 this month</div></div>
+          <div class="stat-card"><div class="sc-n">34</div><div class="sc-l">KOL/KOC applicants</div><div class="sc-d amber">21 pending review</div></div>
+          <div class="stat-card"><div class="sc-n">$12,840</div><div class="sc-l">Total active deal value</div><div class="sc-d">+$2,400 this month</div></div>
+          <div class="stat-card"><div class="sc-n">8</div><div class="sc-l">Partnership requests</div><div class="sc-d amber">3 need response</div></div>
+        </div>
+        <div class="qa-grid">
+          <div class="qa-card" onclick="showSec('a-creators')"><div class="qa-ico">👥</div><div class="qa-label">All Creators</div><div class="qa-sub">View & manage DB</div></div>
+          <div class="qa-card" onclick="showSec('a-import')"><div class="qa-ico">⬆️</div><div class="qa-label">Import Excel</div><div class="qa-sub">Sync creator data</div></div>
+          <div class="qa-card" onclick="showSec('a-applicants')"><div class="qa-ico">📋</div><div class="qa-label">Applicants</div><div class="qa-sub">21 pending</div></div>
+          <div class="qa-card" onclick="showSec('a-deals')"><div class="qa-ico">💼</div><div class="qa-label">Booking Deals</div><div class="qa-sub">12 active deals</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><span class="tbl-title">Recent booking deals</span><button class="btn btn-ghost btn-sm" onclick="showSec('a-deals')">View all</button></div>
+          <table>
+            <thead><tr><th>Deal ID</th><th>Creator</th><th>Brand</th><th>Value</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="deal-row">BM-2026-004</td><td>Keith Lee</td><td>DoorDash</td><td>$2,500</td><td><span class="badge badge-amber">Negotiating</span></td></tr>
+              <tr><td class="deal-row">BM-2026-003</td><td>Nara Smith</td><td>KitchenAid</td><td>$1,200</td><td><span class="badge badge-blue">Brief Sent</span></td></tr>
+              <tr><td class="deal-row">BM-2026-002</td><td>Joshua Weissman</td><td>ButcherBox</td><td>$850</td><td><span class="badge badge-blue">In Progress</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ ADMIN: ALL CREATORS ══ -->
+      <div class="page-section" id="sec-a-creators">
+        <div class="pg-title">All Creators</div>
+        <div class="pg-sub" id="a-creators-sub">Full creator database — all contact info visible</div>
+        <div class="filter-bar">
+          <input placeholder="Search name, handle, niche..." id="a-cr-search" oninput="renderAdminCreators()">
+          <select onchange="renderAdminCreators()" id="a-cr-platform">
+            <option value="">All platforms</option><option>TikTok</option><option>YouTube</option><option>Instagram</option><option>Facebook</option>
+          </select>
+          <select onchange="renderAdminCreators()" id="a-cr-status">
+            <option value="">All statuses</option><option value="active">Active</option><option value="pending">Pending</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="showSec('a-import')">+ Import Excel</button>
+        </div>
+        <div class="creator-grid" id="a-creator-grid"></div>
+      </div>
+
+      <!-- ══ ADMIN: IMPORT / EXCEL SYNC ══ -->
+      <div class="page-section" id="sec-a-import">
+        <div class="pg-title">Import / Excel Sync</div>
+        <div class="pg-sub">Upload Excel hoặc CSV để đồng bộ creator data — hỗ trợ photo_url và video_url</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-title">Upload File</div>
+              <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+                <div class="drop-ico">📂</div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:4px">Drop file here or click to browse</div>
+                <div style="font-size:12px;color:var(--muted)">Supports .csv · .xlsx · .xls · .tsv</div>
+                <div id="drop-filename" style="margin-top:8px;font-size:12.5px;color:var(--blue);font-weight:600"></div>
+              </div>
+              <input type="file" id="file-input" accept=".csv,.xlsx,.xls,.tsv" style="display:none" onchange="handleFileSelect(this)">
+              <div style="margin-top:12px;display:flex;gap:8px">
+                <button class="btn btn-primary" onclick="processImport()" id="import-btn" disabled>Preview Import</button>
+                <button class="btn btn-ghost" onclick="downloadTemplate()">Download Template</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Required Columns</div>
+              <div style="font-size:12px;color:var(--muted);background:var(--bg);padding:10px 13px;border-radius:6px;font-family:monospace;line-height:2">
+                name · handle · platform · channel_url<br>
+                audience · er · rate · niche · contact<br>
+                notes · photo_url · video_url
+              </div>
+              <div style="margin-top:10px;font-size:12px;color:var(--muted)">
+                <strong>photo_url:</strong> Direct image link → displayed in creator cards<br>
+                <strong>video_url:</strong> YouTube URL → embedded in portfolio modal
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-title">Previous Imports</div>
+              <table>
+                <thead><tr><th>File</th><th>Rows</th><th>Imported</th><th>Date</th></tr></thead>
+                <tbody id="import-history">
+                  <tr><td>manual_bd_aug.csv</td><td>40</td><td>38</td><td>15 Aug 2026</td></tr>
+                  <tr><td>tiktok_crawl_q3.csv</td><td>120</td><td>89</td><td>01 Aug 2026</td></tr>
+                </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+        <!-- Preview table (shown after file select) -->
+        <div id="import-preview-wrap" style="display:none;margin-top:16px">
+          <div class="tbl-wrap">
+            <div class="tbl-head">
+              <span class="tbl-title" id="import-preview-title">Preview</span>
+              <div class="btn-row">
+                <button class="btn btn-primary" onclick="confirmImport()">Confirm Import</button>
+                <button class="btn btn-ghost" onclick="cancelImport()">Cancel</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><table id="import-preview-table"></table></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ADMIN: KOL/KOC APPLICANTS ══ -->
+      <div class="page-section" id="sec-a-applicants">
+        <div class="pg-title">KOL/KOC Applicants</div>
+        <div class="pg-sub">Danh sách đăng ký từ form public — review và approve để tạo creator profile</div>
+        <div class="pill-bar">
+          <button class="pill on" onclick="filterApplicants(this,'all')">All (34)</button>
+          <button class="pill" onclick="filterApplicants(this,'pending')">Pending (21)</button>
+          <button class="pill" onclick="filterApplicants(this,'approved')">Approved (8)</button>
+          <button class="pill" onclick="filterApplicants(this,'rejected')">Rejected (5)</button>
+        </div>
+        <div id="applicants-container"></div>
+      </div>
+
+      <!-- ══ ADMIN: BOOKING DEALS ══ -->
+      <div class="page-section" id="sec-a-deals">
+        <div class="pg-title">Booking Deals</div>
+        <div class="pg-sub">Theo dõi toàn bộ deal booking KOL/KOC — từ brief đến payment release</div>
+        <div class="stat-grid" style="margin-bottom:16px">
+          <div class="stat-card"><div class="sc-n">$12,840</div><div class="sc-l">Total active deal value</div></div>
+          <div class="stat-card"><div class="sc-n">12</div><div class="sc-l">Deals this month</div></div>
+          <div class="stat-card"><div class="sc-n">$1,070</div><div class="sc-l">Avg deal size</div></div>
+          <div class="stat-card"><div class="sc-n">15%</div><div class="sc-l">BookingModel fee</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><span class="tbl-title">Active & Recent Deals</span><button class="btn btn-primary btn-sm" onclick="openNewDealModal()">+ New Deal</button></div>
+          <table>
+            <thead><tr><th>Deal ID</th><th>Creator</th><th>Brand</th><th>Content</th><th>Value</th><th>Status</th><th>Due</th><th></th></tr></thead>
+            <tbody id="deals-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ ADMIN: PARTNERSHIP REQUESTS ══ -->
+      <div class="page-section" id="sec-a-hoptac">
+        <div class="pg-title">Partnership Requests</div>
+        <div class="pg-sub">Yêu cầu hợp tác từ form public — bao gồm leads từ VEA Group site</div>
+        <div class="pill-bar">
+          <button class="pill on" onclick="filterHoptac(this,'all')">All</button>
+          <button class="pill" onclick="filterHoptac(this,'new')">New</button>
+          <button class="pill" onclick="filterHoptac(this,'in_discussion')">In Discussion</button>
+          <button class="pill" onclick="filterHoptac(this,'converted')">Converted</button>
+        </div>
+        <div id="hoptac-container"></div>
+      </div>
+
+      <!-- ══ ADMIN: CAMPAIGNS ══ -->
+      <div class="page-section" id="sec-a-campaigns">
+        <div class="pg-title">All Campaigns</div>
+        <div class="pg-sub">All brand campaigns across the platform</div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><span class="tbl-title">Campaigns</span><button class="btn btn-primary btn-sm" onclick="showSec('a-brief')">+ New Campaign</button></div>
+          <table>
+            <thead><tr><th>Campaign</th><th>Brand</th><th>Platform</th><th>Creators</th><th>Budget</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><strong>Skincare UGC Batch Q3</strong></td><td>LuminaSkin</td><td>TikTok + Meta</td><td>4/8</td><td>$2,400</td><td><span class="badge badge-blue">Active</span></td><td><button class="btn btn-ghost btn-xs" onclick="showToast('Campaign detail — production feature')">View</button></td></tr>
+              <tr><td><strong>ButcherBox Recipe Series</strong></td><td>ButcherBox</td><td>YouTube</td><td>2/4</td><td>$3,200</td><td><span class="badge badge-blue">Active</span></td><td><button class="btn btn-ghost btn-xs" onclick="showToast('Campaign detail — production feature')">View</button></td></tr>
+              <tr><td><strong>DoorDash Food Reviews</strong></td><td>DoorDash</td><td>TikTok</td><td>1/3</td><td>$7,500</td><td><span class="badge badge-amber">Negotiating</span></td><td><button class="btn btn-ghost btn-xs" onclick="showToast('Campaign detail — production feature')">View</button></td></tr>
+              <tr><td><strong>Summer Lookbook</strong></td><td>LuminaSkin</td><td>Instagram</td><td>6/6</td><td>$1,800</td><td><span class="badge badge-green">Completed</span></td><td><button class="btn btn-ghost btn-xs" onclick="showToast('Campaign detail — production feature')">View</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ ADMIN: CAMPAIGN BUILDER ══ -->
+      <div class="page-section" id="sec-a-brief">
+        <div class="pg-title">Campaign Builder</div>
+        <div class="pg-sub">Create and publish a new open campaign</div>
+        <div class="brief-grid">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-title">Campaign Details</div>
+              <div class="fg"><label>Brand</label><select id="abf-brand"><option>LuminaSkin</option><option>ButcherBox</option><option>DoorDash</option><option>KitchenAid</option><option>HelloFresh</option><option>New Brand...</option></select></div>
+              <div class="fg"><label>Campaign title</label><input id="abf-title" placeholder="Skincare UGC — 30sec testimonial video"></div>
+              <div class="fg-row">
+                <div class="fg"><label>Category</label><select id="abf-cat"><option>Beauty</option><option>Fitness</option><option>Food</option><option>Tech</option><option>Fashion</option></select></div>
+                <div class="fg"><label>Content type</label><select id="abf-type"><option>UGC Video</option><option>Testimonial</option><option>Unboxing</option><option>Recipe Integration</option></select></div>
+              </div>
+              <div class="fg-row">
+                <div class="fg"><label>Platform</label><select id="abf-platform"><option>TikTok</option><option>Instagram</option><option>YouTube</option><option>TikTok + Meta</option></select></div>
+                <div class="fg"><label>Creator spots</label><input type="number" id="abf-spots" value="8"></div>
+              </div>
+              <div class="fg"><label>Budget per creator (USD)</label><input type="number" id="abf-rate" placeholder="300"></div>
+              <div class="fg"><label>Campaign brief</label><textarea id="abf-brief" rows="5" placeholder="Describe requirements, key messages, do's & don'ts..."></textarea></div>
+              <div class="btn-row">
+                <button class="btn btn-primary" onclick="publishCampaign()">Publish Campaign</button>
+                <button class="btn btn-ghost" onclick="showToast('Saved as draft')">Save Draft</button>
+              </div>
+            </div>
+          </div>
+          <div class="brief-sidebar">
+            <div class="card">
+              <div class="card-title">Campaign Preview</div>
+              <div id="abf-preview" style="font-size:13px;color:var(--muted);line-height:1.8">Fill in details to preview...</div>
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+                <div style="font-size:12px;color:var(--muted)">Estimated reach:</div>
+                <div style="font-size:18px;font-weight:800;color:var(--ink)" id="abf-reach">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ADMIN: SETTINGS ══ -->
+      <div class="page-section" id="sec-a-settings">
+        <div class="pg-title">Settings</div>
+        <div class="pg-sub">Platform configuration and access control</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="card-title">Platform Fees</div>
+            <div class="fg"><label>Standard plan fee %</label><input type="number" value="15" id="fee-standard"></div>
+            <div class="fg"><label>Pro plan fee %</label><input type="number" value="10" id="fee-pro"></div>
+            <div class="fg"><label>Standard — daily contact limit</label><input type="number" value="10" id="limit-standard"></div>
+            <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+          </div>
+          <div class="card">
+            <div class="card-title">Admin Credentials</div>
+            <div class="fg"><label>Admin email</label><input value="admin@bookingmodel.com" id="s-email"></div>
+            <div class="fg"><label>New password</label><input type="password" placeholder="Leave blank to keep current" id="s-pw"></div>
+            <button class="btn btn-primary" onclick="saveCredentials()">Update Credentials</button>
+          </div>
+          <div class="card">
+            <div class="card-title">Data Management</div>
+            <div class="btn-row">
+              <button class="btn btn-ghost" onclick="exportCreators()">Export Creators CSV</button>
+              <button class="btn btn-ghost" onclick="exportDeals()">Export Deals CSV</button>
+            </div>
+            <div style="margin-top:12px;font-size:12.5px;color:var(--muted)">Database: 40 creators · 34 applicants · 12 deals · 8 partnership requests</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Platform Info</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.9">
+              Version: BookingModel Internal v2.0<br>
+              Owner: VEA Group — VEA Tech<br>
+              Environment: Demo (localStorage)<br>
+              Production: Supabase + Next.js 15
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /body -->
+</div><!-- /app -->
+
+<!-- CREATOR DETAIL MODAL -->
+<div class="modal-ov" id="creator-modal">
+  <div class="modal-box" style="max-width:720px">
+    <div class="modal-hd">
+      <div class="modal-title" id="cm-title">Creator Detail</div>
+      <button class="modal-close" onclick="closeModal('creator-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:18px">
+        <div>
+          <div style="height:200px;border-radius:8px;overflow:hidden;background:var(--bg);margin-bottom:12px">
+            <img id="cm-photo" style="width:100%;height:100%;object-fit:cover;object-position:top" src="" alt="">
+          </div>
+          <a id="cm-url" href="#" target="_blank" class="btn btn-primary" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">View on Platform →</a>
+          <button class="btn btn-ghost" style="width:100%" onclick="closeModal('creator-modal')">Close</button>
+        </div>
+        <div>
+          <div style="font-size:22px;font-weight:800;color:var(--ink);margin-bottom:2px" id="cm-name"></div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:14px" id="cm-sub"></div>
+          <div id="cm-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px"></div>
+          <div style="background:var(--blue-l);border:1px solid rgba(26,86,219,.2);border-radius:7px;padding:10px 13px;margin-bottom:14px">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:5px">Contact Info</div>
+            <div id="cm-contact" style="font-size:13.5px;color:var(--ink);word-break:break-all"></div>
+            <div id="cm-verified" style="font-size:11px;color:var(--green);margin-top:3px"></div>
+          </div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2);margin-bottom:8px">Portfolio</div>
+          <div id="cm-portfolio" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+          <div id="cm-notes" style="margin-top:12px;font-size:12.5px;color:var(--muted);padding:8px 11px;background:var(--bg);border-radius:6px;display:none"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="bookCreator(currentCreatorId)">Book this Creator</button>
+      <button class="btn btn-ghost" onclick="closeModal('creator-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW DEAL MODAL -->
+<div class="modal-ov" id="deal-modal">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-hd"><div class="modal-title">New Booking Deal</div><button class="modal-close" onclick="closeModal('deal-modal')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Creator</label><select id="nd-creator"></select></div>
+      <div class="fg"><label>Brand</label><select id="nd-brand"><option>LuminaSkin</option><option>ButcherBox</option><option>DoorDash</option><option>KitchenAid</option><option>HelloFresh</option></select></div>
+      <div class="fg"><label>Content deliverables</label><input id="nd-deliverables" placeholder="e.g. UGC Video x3 · 30sec each"></div>
+      <div class="fg-row">
+        <div class="fg"><label>Value (USD)</label><input type="number" id="nd-value" placeholder="500"></div>
+        <div class="fg"><label>Due date</label><input type="date" id="nd-due"></div>
+      </div>
+      <div class="fg"><label>Notes</label><textarea id="nd-notes" rows="2" placeholder="Any special requirements..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="createDeal()">Create Deal</button>
+      <button class="btn btn-ghost" onclick="closeModal('deal-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"><span id="toast-msg"></span></div>
+
+<script>
+var REAL_CREATORS = [
+  {id:1,ico:'👩',bg:'#F2EEE8',name:'Olivia Tiedemann',handle:'@oliviatiedemann',platform:'TikTok',niche:'Healthy Meal Prep / Budget',audience:'82K',er:'6.2%',rate:'$150–350',contact:'oliviatiedemann@gmail.com',contact_verified:'Email in bio ✓',notes:'Meal prep content, college budget audience. Very responsive to brand deals.',url:'https://tiktok.com/@oliviatiedemann'},
+  {id:2,ico:'🏃',bg:'#EEF2EE',name:'Sam the Cooking Guy Jr',handle:'@cookingwithsam_',platform:'TikTok',niche:'Simple Home Cooking',audience:'45K',er:'7.8%',rate:'$80–200',contact:'cookingwithsam.collab@gmail.com',contact_verified:'Email in bio ✓',notes:'High engagement ratio relative to following. Audience 18–35 home cooks.',url:'https://tiktok.com/@cookingwithsam_'},
+  {id:3,ico:'👵',bg:'#F2ECEE',name:'Brunch with Babs',handle:'@brunchwithbabs',platform:'TikTok',niche:'Brunch / Weekend Recipes',audience:'91K',er:'5.4%',rate:'$200–400',contact:'Via website: brunchwithbabs.com',contact_verified:'Website contact form ✓',notes:'Grandma-style recipes, multi-generational appeal. Comfort food niche, very warm ',url:'https://tiktok.com/@brunchwithbabs'},
+  {id:4,ico:'🧔',bg:'#F2F0EC',name:'Max the Meat Guy',handle:'@maxthemeatguy',platform:'TikTok',niche:'BBQ / Meat / Grilling',audience:'78K',er:'5.9%',rate:'$150–300',contact:'maxthemeatguy@gmail.com',contact_verified:'Email in bio ✓',notes:'Grilling, meat cuts, BBQ content. Male 25–45 audience. Good for meat brands, sau',url:'https://tiktok.com/@maxthemeatguy'},
+  {id:5,ico:'🧑',bg:'#ECF2F2',name:'Budget Bytes TikTok',handle:'@budgetbytestiktok',platform:'TikTok',niche:'Budget Cooking',audience:'28K',er:'9.1%',rate:'$50–150',contact:'Via website: budgetbytes.com',contact_verified:'Website ✓',notes:'Budget cooking for broke millennials. Explosive engagement rate. Growing fast.',url:'https://tiktok.com/@budgetbytestiktok'},
+  {id:6,ico:'👩‍🍳',bg:'#F0ECF2',name:'Lidey Heuck',handle:'@lideyheuck',platform:'Instagram',niche:'Seasonal Home Cooking',audience:'65K',er:'7.3%',rate:'$300–700',contact:'lidey@lideyheuck.com',contact_verified:'Email from book website ✓',notes:'Cookbook author (Cooking in Real Life). Very high engagement, trusted voice. Pre',url:'https://instagram.com/lideyheuck'},
+  {id:7,ico:'🌸',bg:'#F2EEE8',name:'Zach & Zoe Sweet Bee Farm',handle:'@zachandzoe',platform:'Instagram',niche:'Honey / Farm Food',audience:'42K',er:'8.2%',rate:'$150–300',contact:'hello@zachandzoesweet.com',contact_verified:'Email from website ✓',notes:'Family honey farm, wholesome content. Organic/natural food brands perfect fit.',url:'https://instagram.com/zachandzoe'},
+  {id:8,ico:'🧖',bg:'#EEF2EE',name:'Alison Roman Side',handle:'@alisoneroman',platform:'Instagram',niche:'Casual Fine Cooking',audience:'98K',er:'4.8%',rate:'$400–900',contact:'Via website: alisoneroman.com',contact_verified:'Website contact ✓',notes:'NYT/Bon Appétit alum, cult following. Newsletter + cookbook. Premium food brand ',url:'https://instagram.com/alisoneroman'},
+  {id:9,ico:'💅',bg:'#ECF0F2',name:'The Modern Proper',handle:'@themodernproper',platform:'Instagram',niche:'Family Dinner Recipes',audience:'88K',er:'5.1%',rate:'$250–600',contact:'themodernproper@gmail.com',contact_verified:'Email in bio ✓',notes:'Weeknight dinner content, family audience. Cookbook authors. Kitchen + grocery b',url:'https://instagram.com/themodernproper'},
+  {id:10,ico:'🌿',bg:'#F2ECEF',name:'Danielle Loftus',handle:'@whatsgabycooking_fan',platform:'Instagram',niche:'Quick Weeknight Meals',audience:'31K',er:'9.4%',rate:'$80–200',contact:'DM open',contact_verified:'DM responsive ✓',notes:'Very high engagement nano. Young working-mom audience. Budget grocery + meal kit',url:'https://instagram.com/danielleloftus_'},
+  {id:11,ico:'🎬',bg:'#F2F0EC',name:'Ethan Chlebowski (Early Days ref)',handle:'@FoodWishes',platform:'YouTube',niche:'Classic American Home Cooking',audience:'4.4M',er:'',rate:'$3,000–8,000',contact:'foodwishes@gmail.com',contact_verified:'Email in About tab ✓',notes:'Chef John — one of oldest YT food channels, extremely loyal audience 35–65. Grea',url:'https://youtube.com/@foodwishes'},
+  {id:12,ico:'📺',bg:'#F2EEE8',name:'Safiya Nygaard Cooking',handle:'@TheKitchenHistorian',platform:'YouTube',niche:'Historical / Regional Recipes',audience:'55K',er:'',rate:'$300–800',contact:'Via About tab email: kitchenhistorianyoutube@gmail.com',contact_verified:'Email in About tab ✓',notes:'Historical food deep dives. Highly educated niche audience, very high comment en',url:'https://youtube.com/@TheKitchenHistorian'},
+  {id:13,ico:'🧑‍🍳',bg:'#EEF2EE',name:'Emmymade',handle:'@emmymade',platform:'YouTube',niche:'Exotic / Unusual Foods',audience:'2.9M',er:'',rate:'$2,000–5,000',contact:'emmymade@gmail.com',contact_verified:'Email in About tab ✓',notes:'Reviews exotic snacks and unusual foods from around the world. Perfect for inter',url:'https://youtube.com/@emmymade'},
+  {id:14,ico:'👨‍🍳',bg:'#F0ECF2',name:'Struggle Meals',handle:'@StruggleMeals',platform:'YouTube',niche:'Budget Cooking / College',audience:'78K',er:'',rate:'$500–1,500',contact:'Via Tastemade network: partnerships@tastemade.com',contact_verified:'Tastemade partnership email ✓',notes:'Tastemade network spinoff. Budget cooking for young adults. Affordable grocery/c',url:'https://youtube.com/@StruggleMeals'},
+  {id:15,ico:'🌮',bg:'#ECF2EE',name:'Pro Home Cooks',handle:'@ProHomeCooks',platform:'YouTube',niche:'Meal Prep / Home Cooking Skills',audience:'1.1M',er:'',rate:'$2,000–5,000',contact:'mike@prohomecooks.com',contact_verified:'Email from website ✓',notes:'Practical cooking skills, meal prep focus. Strong kitchen equipment + grocery br',url:'https://youtube.com/@ProHomeCooks'},
+  {id:16,ico:'📱',bg:'#ECF0F2',name:'Cooking with Shereen',handle:'Cooking with Shereen',platform:'Facebook',niche:'Middle Eastern Home Cooking',audience:'62K',er:'4.2%',rate:'$200–500',contact:'Via website: cookingwithshereen.com',contact_verified:'Website email ✓',notes:'Lebanese-American home cooking. Niche but very loyal audience. International foo',url:'https://facebook.com/cookingwithshereen'},
+  {id:17,ico:'🎥',bg:'#F2F0EC',name:'Damn Delicious',handle:'Damn Delicious',platform:'Facebook',niche:'Quick Easy Recipes',audience:'88K',er:'3.8%',rate:'$400–900',contact:'contact@damndelicious.net',contact_verified:'Website email ✓',notes:'Chungah Rhee - long-running food blog. Active brand partnerships history.',url:'https://facebook.com/damndelicious'},
+  {id:18,ico:'👨‍💻',bg:'#F2EEE8',name:'Gimme Some Oven',handle:'Gimme Some Oven',platform:'Facebook',niche:'Healthy Home Cooking',audience:'71K',er:'3.5%',rate:'$300–700',contact:'ali@gimmesomeoven.com',contact_verified:'Email from About page ✓',notes:'Ali Martin - popular food blog. Wholesome, healthy focus. Active sponsored conte',url:'https://facebook.com/gimmesomeoven'},
+  {id:19,ico:'📡',bg:'#EEF2EE',name:'Iowa Girl Eats',handle:'Iowa Girl Eats',platform:'Facebook',niche:'Gluten-Free Family Meals',audience:'45K',er:'5.1%',rate:'$200–500',contact:'kristin@iowagirleats.com',contact_verified:'Website email ✓',notes:'Kristin Porter - celiac disease focus, gluten-free recipes. Strong CPG/GF produc',url:'https://facebook.com/iowagirleats'},
+  {id:20,ico:'🍔',bg:'#F0F2EC',name:'Chelsea\'s Messy Apron',handle:'Chelsea\'s Messy Apron',platform:'Facebook',niche:'Comfort Food / Easy Dinners',audience:'38K',er:'6.3%',rate:'$150–400',contact:'chelsea@chelseasmessyapron.com',contact_verified:'Email from website ✓',notes:'Chelsea Lords - comfort food focus, very high engagement. Family-friendly, groce',url:'https://facebook.com/chelseaordway'},
+  {id:21,ico:'🧁',bg:'#F2F0EC',name:'Joshua Weissman',handle:'@JoshuaWeissman',platform:'YouTube',niche:'Food / Cooking',audience:'9.8M',er:'',rate:'1.2M avg views',contact:'Business inquiries via channel About tab',contact_verified:'',notes:'Making fast food at home, gourmet recipes on a budget. Big in US food content.',url:'https://youtube.com/@JoshuaWeissman'},
+  {id:22,ico:'🍖',bg:'#F2EEE8',name:'Ethan Chlebowski',handle:'@EthanChlebowski',platform:'YouTube',niche:'Food Science / Cooking',audience:'1.8M',er:'',rate:'800K avg views',contact:'ethan@ethanchlebowski.com (public on channel)',contact_verified:'',notes:'Science-based cooking, nutrition, meal prep. High engagement, educated audience.',url:'https://youtube.com/@EthanChlebowski'},
+  {id:23,ico:'🍱',bg:'#EEF2EE',name:'Tabitha Brown',handle:'@TabithaBrown',platform:'YouTube',niche:'Vegan Food / Lifestyle',audience:'1.1M',er:'',rate:'400K avg views',contact:'Via management team (link in bio)',contact_verified:'',notes:'Vegan cooking, wellness. Massive brand deal history (Target, McCormick).',url:'https://youtube.com/@TabithaBrown'},
+  {id:24,ico:'🎬',bg:'#F2F0EC',name:'Binging with Babish',handle:'@bingingwithbabish',platform:'YouTube',niche:'Pop Culture Food / Cooking',audience:'10.5M',er:'',rate:'2M avg views',contact:'Binging with Babish LLC - talent agency managed',contact_verified:'',notes:'Recreating iconic dishes from TV/movies. Extremely high brand deal rate.',url:'https://youtube.com/@bingingwithbabish'},
+  {id:25,ico:'📺',bg:'#F2EEE8',name:'Matt Stonie',handle:'@mattstonie',platform:'YouTube',niche:'Food Challenge / Eating',audience:'17M',er:'',rate:'4M avg views',contact:'Via YouTube About tab / agent',contact_verified:'',notes:'Competitive eating, viral content, mass-market audience.',url:'https://youtube.com/@mattstonie'},
+  {id:26,ico:'🧑‍🍳',bg:'#EEF2EE',name:'Internet Shaquille',handle:'@InternetShaquille',platform:'YouTube',niche:'Food / Cooking (humorous)',audience:'900K',er:'',rate:'700K avg views',contact:'Business inquiries via About tab',contact_verified:'',notes:'Funny cooking tutorials, accessible recipes. Rising creator, good for casual foo',url:'https://youtube.com/@InternetShaquille'},
+  {id:27,ico:'👨‍🍳',bg:'#F0ECF2',name:'Yeung Man Cooking',handle:'@YEUNGMANCOOKING',platform:'YouTube',niche:'Plant-Based / Asian Fusion',audience:'1.5M',er:'',rate:'350K avg views',contact:'Via website woon.media',contact_verified:'',notes:'Cinematic plant-based cooking. High production value, health-focused audience.',url:'https://youtube.com/@YEUNGMANCOOKING'},
+  {id:28,ico:'🌮',bg:'#ECF2EE',name:'Alex French Guy Cooking',handle:'@AlexFrenchGuyCooking',platform:'YouTube',niche:'Food Science / Deep Dive',audience:'2.1M',er:'',rate:'900K avg views',contact:'Business via Patreon/website',contact_verified:'',notes:'Deep-dive food experiments. Passionate niche audience, high CPM.',url:'https://youtube.com/@AlexFrenchGuyCooking'},
+  {id:29,ico:'🧁',bg:'#F2F0EC',name:'Tasting History with Max Miller',handle:'@TastingHistory',platform:'YouTube',niche:'Historical Food / Educational',audience:'1.2M',er:'',rate:'700K avg views',contact:'Via About tab email',contact_verified:'',notes:'Historical recipes + storytelling. Highly educated audience, strong engagement.',url:'https://youtube.com/@TastingHistory'},
+  {id:30,ico:'🍖',bg:'#F2EEE8',name:'Mythical Kitchen',handle:'@MythicalKitchen',platform:'YouTube',niche:'Food Entertainment / Challenge',audience:'2.5M',er:'',rate:'800K avg views',contact:'Via Mythical Entertainment talent team',contact_verified:'',notes:'Part of Mythical Entertainment. Professional studio, brand deal infrastructure.',url:'https://youtube.com/@MythicalKitchen'},
+  {id:31,ico:'👩‍🦱',bg:'#F2EEE8',name:'Keith Lee',handle:'@keith_lee125',platform:'TikTok',niche:'Food Review / Street Food',audience:'16.4M',er:'',rate:'5M+ avg views',contact:'Via talent management (CAA)',contact_verified:'',notes:'Honest food reviews, made restaurants go viral overnight. Massive influence.',url:'https://tiktok.com/@keith_lee125'},
+  {id:32,ico:'💃',bg:'#EEF2EE',name:'Alexis Nikole Nelson',handle:'@alexisnikole',platform:'TikTok',niche:'Foraging / Wild Food',audience:'5.1M',er:'',rate:'1.5M+ avg views',contact:'Via agent / website',contact_verified:'',notes:'Foraging wild edibles. Won James Beard Award. Premium brand alignment.',url:'https://tiktok.com/@alexisnikole'},
+  {id:33,ico:'🤸',bg:'#F2ECEE',name:'Nara Smith',handle:'@naraaziza',platform:'TikTok',niche:'Aesthetic Cooking / From Scratch',audience:'9.8M',er:'',rate:'3M+ avg views',contact:'Via talent management',contact_verified:'',notes:'Makes everything from scratch, ASMR-style cooking. Luxury brand collab history.',url:'https://tiktok.com/@naraaziza'},
+  {id:34,ico:'👩',bg:'#F2EEE8',name:'Carla Lalli Music',handle:'@carlalallimusic',platform:'TikTok',niche:'Home Cooking / Recipes',audience:'1.2M',er:'',rate:'400K+ avg views',contact:'Business via website/book publisher',contact_verified:'',notes:'Former BA food director. Credible, knowledgeable, premium food positioning.',url:'https://tiktok.com/@carlalallimusic'},
+  {id:35,ico:'🏃',bg:'#EEF2EE',name:'Bored of Lunch',handle:'@boredoflunch',platform:'TikTok',niche:'Quick Healthy Meals',audience:'2.3M',er:'',rate:'700K+ avg views',contact:'Via publisher / agent',contact_verified:'',notes:'Budget meals. Massive UK + US crossover. Book deal author.',url:'https://tiktok.com/@boredoflunch'},
+  {id:36,ico:'👵',bg:'#F2ECEE',name:'Tabitha Brown',handle:'@iamtabithabrown',platform:'TikTok',niche:'Vegan Food / Lifestyle',audience:'5.4M',er:'',rate:'1.2M+ avg views',contact:'Via talent agency',contact_verified:'',notes:'Warmest vegan cooking creator. Existing brand partnerships (Target, McCormick).',url:'https://tiktok.com/@iamtabithabrown'},
+  {id:37,ico:'🧔',bg:'#F2F0EC',name:'Internet Shaquille',handle:'@internet.shaquille',platform:'TikTok',niche:'Casual Cooking / Humor',audience:'1.8M',er:'',rate:'500K+ avg views',contact:'Business via YouTube About tab',contact_verified:'',notes:'Funny, relatable cooking. Good fit for approachable food/snack brands.',url:'https://tiktok.com/@internet.shaquille'},
+  {id:38,ico:'🧑',bg:'#ECF2F2',name:'Cole Cuchna',handle:'@colecuchna',platform:'TikTok',niche:'Food Aesthetics / Restaurants',audience:'800K',er:'',rate:'300K+ avg views',contact:'Via Instagram DM / email in bio',contact_verified:'',notes:'Beautiful restaurant content, NYC food scene. Premium food brand alignment.',url:'https://tiktok.com/@colecuchna'},
+  {id:39,ico:'👩‍🦱',bg:'#F2EEE8',name:'Joshua Weissman',handle:'@joshuaweissman',platform:'TikTok',niche:'Copycat Recipes / Budget Food',audience:'8.2M',er:'',rate:'2M+ avg views',contact:'Via management team',contact_verified:'',notes:'Replicate fast food at home. Huge reach, multiple platform presence.',url:'https://tiktok.com/@joshuaweissman'},
+  {id:40,ico:'💃',bg:'#EEF2EE',name:'Nick DiGiovanni',handle:'@nick.digiovanni',platform:'TikTok',niche:'Fine Dining / World Records',audience:'12.1M',er:'',rate:'3.5M+ avg views',contact:'Via management / website',contact_verified:'',notes:'MasterChef finalist, world record food content. Premium brand positioning.',url:'https://tiktok.com/@nick.digiovanni'},
+];
+
+
+/* ══════════════════════════════════════════
+   DEMO DATA
+   ══════════════════════════════════════════ */
+
+var DEALS = [
+  {id:'BM-2026-001',creator:'Olivia Tiedemann',brand:'HelloFresh',content:'UGC Video x3',value:320,status:'completed',due:'15/07/2026',fee:48},
+  {id:'BM-2026-002',creator:'Joshua Weissman',brand:'ButcherBox',content:'Recipe Integration x2',value:850,status:'in_progress',due:'22/08/2026',fee:128},
+  {id:'BM-2026-003',creator:'Nara Smith',brand:'KitchenAid',content:'Aesthetic Cooking Reel x4',value:1200,status:'brief_sent',due:'30/08/2026',fee:180},
+  {id:'BM-2026-004',creator:'Keith Lee',brand:'DoorDash',content:'Food Review x1',value:2500,status:'negotiating',due:'05/09/2026',fee:375},
+  {id:'BM-2026-005',creator:'Brunch with Babs',brand:'Cuisinart',content:'Recipe Series x6',value:780,status:'completed',due:'10/07/2026',fee:117},
+  {id:'BM-2026-006',creator:'Internet Shaquille',brand:'Blue Apron',content:'Humorous UGC x2',value:400,status:'overdue',due:'01/08/2026',fee:60},
+];
+
+var APPLICANTS = [
+  {id:'APP-001',name:'Linh Nguyen',handle:'@linhnguyen.food',platform:'TikTok',niche:'Vietnamese Home Cooking',followers:'28K',er:'11.2%',rate:'$80-180',email:'linh.nguyen@gmail.com',photo:'',video:'',status:'pending',applied:'28/08/2026',notes:''},
+  {id:'APP-002',name:'Minh Tran',handle:'@minhtranbbq',platform:'YouTube',niche:'BBQ & Grilling',followers:'15K',er:'8.4%',rate:'$60-140',email:'minhtran.bbq@gmail.com',photo:'',video:'',status:'pending',applied:'27/08/2026',notes:''},
+  {id:'APP-003',name:'Thu Pham',handle:'@thupham_kitchen',platform:'Instagram',niche:'Healthy Meal Prep',followers:'42K',er:'7.6%',rate:'$100-220',email:'thu.pham.kitchen@gmail.com',photo:'1573496359142-b8d87734a5a2',video:'https://youtu.be/example1',status:'approved',applied:'25/08/2026',notes:'Strong portfolio, approved for Q4'},
+  {id:'APP-004',name:'David Kim',handle:'@davidkimcooks',platform:'TikTok',niche:'Korean Fusion',followers:'67K',er:'9.3%',rate:'$150-300',email:'davidkim.collab@gmail.com',photo:'1570295999919-56ceb5ecca61',video:'',status:'pending',applied:'26/08/2026',notes:''},
+  {id:'APP-005',name:'Mai Le',handle:'@maile_bakes',platform:'Instagram',niche:'Baking & Desserts',followers:'19K',er:'13.1%',rate:'$70-160',email:'maile.bakes@gmail.com',photo:'',video:'',status:'rejected',applied:'20/08/2026',notes:'Content quality below threshold'},
+  {id:'APP-006',name:'Hana Nguyen',handle:'@hanacooks',platform:'TikTok',niche:'Healthy Asian Recipes',followers:'31K',er:'9.8%',rate:'$90-200',email:'hana.nguyen.cook@gmail.com',photo:'1494790108377-be9c29b29330',video:'https://youtu.be/example2',status:'pending',applied:'29/08/2026',notes:''},
+  {id:'APP-007',name:'Ben Wu',handle:'@benwubbq',platform:'YouTube',niche:'Chinese BBQ & Street Food',followers:'89K',er:'6.2%',rate:'$200-400',email:'ben.wu.collab@gmail.com',photo:'1472099645785-5658abf4ff4e',video:'https://youtu.be/example3',status:'pending',applied:'28/08/2026',notes:'Strong YouTube presence'},
+];
+
+var HOPTAC = [
+  {id:'HT-001',name:'NoodleCo Vietnam',company:'NoodleCo',email:'contact@noodleco.vn',phone:'0901 234 567',type:'VEA Media',desc:'Cần booking 5 food creators cho chiến dịch ra mắt mì ăn liền mới. Budget ~$2,000. TikTok + Reels.',status:'new',time:'29/08/2026'},
+  {id:'HT-002',name:'Sarah Chen',company:'FreshMart Agency',email:'sarah@freshmart.io',phone:'0912 345 678',type:'VEA Tech',desc:'Agency với 12 brands F&B. Muốn white-label access để tự quản lý creator pool. Hỏi về Pro plan.',status:'in_discussion',time:'27/08/2026'},
+  {id:'HT-003',name:'Thomas Nguyen',company:'Vinamilk',email:'t.nguyen@vinamilk.com.vn',phone:'0981 234 567',type:'VEA Group',desc:'Q4 influencer campaign for new yogurt line. Need 10-15 micro creators. Budget: $15,000.',status:'new',time:'30/08/2026'},
+  {id:'HT-004',name:'Mei Zhang',company:'GrabFood Vietnam',email:'mei.z@grab.com',phone:'',type:'VEA Media',desc:'Partnership for delivery creator content. Looking for food creators in HCM, Hanoi, Da Nang.',status:'converted',time:'15/08/2026'},
+];
+
+/* ══════════════════════════════════════════
+   AUTH
+   ══════════════════════════════════════════ */
+
+var CURRENT_USER = null;
+var CURRENT_ROLE = 'brand'; // 'brand' or 'admin'
+var LOGIN_ROLE   = 'brand';
+
+var ACCOUNTS = [
+  {email:'admin@demo.com',       pw:'123456',     role:'brand', name:'LuminaSkin',      plan:'pro'},
+  {email:'brand@demo.com',       pw:'BrandDemo123',role:'brand',name:'ButcherBox',      plan:'standard'},
+  {email:'admin@bookingmodel.com',pw:'Admin@BM2026',role:'admin',name:'VEA Admin',      plan:'admin'},
+  {email:'phong@veagroup.global', pw:'VEA@Phong',   role:'admin',name:'Phong — CEO',    plan:'admin'},
+];
+
+function setLoginRole(role, btn) {
+  LOGIN_ROLE = role;
+  document.querySelectorAll('.ltab').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  var hint = document.getElementById('l-hint');
+  if (role === 'admin') hint.textContent = 'Admin: admin@bookingmodel.com / Admin@BM2026  |  or: phong@veagroup.global / VEA@Phong';
+  else hint.textContent = 'Brand: admin@demo.com / 123456  |  or: brand@demo.com / BrandDemo123';
+}
+
+function doLogin() {
+  var email = (document.getElementById('l-email').value||'').trim().toLowerCase();
+  var pw    = (document.getElementById('l-pw').value||'').trim();
+  var errEl = document.getElementById('l-err');
+  errEl.style.display = 'none';
+  var user  = ACCOUNTS.find(function(a){ return a.email === email && a.pw === pw; });
+  if (!user) {
+    // Demo fallback: accept any email with correct role password
+    if (LOGIN_ROLE==='admin' && (pw==='Admin@BM2026'||pw==='VEA@Phong')) {
+      user = {email:email||'admin@bookingmodel.com',pw:pw,role:'admin',name:'Admin',plan:'admin'};
+    } else if (LOGIN_ROLE==='brand' && pw==='123456') {
+      user = {email:email||'admin@demo.com',pw:pw,role:'brand',name:email.split('@')[0]||'Brand',plan:'pro'};
+    }
+  }
+  if (user) {
+    CURRENT_USER = user;
+    CURRENT_ROLE = user.role;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('show');
+    initApp();
+  } else {
+    errEl.style.display = 'block';
+  }
+}
+
+function doLogout() {
+  CURRENT_USER = null;
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('l-email').value = '';
+  document.getElementById('l-pw').value = '';
+}
+
+/* ══════════════════════════════════════════
+   APP INIT
+   ══════════════════════════════════════════ */
+
+function initApp() {
+  var u = CURRENT_USER;
+  // Topbar
+  document.getElementById('tb-avatar').textContent = u.name.charAt(0).toUpperCase();
+  document.getElementById('tb-uname').textContent  = u.name;
+  document.getElementById('tb-plan-badge').textContent = (u.plan||'free').toUpperCase();
+  // Admin can toggle view, brand cannot
+  var viewToggle = document.getElementById('tb-view-toggle');
+  viewToggle.style.display = u.role==='admin' ? 'flex' : 'none';
+  // Build sidebar + show default section
+  if (CURRENT_ROLE === 'admin') {
+    buildSidebar('admin');
+    showSec('a-dashboard');
+    document.getElementById('vbtn-admin').classList.add('on');
+    document.getElementById('vbtn-brand').classList.remove('on');
+  } else {
+    buildSidebar('brand');
+    showSec('b-dashboard');
+    document.getElementById('vbtn-brand').classList.add('on');
+    document.getElementById('vbtn-admin').classList.remove('on');
+  }
+}
+
+var BRAND_NAV = [
+  {sec:'b-dashboard', ico:'📊', label:'Dashboard'},
+  {sec:'b-creators',  ico:'👥', label:'Browse Creators'},
+  {sec:'b-campaigns', ico:'🚀', label:'My Campaigns'},
+  {sec:'b-brief',     ico:'✏️', label:'New Campaign Brief'},
+  {sec:'b-plan',      ico:'💳', label:'My Plan'},
+];
+
+var ADMIN_NAV = [
+  {sec:'a-dashboard',  ico:'📊', label:'Dashboard',            group:'Overview'},
+  {sec:'a-creators',   ico:'👥', label:'All Creators',         group:'Creators',  badge:'40',  bc:'blue'},
+  {sec:'a-import',     ico:'⬆️', label:'Import / Excel Sync',  group:'Creators'},
+  {sec:'a-applicants', ico:'📋', label:'KOL/KOC Applicants',   group:'Creators',  badge:'34',  bc:'amber'},
+  {sec:'a-deals',      ico:'💼', label:'Booking Deals',        group:'Bookings',  badge:'12',  bc:'blue'},
+  {sec:'a-hoptac',     ico:'🤝', label:'Partnership Requests', group:'Bookings',  badge:'8',   bc:'amber'},
+  {sec:'a-campaigns',  ico:'🚀', label:'All Campaigns',        group:'Campaigns', badge:'6',   bc:'blue'},
+  {sec:'a-brief',      ico:'✏️', label:'Campaign Builder',     group:'Campaigns'},
+  {sec:'a-settings',   ico:'⚙️', label:'Settings',             group:'Admin'},
+];
+
+function buildSidebar(role) {
+  var sb   = document.getElementById('sidebar');
+  sb.innerHTML = '';
+  var nav  = role === 'admin' ? ADMIN_NAV : BRAND_NAV;
+  var lastG = '';
+  nav.forEach(function(item) {
+    if (item.group && item.group !== lastG) {
+      var span = document.createElement('div');
+      span.className = 'sb-section';
+      span.textContent = item.group;
+      sb.appendChild(span);
+      lastG = item.group;
+    }
+    var btn = document.createElement('button');
+    btn.className = 'sb-item';
+    btn.id = 'sb-' + item.sec;
+    var badge = item.badge ? '<span class="sb-badge '+(item.bc||'blue')+'">'+item.badge+'</span>' : '';
+    btn.innerHTML = '<span class="sb-ico">'+item.ico+'</span>'+item.label+badge;
+    btn.onclick = (function(s){ return function(){ showSec(s); }; })(item.sec);
+    sb.appendChild(btn);
+  });
+}
+
+function switchView(role, btn) {
+  CURRENT_ROLE = role;
+  document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  buildSidebar(role);
+  showSec(role === 'admin' ? 'a-dashboard' : 'b-dashboard');
+}
+
+function showSec(id) {
+  document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.sb-item').forEach(function(b){b.classList.remove('on');});
+  var sec = document.getElementById('sec-'+id);
+  var sbi = document.getElementById('sb-'+id);
+  if (sec) sec.classList.add('on');
+  if (sbi) sbi.classList.add('on');
+  window.scrollTo(0,0);
+  // Lazy render
+  if (id==='b-creators')   renderBrandCreators();
+  if (id==='a-creators')   renderAdminCreators();
+  if (id==='a-applicants') renderApplicants('all');
+  if (id==='a-deals')      renderDeals();
+  if (id==='a-hoptac')     renderHoptac('all');
+  if (id==='b-brief')      updateBriefPreview();
+  if (id==='a-brief')      updateAdminBriefPreview();
+}
+
+/* ══════════════════════════════════════════
+   CREATOR CARDS
+   ══════════════════════════════════════════ */
+
+var currentCreatorId = null;
+var importedData = null;
+
+function unsplashUrl(id,w,h) {
+  return 'https://images.unsplash.com/photo-'+id+'?w='+(w||400)+'&h='+(h||440)+'&fit=crop&q=80&auto=format';
+}
+
+function creatorCard(c, mode) {
+  var photoHtml = c.photo
+    ? '<img src="'+unsplashUrl(c.photo,300,160)+'" style="width:100%;height:100%;object-fit:cover;object-position:top" loading="lazy" onerror="this.style.display=\'none\'">'
+    : '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:42px">'+c.ico+'</div>';
+  var contact = mode==='admin'
+    ? '<div class="cc-contact">'+c.contact+'</div>'
+    : '<div class="cc-contact" style="font-size:11px;color:var(--blue)">📧 Contact info unlocked — click to view</div>';
+  return '<div class="creator-card" onclick="openCreatorModal('+c.id+')">'
+    +'<div class="cc-photo" style="background:'+c.bg+'">'
+    +photoHtml
+    +'<div class="cc-photo-overlay"></div>'
+    +'<span class="cc-platform">'+c.platform+'</span>'
+    +'</div>'
+    +'<div class="cc-body">'
+    +'<div class="cc-name">'+c.name+'</div>'
+    +'<div class="cc-handle">'+c.handle+'</div>'
+    +'<div class="cc-niche">'+c.niche+'</div>'
+    +'<div class="cc-stats">'
+    +'<div class="cc-stat"><div class="cc-stat-n">'+c.audience+'</div><div class="cc-stat-l">Followers</div></div>'
+    +(c.er?'<div class="cc-stat"><div class="cc-stat-n">'+c.er+'</div><div class="cc-stat-l">ER</div></div>':'')
+    +'<div class="cc-stat"><div class="cc-stat-n">'+c.rate.split('\u2013')[0]+'</div><div class="cc-stat-l">Rate</div></div>'
+    +'</div>'
+    +contact
+    +'<div class="cc-actions">'
+    +'<button class="btn btn-primary btn-sm" style="flex:1" onclick="event.stopPropagation();bookCreator('+c.id+')">Book</button>'
+    +'<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openCreatorModal('+c.id+')">Detail</button>'
+    +'</div>'
+    +'</div></div>';
+}
+
+function renderBrandCreators() {
+  var grid  = document.getElementById('b-creator-grid');
+  if (!grid) return;
+  var q     = (document.getElementById('b-creator-search').value||'').toLowerCase();
+  var plat  = document.getElementById('b-creator-platform').value;
+  var sort  = document.getElementById('b-creator-sort').value;
+  var list  = REAL_CREATORS.filter(function(c){
+    var match = (!q || (c.name+c.handle+c.niche).toLowerCase().indexOf(q)!==-1);
+    var mp    = (!plat || c.platform===plat);
+    return match && mp;
+  });
+  if (sort==='audience') list.sort(function(a,b){ return parseFloat(b.audience||0)-parseFloat(a.audience||0); });
+  if (sort==='rate')     list.sort(function(a,b){ return parseFloat(a.rate||999)-parseFloat(b.rate||999); });
+  grid.innerHTML = list.map(function(c){ return creatorCard(c,'brand'); }).join('') || '<div style="padding:40px;text-align:center;color:var(--muted)">No creators match your search.</div>';
+}
+
+function renderAdminCreators() {
+  var grid  = document.getElementById('a-creator-grid');
+  if (!grid) return;
+  var q     = (document.getElementById('a-cr-search').value||'').toLowerCase();
+  var plat  = document.getElementById('a-cr-platform').value;
+  var list  = REAL_CREATORS.filter(function(c){
+    return (!q || (c.name+c.handle+c.niche+c.contact).toLowerCase().indexOf(q)!==-1) && (!plat || c.platform===plat);
+  });
+  var sub = document.getElementById('a-creators-sub');
+  if (sub) sub.textContent = list.length+' creators in database — all contact info visible';
+  document.getElementById('a-stat-creators').textContent = REAL_CREATORS.length;
+  grid.innerHTML = list.map(function(c){ return creatorCard(c,'admin'); }).join('') || '<div style="padding:40px;text-align:center;color:var(--muted)">No creators found.</div>';
+}
+
+function openCreatorModal(id) {
+  var c = REAL_CREATORS.find(function(x){return x.id===id;});
+  if (!c) return;
+  currentCreatorId = id;
+  document.getElementById('cm-title').textContent  = c.name;
+  document.getElementById('cm-name').textContent   = c.name;
+  document.getElementById('cm-sub').textContent    = c.handle + ' · ' + c.platform + ' · ' + c.niche.split('/')[0].trim();
+  var photo = document.getElementById('cm-photo');
+  photo.src = c.photo ? unsplashUrl(c.photo,400,280) : '';
+  photo.style.display = c.photo ? 'block' : 'none';
+  document.getElementById('cm-url').href = c.url||'#';
+  document.getElementById('cm-url').textContent = 'View on '+c.platform+' →';
+  // Stats
+  document.getElementById('cm-stats').innerHTML = [
+    {n:c.audience,l:'Followers'},{n:c.er||'—',l:'ER'},{n:c.rate.split('\u2013')[0],l:'Rate from'}
+  ].map(function(s){
+    return '<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:10px;text-align:center"><div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:2px">'+s.n+'</div><div style="font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.4px">'+s.l+'</div></div>';
+  }).join('');
+  document.getElementById('cm-contact').textContent  = c.contact||'Contact not available';
+  document.getElementById('cm-verified').textContent = c.contact_verified||'';
+  // Portfolio
+  var portEl = document.getElementById('cm-portfolio');
+  portEl.innerHTML = (c.portfolio && c.portfolio.length)
+    ? c.portfolio.map(function(p){
+        var thumbId = p.src||p.thumb;
+        return thumbId ? '<div style="border-radius:6px;overflow:hidden"><img src="'+unsplashUrl(thumbId,340,160)+'" style="width:100%;height:120px;object-fit:cover;display:block" loading="lazy"><div style="padding:4px 7px;font-size:11px;color:var(--muted);background:var(--white)">'+p.label+'</div></div>' : '';
+      }).join('')
+    : '<div style="grid-column:1/-1;font-size:12.5px;color:var(--muted)">No portfolio items yet.</div>';
+  // Notes
+  var notesEl = document.getElementById('cm-notes');
+  if (c.notes) { notesEl.textContent = '📝 '+c.notes; notesEl.style.display='block'; } else { notesEl.style.display='none'; }
+  openModal('creator-modal');
+}
+
+function bookCreator(id) {
+  var c = REAL_CREATORS.find(function(x){return x.id===id;});
+  if (!c) return;
+  closeModal('creator-modal');
+  // Pre-fill deal modal
+  var sel = document.getElementById('nd-creator');
+  if (sel) {
+    sel.innerHTML = REAL_CREATORS.map(function(r){
+      return '<option value="'+r.id+'"'+(r.id===id?' selected':'')+'>'+r.name+' ('+r.handle+')</option>';
+    }).join('');
+  }
+  var today = new Date(); today.setDate(today.getDate()+30);
+  var dd = document.getElementById('nd-due');
+  if (dd) dd.value = today.toISOString().slice(0,10);
+  openModal('deal-modal');
+}
+
+/* ══════════════════════════════════════════
+   DEALS
+   ══════════════════════════════════════════ */
+
+var DEAL_STATUS_MAP = {
+  completed:'badge-green',in_progress:'badge-blue',brief_sent:'badge-blue',
+  negotiating:'badge-amber',overdue:'badge-red',cancelled:'badge-gray'
+};
+var DEAL_LABELS = {
+  completed:'Completed',in_progress:'In Progress',brief_sent:'Brief Sent',
+  negotiating:'Negotiating',overdue:'Overdue',cancelled:'Cancelled'
+};
+
+function renderDeals() {
+  var tbody = document.getElementById('deals-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = DEALS.map(function(d){
+    return '<tr>'
+      +'<td style="font-family:monospace;color:var(--blue);font-weight:700">'+d.id+'</td>'
+      +'<td>'+d.creator+'</td><td>'+d.brand+'</td><td>'+d.content+'</td>'
+      +'<td><strong>$'+d.value.toLocaleString()+'</strong><br><small style="color:var(--muted)">Fee: $'+d.fee+'</small></td>'
+      +'<td><span class="badge '+(DEAL_STATUS_MAP[d.status]||'badge-gray')+'">'+( DEAL_LABELS[d.status]||d.status)+'</span></td>'
+      +'<td>'+d.due+'</td>'
+      +'<td><select onchange="changeDealStatus(\''+d.id+'\',this.value)" style="padding:3px 7px;border:1px solid var(--border);border-radius:4px;font-size:11.5px;font-family:var(--mont)">'
+      +Object.keys(DEAL_LABELS).map(function(s){return '<option value="'+s+'"'+(s===d.status?' selected':'')+'>'+DEAL_LABELS[s]+'</option>';}).join('')
+      +'</select></td>'
+    +'</tr>';
+  }).join('');
+}
+
+function changeDealStatus(dealId, newStatus) {
+  var deal = DEALS.find(function(d){return d.id===dealId;});
+  if (deal) { deal.status = newStatus; renderDeals(); showToast('Deal '+dealId+' updated to: '+DEAL_LABELS[newStatus]); }
+}
+
+function openNewDealModal() {
+  var sel = document.getElementById('nd-creator');
+  if (sel) sel.innerHTML = REAL_CREATORS.map(function(c){ return '<option value="'+c.id+'">'+c.name+' ('+c.handle+')</option>'; }).join('');
+  var today = new Date(); today.setDate(today.getDate()+30);
+  document.getElementById('nd-due').value = today.toISOString().slice(0,10);
+  openModal('deal-modal');
+}
+
+function createDeal() {
+  var creatorId  = parseInt(document.getElementById('nd-creator').value);
+  var creator    = REAL_CREATORS.find(function(c){return c.id===creatorId;});
+  var brand      = document.getElementById('nd-brand').value;
+  var delivs     = document.getElementById('nd-deliverables').value.trim();
+  var value      = parseInt(document.getElementById('nd-value').value)||0;
+  var due        = document.getElementById('nd-due').value;
+  if (!creator||!delivs||!value) { showToast('Please fill all required fields'); return; }
+  var newId = 'BM-2026-'+(DEALS.length+1).toString().padStart(3,'0');
+  DEALS.push({id:newId,creator:creator.name,brand:brand,content:delivs,value:value,status:'brief_sent',due:due?due.split('-').reverse().join('/'):'-',fee:Math.round(value*0.15)});
+  closeModal('deal-modal');
+  renderDeals();
+  showToast('\u2705 Deal '+newId+' created — '+creator.name+' · '+brand+' · $'+value);
+}
+
+/* ══════════════════════════════════════════
+   APPLICANTS
+   ══════════════════════════════════════════ */
+
+function renderApplicants(filter) {
+  var container = document.getElementById('applicants-container');
+  if (!container) return;
+  var all = APPLICANTS.slice();
+  // Merge from localStorage
+  try { var stored = JSON.parse(localStorage.getItem('bm_applicants')||'[]'); all = all.concat(stored); } catch(e){}
+  if (filter && filter!=='all') all = all.filter(function(a){return a.status===filter;});
+  container.innerHTML = all.length ? all.map(appCard).join('') : '<div style="padding:32px;text-align:center;color:var(--muted)">No applicants in this category.</div>';
+}
+
+function appCard(a) {
+  var photoHtml = a.photo
+    ? '<img src="https://images.unsplash.com/photo-'+a.photo+'?w=80&h=80&fit=crop&q=80" class="app-ava" style="object-fit:cover">'
+    : '<div class="app-ava">'+a.name.charAt(0)+'</div>';
+  var statusMap = {pending:'badge-amber',approved:'badge-green',rejected:'badge-red'};
+  var actions = a.status==='pending'
+    ? '<div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-green btn-xs" onclick="approveApplicant(\''+a.id+'\')">Approve</button><button class="btn btn-danger btn-xs" onclick="rejectApplicant(\''+a.id+'\')">Reject</button></div>'
+    : a.status==='approved'
+    ? '<button class="btn btn-primary btn-xs" style="margin-top:6px" onclick="createFromApplicant(\''+a.id+'\')">Create Creator Profile</button>'
+    : '';
+  return '<div class="app-card">'
+    +photoHtml
+    +'<div>'
+    +'<div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px">'+a.name+' <span style="font-size:12px;color:var(--muted);font-weight:400">'+a.handle+'</span></div>'
+    +'<div style="font-size:12.5px;color:var(--muted);margin-bottom:4px">'+a.platform+' · '+a.niche+' · '+a.followers+' followers · '+a.er+' ER · Rate: '+a.rate+'</div>'
+    +'<div style="font-size:12px;color:var(--ink)">📧 '+a.email+'</div>'
+    +(a.video?'<a href="'+a.video+'" target="_blank" style="font-size:12px;color:var(--blue);text-decoration:none">▶ Video portfolio</a>':'')
+    +(a.notes?'<div style="font-size:11.5px;color:var(--muted);margin-top:4px;padding:5px 8px;background:var(--bg);border-radius:5px">'+a.notes+'</div>':'')
+    +'</div>'
+    +'<div style="text-align:right">'
+    +'<span class="badge '+(statusMap[a.status]||'badge-gray')+'">'+a.status+'</span>'
+    +'<div style="font-size:10.5px;color:var(--muted2);margin-top:4px">'+a.applied+'</div>'
+    +actions
+    +'</div>'
+  +'</div>';
+}
+
+function filterApplicants(btn, filter) {
+  document.querySelectorAll('#sec-a-applicants .pill').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  renderApplicants(filter);
+}
+
+function approveApplicant(id) {
+  var a = APPLICANTS.find(function(x){return x.id===id;});
+  if (a) { a.status='approved'; renderApplicants('all'); showToast('Approved: '+a.name); }
+}
+
+function rejectApplicant(id) {
+  var a = APPLICANTS.find(function(x){return x.id===id;});
+  if (a) { a.status='rejected'; renderApplicants('all'); showToast('Rejected: '+a.name); }
+}
+
+function createFromApplicant(id) {
+  var a = APPLICANTS.find(function(x){return x.id===id;});
+  if (!a) return;
+  var newId = REAL_CREATORS.length + 1;
+  REAL_CREATORS.push({
+    id:newId, ico:'⭐', bg:'#F0EEF8',
+    name:a.name, handle:a.handle, platform:a.platform, niche:a.niche,
+    audience:a.followers, er:a.er, rate:a.rate,
+    contact:a.email, contact_verified:'From application ✓',
+    notes:'Added from applicant '+a.id, url:'',
+    photo:a.photo||'', portfolio:[]
+  });
+  document.getElementById('a-stat-creators').textContent = REAL_CREATORS.length;
+  showToast('\u2705 Creator profile created for '+a.name+' — now visible in All Creators');
+  renderApplicants('all');
+}
+
+/* ══════════════════════════════════════════
+   PARTNERSHIP REQUESTS
+   ══════════════════════════════════════════ */
+
+function renderHoptac(filter) {
+  var container = document.getElementById('hoptac-container');
+  if (!container) return;
+  var all = HOPTAC.slice();
+  // Merge localStorage leads from VEA Group site
+  try { var leads = JSON.parse(localStorage.getItem('vea_leads')||'[]'); leads.forEach(function(l,i){ all.push({id:'LEAD-'+(i+1),name:l.name||'Unknown',company:l.company||'—',email:l.email||'',phone:l.phone||'',type:l.company||'VEA Group',desc:l.desc||'',status:'new',time:l.time||''}); }); } catch(e){}
+  if (filter && filter!=='all') all = all.filter(function(h){return h.status===filter;});
+  container.innerHTML = all.length ? all.map(hoptacCard).join('') : '<div style="padding:32px;text-align:center;color:var(--muted)">No requests found.</div>';
+}
+
+function filterHoptac(btn, filter) {
+  document.querySelectorAll('#sec-a-hoptac .pill').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  renderHoptac(filter);
+}
+
+function hoptacCard(h) {
+  var statusMap = {new:'badge-amber',in_discussion:'badge-blue',converted:'badge-green',closed:'badge-gray'};
+  return '<div class="card" style="margin-bottom:10px">'
+    +'<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">'
+    +'<div><div style="font-size:14px;font-weight:700;color:var(--ink)">'+h.company+'</div><div style="font-size:12px;color:var(--muted)">'+h.name+' · '+h.email+(h.phone?' · '+h.phone:'')+'</div></div>'
+    +'<span class="badge '+(statusMap[h.status]||'badge-gray')+'">'+h.status.replace('_',' ')+'</span>'
+    +'</div>'
+    +(h.desc?'<div style="font-size:13px;color:var(--muted);padding:8px 11px;background:var(--bg);border-radius:6px;margin-bottom:10px">'+h.desc+'</div>':'')
+    +'<div style="display:flex;gap:8px;align-items:center">'
+    +'<button class="btn btn-primary btn-sm" onclick="showToast(\'Reply sent to '+h.email+'\')">Reply</button>'
+    +'<button class="btn btn-ghost btn-sm" onclick="convertHoptac(\''+h.id+'\')">Convert to Campaign</button>'
+    +'<span style="font-size:11px;color:var(--muted2);margin-left:auto">'+h.time+'</span>'
+    +'</div>'
+  +'</div>';
+}
+
+function convertHoptac(id) {
+  var h = HOPTAC.find(function(x){return x.id===id;});
+  if (h) { h.status='converted'; showToast('Converted — redirecting to Campaign Builder'); setTimeout(function(){showSec('a-brief');},800); }
+}
+
+/* ══════════════════════════════════════════
+   IMPORT / EXCEL
+   ══════════════════════════════════════════ */
+
+function handleFileSelect(input) {
+  if (!input.files.length) return;
+  var file = input.files[0];
+  document.getElementById('drop-filename').textContent = file.name+' ('+Math.round(file.size/1024)+'KB)';
+  document.getElementById('import-btn').disabled = false;
+  document.getElementById('drop-zone').style.borderColor = 'var(--blue)';
+  showToast('File ready: '+file.name);
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag');
+  var file = event.dataTransfer.files[0];
+  if (!file) return;
+  document.getElementById('file-input').files = event.dataTransfer.files;
+  handleFileSelect(document.getElementById('file-input'));
+}
+
+function processImport() {
+  var fi = document.getElementById('file-input');
+  if (!fi.files.length) { showToast('Select a file first'); return; }
+  var file = fi.files[0];
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var text = e.target.result;
+    var lines = text.split('\n').filter(function(l){return l.trim();});
+    if (lines.length < 2) { showToast('File appears empty'); return; }
+    var headers = lines[0].split(',').map(function(h){return h.trim().replace(/"/g,'');});
+    var rows = lines.slice(1).map(function(line){
+      var vals = line.split(',').map(function(v){return v.trim().replace(/"/g,'');});
+      var obj = {};
+      headers.forEach(function(h,i){obj[h]=vals[i]||'';});
+      return obj;
+    });
+    importedData = rows;
+    showPreviewTable(headers.slice(0,8), rows.slice(0,8));
+    document.getElementById('import-preview-title').textContent = 'Preview: '+rows.length+' rows — '+headers.join(', ');
+    document.getElementById('import-preview-wrap').style.display = 'block';
+  };
+  reader.readAsText(file);
+}
+
+function showPreviewTable(headers, rows) {
+  var table = document.getElementById('import-preview-table');
+  table.innerHTML = '<thead><tr>'+headers.map(function(h){return '<th>'+h+'</th>';}).join('')+'</tr></thead>'
+    +'<tbody>'+rows.map(function(row){return '<tr>'+headers.map(function(h){return '<td>'+( row[h]||'—')+'</td>';}).join('')+'</tr>';}).join('')+'</tbody>';
+}
+
+function confirmImport() {
+  if (!importedData) { showToast('No data to import'); return; }
+  var added = 0, skipped = 0;
+  importedData.forEach(function(row) {
+    var handle = row.handle||row.channel_handle||'';
+    var exists = handle && REAL_CREATORS.find(function(c){return c.handle===handle;});
+    if (exists) { skipped++; return; }
+    var newId = REAL_CREATORS.length + 1;
+    REAL_CREATORS.push({
+      id:newId, ico:'⭐', bg:'#F0EEF8',
+      name:row.name||row.channel_name||'Unknown',
+      handle:handle, platform:row.platform||'TikTok',
+      niche:row.niche||'', audience:row.audience||'—',
+      er:row.er||row.engagement_rate||'—', rate:row.rate||row.est_rate||'TBC',
+      contact:row.contact||row.contact_hint||'',
+      contact_verified:'Imported from CSV',
+      notes:row.notes||row.bd_notes||'', url:row.channel_url||'',
+      photo:extractUnsplashId(row.photo_url||''), portfolio:[],
+    });
+    added++;
+  });
+  cancelImport();
+  document.getElementById('a-stat-creators').textContent = REAL_CREATORS.length;
+  showToast('\u2705 Imported '+added+' creators ('+skipped+' duplicates skipped)');
+  // Add to history
+  var tbody = document.getElementById('import-history');
+  if (tbody) {
+    var row = document.createElement('tr');
+    row.innerHTML = '<td>'+document.getElementById('file-input').files[0].name+'</td><td>'+importedData.length+'</td><td>'+added+'</td><td>Today</td>';
+    tbody.insertBefore(row, tbody.firstChild);
+  }
+}
+
+function extractUnsplashId(url) {
+  if (!url) return '';
+  var m = url.match(/unsplash\.com\/photo-([a-zA-Z0-9_-]+)/);
+  return m ? m[1] : '';
+}
+
+function cancelImport() {
+  document.getElementById('import-preview-wrap').style.display = 'none';
+  importedData = null;
+}
+
+function downloadTemplate() {
+  var csv = 'name,handle,platform,channel_url,audience,er,rate,niche,contact,notes,photo_url,video_url\n'
+    +'Example Creator,@example,TikTok,https://tiktok.com/@example,50K,7.5%,$100-250,Food & Cooking,contact@example.com,Great food creator,,\n';
+  var blob = new Blob([csv], {type:'text/csv'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'bookingmodel_import_template.csv'; a.click();
+  showToast('Template downloaded');
+}
+
+/* ══════════════════════════════════════════
+   BRIEF BUILDER
+   ══════════════════════════════════════════ */
+
+function updateBriefPreview() {
+  var name     = (document.getElementById('bf-name')||{value:''}).value||'[Campaign name]';
+  var cat      = (document.getElementById('bf-cat')||{value:''}).value;
+  var type     = (document.getElementById('bf-type')||{value:''}).value;
+  var platform = (document.getElementById('bf-platform')||{value:''}).value;
+  var spots    = (document.getElementById('bf-spots')||{value:'5'}).value;
+  var rate     = (document.getElementById('bf-rate')||{value:''}).value;
+  var brief    = (document.getElementById('bf-brief')||{value:''}).value;
+  document.getElementById('bf-preview-content').innerHTML =
+    '<strong>'+name+'</strong><br>'+cat+' · '+type+'<br>Platform: '+platform+'<br>Spots: '+spots+'<br>Budget: '+(rate?'$'+rate+'/creator':'TBC')+'<br><br>'+(brief||'Brief not yet written...');
+  // Show matching creators
+  var matches = REAL_CREATORS.filter(function(c){
+    return cat && c.niche.toLowerCase().indexOf(cat.toLowerCase())!==-1;
+  }).slice(0,4);
+  document.getElementById('bf-matches').innerHTML = matches.length
+    ? matches.map(function(c){ return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border2)"><div style="font-size:14px">'+c.ico+'</div><div><div style="font-size:12.5px;font-weight:700">'+c.name+'</div><div style="font-size:11px;color:var(--muted)">'+c.audience+' · '+c.er+'</div></div><div style="margin-left:auto;font-size:12px;color:var(--green)">'+c.rate.split('\u2013')[0]+'</div></div>'; }).join('')
+    : '<div style="font-size:13px;color:var(--muted)">No matches yet — choose a category.</div>';
+}
+
+function submitBrief() {
+  var name = (document.getElementById('bf-name')||{value:''}).value.trim();
+  if (!name) { showToast('Please enter a campaign name'); return; }
+  showToast('\u2705 Brief submitted — VEA team will match creators within 24h');
+}
+function saveDraftBrief() { showToast('Draft saved locally'); }
+
+function updateAdminBriefPreview() {
+  var title = (document.getElementById('abf-title')||{value:''}).value||'[Campaign title]';
+  var brand = (document.getElementById('abf-brand')||{value:''}).value;
+  var spots = (document.getElementById('abf-spots')||{value:'8'}).value;
+  var rate  = (document.getElementById('abf-rate')||{value:''}).value;
+  document.getElementById('abf-preview').innerHTML = '<strong>'+title+'</strong><br>Brand: '+brand+'<br>Spots: '+spots+'<br>Budget/creator: '+(rate?'$'+rate:'TBC');
+  var estimatedReach = spots * 80000;
+  document.getElementById('abf-reach').textContent = (estimatedReach/1000).toFixed(0)+'K+ (estimated)';
+}
+
+function publishCampaign() {
+  var title = (document.getElementById('abf-title')||{value:''}).value.trim();
+  if (!title) { showToast('Please enter a campaign title'); return; }
+  showToast('\u2705 Campaign published: '+title);
+  setTimeout(function(){showSec('a-campaigns');},1000);
+}
+
+/* ══════════════════════════════════════════
+   SETTINGS
+   ══════════════════════════════════════════ */
+
+function saveSettings() {
+  showToast('\u2705 Settings saved — apply in production via Supabase config');
+}
+function saveCredentials() {
+  var pw = document.getElementById('s-pw').value;
+  if (pw && pw.length < 8) { showToast('Password must be at least 8 characters'); return; }
+  showToast('\u2705 Credentials updated');
+  document.getElementById('s-pw').value = '';
+}
+function exportCreators() {
+  var csv = 'name,handle,platform,niche,audience,er,rate,contact\n'
+    + REAL_CREATORS.map(function(c){ return [c.name,c.handle,c.platform,c.niche,c.audience,c.er,c.rate,c.contact].map(function(v){return '"'+(v||'').replace(/"/g,'""')+'"';}).join(','); }).join('\n');
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'bookingmodel_creators_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+  showToast('Exported '+REAL_CREATORS.length+' creators');
+}
+function exportDeals() {
+  var csv = 'id,creator,brand,content,value,status,due\n'
+    + DEALS.map(function(d){ return [d.id,d.creator,d.brand,d.content,d.value,d.status,d.due].map(function(v){return '"'+(v||'')+'"';}).join(','); }).join('\n');
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'bookingmodel_deals_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+  showToast('Exported '+DEALS.length+' deals');
+}
+
+/* ══════════════════════════════════════════
+   MODAL HELPERS
+   ══════════════════════════════════════════ */
+
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+
+/* Close modal on overlay click */
+document.querySelectorAll('.modal-ov').forEach(function(m){
+  m.addEventListener('click', function(e){ if(e.target===m) closeModal(m.id); });
+});
+
+/* ══════════════════════════════════════════
+   BRIEF LIVE PREVIEW (wire up inputs)
+   ══════════════════════════════════════════ */
+
+['bf-name','bf-cat','bf-type','bf-platform','bf-spots','bf-rate','bf-brief'].forEach(function(id){
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateBriefPreview);
+});
+['abf-title','abf-brand','abf-spots','abf-rate'].forEach(function(id){
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateAdminBriefPreview);
+});
+
+/* ══════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════ */
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3500);
+}
+
+function showCampDetail(name) { showSec('b-campaigns'); showToast('Campaign: '+name); }
+</script>
+</body>
+</html>

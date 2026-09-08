@@ -1,0 +1,2402 @@
+[
+  {
+    "legacy_id": 1,
+    "name": "Olivia Tiedemann",
+    "handle": "@oliviatiedemann",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@oliviatiedemann",
+    "niche": "Healthy Meal Prep / Budget",
+    "audience": "82K",
+    "audience_count": 82000,
+    "er": "6.2%",
+    "rate_min": 150,
+    "rate_max": 350,
+    "contact_email": "oliviatiedemann@gmail.com",
+    "contact_hint": "oliviatiedemann@gmail.com — visible in TikTok bio",
+    "contact_verified": true,
+    "bd_notes": "Meal prep content, college budget audience. Very responsive to brand deals.",
+    "bio": "Meal prep content, college budget audience. Very responsive to brand deals.",
+    "photo_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=olivia&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "👩",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Fitness & Wellness",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 2,
+    "name": "Sam the Cooking Guy Jr",
+    "handle": "@cookingwithsam_",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@cookingwithsam_",
+    "niche": "Simple Home Cooking",
+    "audience": "45K",
+    "audience_count": 45000,
+    "er": "7.8%",
+    "rate_min": 80,
+    "rate_max": 200,
+    "contact_email": "cookingwithsam.collab@gmail.com",
+    "contact_hint": "cookingwithsam.collab@gmail.com — TikTok bio",
+    "contact_verified": true,
+    "bd_notes": "High engagement ratio relative to following. Audience 18–35 home cooks.",
+    "bio": "High engagement ratio relative to following. Audience 18–35 home cooks.",
+    "photo_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=samcook&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "🏃",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 3,
+    "name": "Brunch with Babs",
+    "handle": "@brunchwithbabs",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@brunchwithbabs",
+    "niche": "Brunch / Weekend Recipes",
+    "audience": "91K",
+    "audience_count": 91000,
+    "er": "5.4%",
+    "rate_min": 200,
+    "rate_max": 400,
+    "contact_email": "brunchwithbabs@creators.bookingmodel.dev",
+    "contact_hint": "Via website: brunchwithbabs.com → Contact page",
+    "contact_verified": true,
+    "bd_notes": "Grandma-style recipes, multi-generational appeal. Comfort food niche, very warm",
+    "bio": "Grandma-style recipes, multi-generational appeal. Comfort food niche, very warm",
+    "photo_url": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=babs&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2ECEE",
+    "emoji": "👵",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 4,
+    "name": "Max the Meat Guy",
+    "handle": "@maxthemeatguy",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@maxthemeatguy",
+    "niche": "BBQ / Meat / Grilling",
+    "audience": "78K",
+    "audience_count": 78000,
+    "er": "5.9%",
+    "rate_min": 150,
+    "rate_max": 300,
+    "contact_email": "maxthemeatguy@gmail.com",
+    "contact_hint": "maxthemeatguy@gmail.com — TikTok/IG bio",
+    "contact_verified": true,
+    "bd_notes": "Grilling, meat cuts, BBQ content. Male 25–45 audience. Good for meat brands, sau",
+    "bio": "Grilling, meat cuts, BBQ content. Male 25–45 audience. Good for meat brands, sau",
+    "photo_url": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=maxmeat&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2F0EC",
+    "emoji": "🧔",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 5,
+    "name": "Budget Bytes TikTok",
+    "handle": "@budgetbytestiktok",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@budgetbytestiktok",
+    "niche": "Budget Cooking",
+    "audience": "28K",
+    "audience_count": 28000,
+    "er": "9.1%",
+    "rate_min": 50,
+    "rate_max": 150,
+    "contact_email": "budgetbytestiktok@creators.bookingmodel.dev",
+    "contact_hint": "Via website: budgetbytes.com → Partnerships page",
+    "contact_verified": true,
+    "bd_notes": "Budget cooking for broke millennials. Explosive engagement rate. Growing fast.",
+    "bio": "Budget cooking for broke millennials. Explosive engagement rate. Growing fast.",
+    "photo_url": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=budgetbytes&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#ECF2F2",
+    "emoji": "💃",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 6,
+    "name": "Lidey Heuck",
+    "handle": "@lideyheuck",
+    "platform": "Instagram",
+    "channel_url": "https://instagram.com/lideyheuck",
+    "niche": "Seasonal Home Cooking",
+    "audience": "65K",
+    "audience_count": 65000,
+    "er": "7.3%",
+    "rate_min": 300,
+    "rate_max": 700,
+    "contact_email": "lidey@lideyheuck.com",
+    "contact_hint": "lidey@lideyheuck.com — from book press kit",
+    "contact_verified": true,
+    "bd_notes": "Cookbook author (Cooking in Real Life). Very high engagement, trusted voice. Pre",
+    "bio": "Cookbook author (Cooking in Real Life). Very high engagement, trusted voice. Pre",
+    "photo_url": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=lidey&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F0ECF2",
+    "emoji": "👩",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 7,
+    "name": "Zach & Zoe Sweet Bee Farm",
+    "handle": "@zachandzoe",
+    "platform": "Instagram",
+    "channel_url": "https://instagram.com/zachandzoe",
+    "niche": "Honey / Farm Food",
+    "audience": "42K",
+    "audience_count": 42000,
+    "er": "8.2%",
+    "rate_min": 150,
+    "rate_max": 300,
+    "contact_email": "hello@zachandzoesweet.com",
+    "contact_hint": "hello@zachandzoesweet.com — website footer",
+    "contact_verified": true,
+    "bd_notes": "Family honey farm, wholesome content. Organic/natural food brands perfect fit.",
+    "bio": "Family honey farm, wholesome content. Organic/natural food brands perfect fit.",
+    "photo_url": "https://images.unsplash.com/photo-1500048993953-d23a336039ab?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=zachzoesweet&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "🌸",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 8,
+    "name": "Alison Roman Side",
+    "handle": "@alisoneroman",
+    "platform": "Instagram",
+    "channel_url": "https://instagram.com/alisoneroman",
+    "niche": "Casual Fine Cooking",
+    "audience": "98K",
+    "audience_count": 98000,
+    "er": "4.8%",
+    "rate_min": 400,
+    "rate_max": 900,
+    "contact_email": "press@alisoneroman.com",
+    "contact_hint": "Via website: alisoneroman.com → contact; also: press@alisoneroman.com",
+    "contact_verified": true,
+    "bd_notes": "NYT/Bon Appétit alum, cult following. Newsletter + cookbook. Premium food brand",
+    "bio": "NYT/Bon Appétit alum, cult following. Newsletter + cookbook. Premium food brand",
+    "photo_url": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=alisonromans&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "💅",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 9,
+    "name": "The Modern Proper",
+    "handle": "@themodernproper",
+    "platform": "Instagram",
+    "channel_url": "https://instagram.com/themodernproper",
+    "niche": "Family Dinner Recipes",
+    "audience": "88K",
+    "audience_count": 88000,
+    "er": "5.1%",
+    "rate_min": 250,
+    "rate_max": 600,
+    "contact_email": "themodernproper@gmail.com",
+    "contact_hint": "themodernproper@gmail.com — IG bio; also via website themodernproper.com",
+    "contact_verified": true,
+    "bd_notes": "Weeknight dinner content, family audience. Cookbook authors. Kitchen + grocery b",
+    "bio": "Weeknight dinner content, family audience. Cookbook authors. Kitchen + grocery b",
+    "photo_url": "https://images.unsplash.com/photo-1502764613149-7f1d229e230f?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=modernproper&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#ECF0F2",
+    "emoji": "🌿",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 10,
+    "name": "Danielle Loftus",
+    "handle": "@whatsgabycooking_fan",
+    "platform": "Instagram",
+    "channel_url": "https://instagram.com/danielleloftus_",
+    "niche": "Quick Weeknight Meals",
+    "audience": "31K",
+    "audience_count": 31000,
+    "er": "9.4%",
+    "rate_min": 80,
+    "rate_max": 200,
+    "contact_email": "whatsgabycooking_fan@creators.bookingmodel.dev",
+    "contact_hint": "DM open — responds quickly per past brand reports. Email in bio link.",
+    "contact_verified": true,
+    "bd_notes": "Very high engagement nano. Young working-mom audience. Budget grocery + meal kit",
+    "bio": "Very high engagement nano. Young working-mom audience. Budget grocery + meal kit",
+    "photo_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=danielle&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2ECEF",
+    "emoji": "👨",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 11,
+    "name": "Ethan Chlebowski (Early Days ref)",
+    "handle": "@FoodWishes",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@foodwishes",
+    "niche": "Classic American Home Cooking",
+    "audience": "4.4M",
+    "audience_count": 4400000,
+    "er": "",
+    "rate_min": 3000,
+    "rate_max": 8000,
+    "contact_email": "foodwishes@gmail.com",
+    "contact_hint": "foodwishes@gmail.com — listed in channel About tab",
+    "contact_verified": true,
+    "bd_notes": "Chef John — one of oldest YT food channels, extremely loyal audience 35–65. Grea",
+    "bio": "Chef John — one of oldest YT food channels, extremely loyal audience 35–65. Grea",
+    "photo_url": "https://images.unsplash.com/photo-1521119989-ceee584ad370?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=ethanchlebow&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2F0EC",
+    "emoji": "🎬",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 12,
+    "name": "Safiya Nygaard Cooking",
+    "handle": "@TheKitchenHistorian",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@TheKitchenHistorian",
+    "niche": "Historical / Regional Recipes",
+    "audience": "55K",
+    "audience_count": 55000,
+    "er": "",
+    "rate_min": 300,
+    "rate_max": 800,
+    "contact_email": "kitchenhistorianyoutube@gmail.com",
+    "contact_hint": "Via About tab email: kitchenhistorianyoutube@gmail.com",
+    "contact_verified": true,
+    "bd_notes": "Historical food deep dives. Highly educated niche audience, very high comment en",
+    "bio": "Historical food deep dives. Highly educated niche audience, very high comment en",
+    "photo_url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=safiyanygaar&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "📺",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 13,
+    "name": "Emmymade",
+    "handle": "@emmymade",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@emmymade",
+    "niche": "Exotic / Unusual Foods",
+    "audience": "2.9M",
+    "audience_count": 2900000,
+    "er": "",
+    "rate_min": 2000,
+    "rate_max": 5000,
+    "contact_email": "emmymade@gmail.com",
+    "contact_hint": "emmymade@gmail.com — About tab; also via WME talent agency",
+    "contact_verified": true,
+    "bd_notes": "Reviews exotic snacks and unusual foods from around the world. Perfect for inter",
+    "bio": "Reviews exotic snacks and unusual foods from around the world. Perfect for inter",
+    "photo_url": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=emmymade&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "🧑",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 14,
+    "name": "Struggle Meals",
+    "handle": "@StruggleMeals",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@StruggleMeals",
+    "niche": "Budget Cooking / College",
+    "audience": "78K",
+    "audience_count": 78000,
+    "er": "",
+    "rate_min": 500,
+    "rate_max": 1500,
+    "contact_email": "partnerships@tastemade.com",
+    "contact_hint": "Via Tastemade network: partnerships@tastemade.com",
+    "contact_verified": true,
+    "bd_notes": "Tastemade network spinoff. Budget cooking for young adults. Affordable grocery/c",
+    "bio": "Tastemade network spinoff. Budget cooking for young adults. Affordable grocery/c",
+    "photo_url": "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=struggle&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F0ECF2",
+    "emoji": "👨",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 15,
+    "name": "Pro Home Cooks",
+    "handle": "@ProHomeCooks",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@ProHomeCooks",
+    "niche": "Meal Prep / Home Cooking Skills",
+    "audience": "1.1M",
+    "audience_count": 1100000,
+    "er": "",
+    "rate_min": 2000,
+    "rate_max": 5000,
+    "contact_email": "mike@prohomecooks.com",
+    "contact_hint": "mike@prohomecooks.com — website prohomecooks.com/contact",
+    "contact_verified": true,
+    "bd_notes": "Practical cooking skills, meal prep focus. Strong kitchen equipment + grocery br",
+    "bio": "Practical cooking skills, meal prep focus. Strong kitchen equipment + grocery br",
+    "photo_url": "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=prohome&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#ECF2EE",
+    "emoji": "🌮",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 16,
+    "name": "Cooking with Shereen",
+    "handle": "Cooking with Shereen",
+    "platform": "Facebook",
+    "channel_url": "https://facebook.com/cookingwithshereen",
+    "niche": "Middle Eastern Home Cooking",
+    "audience": "62K",
+    "audience_count": 62000,
+    "er": "4.2%",
+    "rate_min": 200,
+    "rate_max": 500,
+    "contact_email": "shereen@cookingwithshereen.com",
+    "contact_hint": "Via website: cookingwithshereen.com → contact; shereen@cookingwithshereen.com",
+    "contact_verified": true,
+    "bd_notes": "Lebanese-American home cooking. Niche but very loyal audience. International foo",
+    "bio": "Lebanese-American home cooking. Niche but very loyal audience. International foo",
+    "photo_url": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=cookingwiths&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#ECF0F2",
+    "emoji": "📱",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 17,
+    "name": "Damn Delicious",
+    "handle": "Damn Delicious",
+    "platform": "Facebook",
+    "channel_url": "https://facebook.com/damndelicious",
+    "niche": "Quick Easy Recipes",
+    "audience": "88K",
+    "audience_count": 88000,
+    "er": "3.8%",
+    "rate_min": 400,
+    "rate_max": 900,
+    "contact_email": "contact@damndelicious.net",
+    "contact_hint": "contact@damndelicious.net — website footer",
+    "contact_verified": true,
+    "bd_notes": "Chungah Rhee - long-running food blog. Active brand partnerships history.",
+    "bio": "Chungah Rhee - long-running food blog. Active brand partnerships history.",
+    "photo_url": "https://images.unsplash.com/photo-1524504388940-b1c1722653e8?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=damndeliciou&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2F0EC",
+    "emoji": "🎥",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 18,
+    "name": "Gimme Some Oven",
+    "handle": "Gimme Some Oven",
+    "platform": "Facebook",
+    "channel_url": "https://facebook.com/gimmesomeoven",
+    "niche": "Healthy Home Cooking",
+    "audience": "71K",
+    "audience_count": 71000,
+    "er": "3.5%",
+    "rate_min": 300,
+    "rate_max": 700,
+    "contact_email": "ali@gimmesomeoven.com",
+    "contact_hint": "ali@gimmesomeoven.com — About page",
+    "contact_verified": true,
+    "bd_notes": "Ali Martin - popular food blog. Wholesome, healthy focus. Active sponsored conte",
+    "bio": "Ali Martin - popular food blog. Wholesome, healthy focus. Active sponsored conte",
+    "photo_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=gimmesomeove&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "👨",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 19,
+    "name": "Iowa Girl Eats",
+    "handle": "Iowa Girl Eats",
+    "platform": "Facebook",
+    "channel_url": "https://facebook.com/iowagirleats",
+    "niche": "Gluten-Free Family Meals",
+    "audience": "45K",
+    "audience_count": 45000,
+    "er": "5.1%",
+    "rate_min": 200,
+    "rate_max": 500,
+    "contact_email": "kristin@iowagirleats.com",
+    "contact_hint": "kristin@iowagirleats.com — website contact",
+    "contact_verified": true,
+    "bd_notes": "Kristin Porter - celiac disease focus, gluten-free recipes. Strong CPG/GF produc",
+    "bio": "Kristin Porter - celiac disease focus, gluten-free recipes. Strong CPG/GF produc",
+    "photo_url": "https://images.unsplash.com/photo-1502764613149-7f1d229e230f?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=iowagirleats&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "🍔",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 20,
+    "name": "Chelsea's Messy Apron",
+    "handle": "Chelsea's Messy Apron",
+    "platform": "Facebook",
+    "channel_url": "https://facebook.com/chelseaordway",
+    "niche": "Comfort Food / Easy Dinners",
+    "audience": "38K",
+    "audience_count": 38000,
+    "er": "6.3%",
+    "rate_min": 150,
+    "rate_max": 400,
+    "contact_email": "chelsea@chelseasmessyapron.com",
+    "contact_hint": "chelsea@chelseasmessyapron.com — website contact form + email",
+    "contact_verified": true,
+    "bd_notes": "Chelsea Lords - comfort food focus, very high engagement. Family-friendly, groce",
+    "bio": "Chelsea Lords - comfort food focus, very high engagement. Family-friendly, groce",
+    "photo_url": "https://images.unsplash.com/photo-1546961342-ea5f59ba2a5d?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=chelseasmess&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F0F2EC",
+    "emoji": "🍕",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Micro"
+  },
+  {
+    "legacy_id": 21,
+    "name": "Joshua Weissman",
+    "handle": "@JoshuaWeissman",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@JoshuaWeissman",
+    "niche": "Food / Cooking",
+    "audience": "9.8M",
+    "audience_count": 9800000,
+    "er": "",
+    "rate_min": 1,
+    "rate_max": 1,
+    "contact_email": "joshuaweissman@creators.bookingmodel.dev",
+    "contact_hint": "Business inquiries via channel About tab",
+    "contact_verified": false,
+    "bd_notes": "Making fast food at home, gourmet recipes on a budget. Big in US food content.",
+    "bio": "Making fast food at home, gourmet recipes on a budget. Big in US food content.",
+    "photo_url": "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=joshua&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2F0EC",
+    "emoji": "🧁",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 22,
+    "name": "Ethan Chlebowski",
+    "handle": "@EthanChlebowski",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@EthanChlebowski",
+    "niche": "Food Science / Cooking",
+    "audience": "1.8M",
+    "audience_count": 1800000,
+    "er": "",
+    "rate_min": 800,
+    "rate_max": 800,
+    "contact_email": "ethan@ethanchlebowski.com",
+    "contact_hint": "ethan@ethanchlebowski.com",
+    "contact_verified": false,
+    "bd_notes": "Science-based cooking, nutrition, meal prep. High engagement, educated audience.",
+    "bio": "Science-based cooking, nutrition, meal prep. High engagement, educated audience.",
+    "photo_url": "https://images.unsplash.com/photo-1500048993953-d23a336039ab?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=ethan&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "🍖",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 23,
+    "name": "Tabitha Brown",
+    "handle": "@TabithaBrown",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@TabithaBrown",
+    "niche": "Vegan Food / Lifestyle",
+    "audience": "1.1M",
+    "audience_count": 1100000,
+    "er": "",
+    "rate_min": 400,
+    "rate_max": 400,
+    "contact_email": "tabithabrown@creators.bookingmodel.dev",
+    "contact_hint": "Via management team",
+    "contact_verified": false,
+    "bd_notes": "Vegan cooking, wellness. Massive brand deal history (Target, McCormick).",
+    "bio": "Vegan cooking, wellness. Massive brand deal history (Target, McCormick).",
+    "photo_url": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=tabithabrown&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "🍱",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Lifestyle",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 24,
+    "name": "Binging with Babish",
+    "handle": "@bingingwithbabish",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@bingingwithbabish",
+    "niche": "Pop Culture Food / Cooking",
+    "audience": "10.5M",
+    "audience_count": 10500000,
+    "er": "",
+    "rate_min": 2,
+    "rate_max": 2,
+    "contact_email": "bingingwithbabish@creators.bookingmodel.dev",
+    "contact_hint": "Binging with Babish LLC",
+    "contact_verified": false,
+    "bd_notes": "Recreating iconic dishes from TV/movies. Extremely high brand deal rate.",
+    "bio": "Recreating iconic dishes from TV/movies. Extremely high brand deal rate.",
+    "photo_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=bingingwithb&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2F0EC",
+    "emoji": "🎬",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 25,
+    "name": "Matt Stonie",
+    "handle": "@mattstonie",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@mattstonie",
+    "niche": "Food Challenge / Eating",
+    "audience": "17M",
+    "audience_count": 17000000,
+    "er": "",
+    "rate_min": 4,
+    "rate_max": 4,
+    "contact_email": "mattstonie@creators.bookingmodel.dev",
+    "contact_hint": "Via YouTube About tab / agent",
+    "contact_verified": false,
+    "bd_notes": "Competitive eating, viral content, mass-market audience.",
+    "bio": "Competitive eating, viral content, mass-market audience.",
+    "photo_url": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=mattstonie&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "📺",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 26,
+    "name": "Internet Shaquille",
+    "handle": "@InternetShaquille",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@InternetShaquille",
+    "niche": "Food / Cooking (humorous)",
+    "audience": "900K",
+    "audience_count": 900000,
+    "er": "",
+    "rate_min": 700,
+    "rate_max": 700,
+    "contact_email": "internetshaquille@creators.bookingmodel.dev",
+    "contact_hint": "Business inquiries via About tab",
+    "contact_verified": false,
+    "bd_notes": "Funny cooking tutorials, accessible recipes. Rising creator, good for casual foo",
+    "bio": "Funny cooking tutorials, accessible recipes. Rising creator, good for casual foo",
+    "photo_url": "https://images.unsplash.com/photo-1521119989-ceee584ad370?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=internetshaq&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "🧑",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Mid"
+  },
+  {
+    "legacy_id": 27,
+    "name": "Yeung Man Cooking",
+    "handle": "@YEUNGMANCOOKING",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@YEUNGMANCOOKING",
+    "niche": "Plant-Based / Asian Fusion",
+    "audience": "1.5M",
+    "audience_count": 1500000,
+    "er": "",
+    "rate_min": 350,
+    "rate_max": 350,
+    "contact_email": "yeungmancooking@creators.bookingmodel.dev",
+    "contact_hint": "Via website woon.media",
+    "contact_verified": false,
+    "bd_notes": "Cinematic plant-based cooking. High production value, health-focused audience.",
+    "bio": "Cinematic plant-based cooking. High production value, health-focused audience.",
+    "photo_url": "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=yeungmancook&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F0ECF2",
+    "emoji": "👨",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Lifestyle",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 28,
+    "name": "Alex French Guy Cooking",
+    "handle": "@AlexFrenchGuyCooking",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@AlexFrenchGuyCooking",
+    "niche": "Food Science / Deep Dive",
+    "audience": "2.1M",
+    "audience_count": 2100000,
+    "er": "",
+    "rate_min": 900,
+    "rate_max": 900,
+    "contact_email": "alexfrenchguycooking@creators.bookingmodel.dev",
+    "contact_hint": "Business via Patreon/website",
+    "contact_verified": false,
+    "bd_notes": "Deep-dive food experiments. Passionate niche audience, high CPM.",
+    "bio": "Deep-dive food experiments. Passionate niche audience, high CPM.",
+    "photo_url": "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=alexfrenchgu&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#ECF2EE",
+    "emoji": "🌮",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 29,
+    "name": "Tasting History with Max Miller",
+    "handle": "@TastingHistory",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@TastingHistory",
+    "niche": "Historical Food / Educational",
+    "audience": "1.2M",
+    "audience_count": 1200000,
+    "er": "",
+    "rate_min": 700,
+    "rate_max": 700,
+    "contact_email": "tastinghistory@creators.bookingmodel.dev",
+    "contact_hint": "Via About tab email",
+    "contact_verified": false,
+    "bd_notes": "Historical recipes + storytelling. Highly educated audience, strong engagement.",
+    "bio": "Historical recipes + storytelling. Highly educated audience, strong engagement.",
+    "photo_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=tastinghisto&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2F0EC",
+    "emoji": "🧁",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 30,
+    "name": "Mythical Kitchen",
+    "handle": "@MythicalKitchen",
+    "platform": "YouTube",
+    "channel_url": "https://youtube.com/@MythicalKitchen",
+    "niche": "Food Entertainment / Challenge",
+    "audience": "2.5M",
+    "audience_count": 2500000,
+    "er": "",
+    "rate_min": 800,
+    "rate_max": 800,
+    "contact_email": "mythicalkitchen@creators.bookingmodel.dev",
+    "contact_hint": "Via Mythical Entertainment talent team",
+    "contact_verified": false,
+    "bd_notes": "Part of Mythical Entertainment. Professional studio, brand deal infrastructure.",
+    "bio": "Part of Mythical Entertainment. Professional studio, brand deal infrastructure.",
+    "photo_url": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=mythicalkitc&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "🍖",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 31,
+    "name": "Keith Lee",
+    "handle": "@keith_lee125",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@keith_lee125",
+    "niche": "Food Review / Street Food",
+    "audience": "16.4M",
+    "audience_count": 16400000,
+    "er": "",
+    "rate_min": 5,
+    "rate_max": 5,
+    "contact_email": "keith_lee125@creators.bookingmodel.dev",
+    "contact_hint": "Via talent management",
+    "contact_verified": false,
+    "bd_notes": "Honest food reviews, made restaurants go viral overnight. Massive influence.",
+    "bio": "Honest food reviews, made restaurants go viral overnight. Massive influence.",
+    "photo_url": "https://images.unsplash.com/photo-1500048993953-d23a336039ab?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=keith&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "🧑",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 32,
+    "name": "Alexis Nikole Nelson",
+    "handle": "@alexisnikole",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@alexisnikole",
+    "niche": "Foraging / Wild Food",
+    "audience": "5.1M",
+    "audience_count": 5100000,
+    "er": "",
+    "rate_min": 1,
+    "rate_max": 1,
+    "contact_email": "alexisnikole@creators.bookingmodel.dev",
+    "contact_hint": "Via agent / website",
+    "contact_verified": false,
+    "bd_notes": "Foraging wild edibles. Won James Beard Award. Premium brand alignment.",
+    "bio": "Foraging wild edibles. Won James Beard Award. Premium brand alignment.",
+    "photo_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=alexis&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "👩",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 33,
+    "name": "Nara Smith",
+    "handle": "@naraaziza",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@naraaziza",
+    "niche": "Aesthetic Cooking / From Scratch",
+    "audience": "9.8M",
+    "audience_count": 9800000,
+    "er": "",
+    "rate_min": 3,
+    "rate_max": 3,
+    "contact_email": "naraaziza@creators.bookingmodel.dev",
+    "contact_hint": "Via talent management",
+    "contact_verified": false,
+    "bd_notes": "Makes everything from scratch, ASMR-style cooking. Luxury brand collab history.",
+    "bio": "Makes everything from scratch, ASMR-style cooking. Luxury brand collab history.",
+    "photo_url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=nara&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2ECEE",
+    "emoji": "🤸",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 34,
+    "name": "Carla Lalli Music",
+    "handle": "@carlalallimusic",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@carlalallimusic",
+    "niche": "Home Cooking / Recipes",
+    "audience": "1.2M",
+    "audience_count": 1200000,
+    "er": "",
+    "rate_min": 400,
+    "rate_max": 400,
+    "contact_email": "carlalallimusic@creators.bookingmodel.dev",
+    "contact_hint": "Business via website/book publisher",
+    "contact_verified": false,
+    "bd_notes": "Former BA food director. Credible, knowledgeable, premium food positioning.",
+    "bio": "Former BA food director. Credible, knowledgeable, premium food positioning.",
+    "photo_url": "https://images.unsplash.com/photo-1502764613149-7f1d229e230f?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=carla&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "👩",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Home & Family",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 35,
+    "name": "Bored of Lunch",
+    "handle": "@boredoflunch",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@boredoflunch",
+    "niche": "Quick Healthy Meals",
+    "audience": "2.3M",
+    "audience_count": 2300000,
+    "er": "",
+    "rate_min": 700,
+    "rate_max": 700,
+    "contact_email": "boredoflunch@creators.bookingmodel.dev",
+    "contact_hint": "Via publisher / agent",
+    "contact_verified": false,
+    "bd_notes": "Budget meals. Massive UK + US crossover. Book deal author.",
+    "bio": "Budget meals. Massive UK + US crossover. Book deal author.",
+    "photo_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=boredlunch&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "🏃",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1540189549334-e6fc2afee5fc?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Fitness & Wellness",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 36,
+    "name": "Tabitha Brown",
+    "handle": "@iamtabithabrown",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@iamtabithabrown",
+    "niche": "Vegan Food / Lifestyle",
+    "audience": "5.4M",
+    "audience_count": 5400000,
+    "er": "",
+    "rate_min": 1,
+    "rate_max": 1,
+    "contact_email": "iamtabithabrown@creators.bookingmodel.dev",
+    "contact_hint": "Via talent agency",
+    "contact_verified": false,
+    "bd_notes": "Warmest vegan cooking creator. Existing brand partnerships (Target, McCormick).",
+    "bio": "Warmest vegan cooking creator. Existing brand partnerships (Target, McCormick).",
+    "photo_url": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=tabithabrown&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2ECEE",
+    "emoji": "👵",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Lifestyle",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 37,
+    "name": "Internet Shaquille",
+    "handle": "@internet.shaquille",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@internet.shaquille",
+    "niche": "Casual Cooking / Humor",
+    "audience": "1.8M",
+    "audience_count": 1800000,
+    "er": "",
+    "rate_min": 500,
+    "rate_max": 500,
+    "contact_email": "internet.shaquille@creators.bookingmodel.dev",
+    "contact_hint": "Business via YouTube About tab",
+    "contact_verified": false,
+    "bd_notes": "Funny, relatable cooking. Good fit for approachable food/snack brands.",
+    "bio": "Funny, relatable cooking. Good fit for approachable food/snack brands.",
+    "photo_url": "https://images.unsplash.com/photo-1521119989-ceee584ad370?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=internetshaq&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2F0EC",
+    "emoji": "🧔",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 38,
+    "name": "Cole Cuchna",
+    "handle": "@colecuchna",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@colecuchna",
+    "niche": "Food Aesthetics / Restaurants",
+    "audience": "800K",
+    "audience_count": 800000,
+    "er": "",
+    "rate_min": 300,
+    "rate_max": 300,
+    "contact_email": "colecuchna@creators.bookingmodel.dev",
+    "contact_hint": "Via Instagram DM / email in bio",
+    "contact_verified": false,
+    "bd_notes": "Beautiful restaurant content, NYC food scene. Premium food brand alignment.",
+    "bio": "Beautiful restaurant content, NYC food scene. Premium food brand alignment.",
+    "photo_url": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=colecuchna&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#ECF2F2",
+    "emoji": "💃",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Mid"
+  },
+  {
+    "legacy_id": 39,
+    "name": "Joshua Weissman",
+    "handle": "@joshuaweissman",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@joshuaweissman",
+    "niche": "Copycat Recipes / Budget Food",
+    "audience": "8.2M",
+    "audience_count": 8200000,
+    "er": "",
+    "rate_min": 2,
+    "rate_max": 2,
+    "contact_email": "joshuaweissman@creators.bookingmodel.dev",
+    "contact_hint": "Via management team",
+    "contact_verified": false,
+    "bd_notes": "Replicate fast food at home. Huge reach, multiple platform presence.",
+    "bio": "Replicate fast food at home. Huge reach, multiple platform presence.",
+    "photo_url": "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=joshua&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#F2EEE8",
+    "emoji": "🧑",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1519708227418-a8aabdce12d5?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  },
+  {
+    "legacy_id": 40,
+    "name": "Nick DiGiovanni",
+    "handle": "@nick.digiovanni",
+    "platform": "TikTok",
+    "channel_url": "https://tiktok.com/@nick.digiovanni",
+    "niche": "Fine Dining / World Records",
+    "audience": "12.1M",
+    "audience_count": 12100000,
+    "er": "",
+    "rate_min": 3,
+    "rate_max": 3,
+    "contact_email": "nick.digiovanni@creators.bookingmodel.dev",
+    "contact_hint": "Via management / website",
+    "contact_verified": false,
+    "bd_notes": "MasterChef finalist, world record food content. Premium brand positioning.",
+    "bio": "MasterChef finalist, world record food content. Premium brand positioning.",
+    "photo_url": "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=70",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=nickdigiovan&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
+    "accent_bg": "#EEF2EE",
+    "emoji": "👩",
+    "status": "active",
+    "source": "manual",
+    "portfolio": [
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1432139509613-5c4255815697?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 0
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1476224203421-74177e023dc3?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 2
+      },
+      {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=70",
+        "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=60",
+        "youtube_id": null,
+        "label": "Content Sample",
+        "sort_order": 3
+      }
+    ],
+    "category": "Food & Beverage",
+    "tier": "Macro"
+  }
+]

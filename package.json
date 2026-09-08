@@ -1,0 +1,43 @@
+{
+  "name": "bookingmodel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BookingModel.com — Creator marketing marketplace for North American brands (VEA Group / VEA Tech)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "db:seed": "supabase db push --include-seed",
+    "db:link": "supabase link --project-ref",
+    "db:push": "supabase db push",
+    "db:diff": "supabase db diff -f",
+    "db:pull": "supabase db pull",
+    "db:status": "supabase migration list"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.9.6",
+    "next": "^15.5.25",
+    "papaparse": "^5.4.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "resend": "^4.0.1",
+    "xlsx": "^0.18.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.10.5",
+    "@types/papaparse": "^5.3.15",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "supabase": "^2.116.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
+  }
+}

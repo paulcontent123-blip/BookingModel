@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BookingModel — Creator Marketing Platform for North American Brands</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0A0A0A;--ink2:#222;--white:#FFF;--bg:#F8F8F8;--bg2:#F2F2F2;--bg3:#EBEBEB;
+  --muted:#5C5C5C;--muted2:#8C8C8C;--muted3:#C0C0C0;
+  --border:#E2E2E2;--border2:#CACACA;
+  --blue:#0057FF;--blue2:#0047D4;--blue-l:rgba(0,87,255,.08);--blue-b:rgba(0,87,255,.18);
+  --green:#00875A;--green-l:rgba(0,135,90,.08);
+  --orange:#E8541A;--orange-l:rgba(232,84,26,.08);
+  --sh:0 1px 4px rgba(0,0,0,.07);--sh2:0 6px 28px rgba(0,0,0,.11);
+  --r:4px;--mont:'Montserrat',Arial,sans-serif;--arial:Arial,'Helvetica Neue',sans-serif;--times:'Times New Roman',Times,Georgia,serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--arial);background:var(--white);color:var(--ink);font-size:14px;line-height:1.6}
+/* NAV */
+nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 48px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;margin-right:40px;flex-shrink:0}
+.logo-mark{width:32px;height:32px;background:var(--ink);border-radius:var(--r);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-family:var(--mont);font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
+.logo-text em{font-style:normal;color:var(--blue)}
+.nav-c{display:flex;flex:1;gap:2px}
+.nl{padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;font-family:var(--arial);white-space:nowrap;border-radius:var(--r);transition:all .15s}
+.nl:hover,.nl.on{color:var(--ink);background:var(--bg2)}
+.nav-drop{position:relative}.nav-drop:hover .ddm{display:block}
+.nl-arr::after{content:'';width:4px;height:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);display:inline-block;margin-left:5px}
+.ddm{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--white);border:1px solid var(--border);border-radius:6px;box-shadow:var(--sh2);padding:5px;min-width:220px;z-index:500}
+.ddi{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border-radius:3px;font-size:13px;color:var(--muted);cursor:pointer;border:none;background:transparent;font-family:var(--arial);width:100%;text-align:left;transition:all .15s}
+.ddi:hover{background:var(--bg);color:var(--ink)}
+.ddi-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.ddi-text{display:flex;flex-direction:column;gap:1px}
+.ddi-title{font-size:13px;font-weight:600;color:var(--ink)}
+.ddi-sub{font-size:11px;color:var(--muted2)}
+.nav-r{display:flex;gap:8px;align-items:center;margin-left:8px;flex-shrink:0}
+.btn-ghost{border:1.5px solid var(--border2);background:transparent;color:var(--ink);padding:7px 18px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--arial);transition:all .2s}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-solid{background:var(--ink);color:var(--white);border:none;padding:8px 20px;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--arial);transition:all .2s}
+.btn-solid:hover{background:var(--blue)}
+.btn-blue{background:var(--blue);color:var(--white);border:none;padding:8px 20px;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--arial);transition:all .2s}
+.btn-blue:hover{background:var(--blue2)}
+/* PAGES */
+.page{display:none}.page.on{display:block}
+/* TICKER */
+.ticker{background:var(--ink);overflow:hidden;padding:8px 0;border-bottom:2px solid var(--blue)}
+.ticker-wrap{display:flex;width:max-content;animation:ticker 35s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.t-item{display:inline-flex;align-items:center;gap:6px;font-family:var(--mont);font-size:11.5px;font-weight:600;color:rgba(255,255,255,.5);padding:0 24px;white-space:nowrap;letter-spacing:.3px}
+.t-item .dot{color:var(--blue);font-size:8px}
+/* HERO */
+.hero{background:var(--white);padding:72px 48px 56px;border-bottom:1px solid var(--border)}
+.hero-inner{max-width:1200px;margin:0 auto}
+.hero-top{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:flex-start;margin-bottom:40px}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border2);border-radius:20px;padding:4px 13px;font-size:11.5px;font-weight:600;color:var(--muted);font-family:var(--mont);margin-bottom:18px}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.hero-h{font-family:var(--times);font-size:54px;font-weight:400;line-height:1.06;color:var(--ink);margin-bottom:16px;letter-spacing:-.5px}
+.hero-h strong{font-family:var(--mont);font-style:normal;font-weight:900;color:var(--blue);display:block;font-size:50px;letter-spacing:-2px;line-height:1}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:28px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.btn-hero{background:var(--ink);color:var(--white);border:none;padding:14px 28px;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--mont);transition:all .2s}
+.btn-hero:hover{background:var(--blue)}
+.btn-hero-out{background:transparent;color:var(--ink);border:2px solid var(--border2);padding:13px 24px;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--arial);transition:all .2s}
+.btn-hero-out:hover{border-color:var(--ink)}
+.hero-kpis{display:flex;gap:24px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:22px}
+.kpi-n{font-family:var(--mont);font-size:21px;font-weight:800;color:var(--ink);letter-spacing:-.5px}
+.kpi-l{font-size:11.5px;color:var(--muted);margin-top:1px}
+/* CREATOR SCROLL — full width below hero grid */
+.hero-scroll-area{border-top:1px solid var(--border);padding-top:24px}
+.hs-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px;font-family:var(--mont)}
+.creator-strip{overflow:hidden}
+.cs-track{display:flex;gap:10px;width:max-content;animation:scrollx 45s linear infinite}
+.cs-track.rev{animation-direction:reverse}
+.cs-track:hover{animation-play-state:paused}
+@keyframes scrollx{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.creator-scroll-card{flex-shrink:0;width:150px;background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s}
+.creator-scroll-card:hover{border-color:var(--blue);transform:translateY(-2px)}
+.csc-media{height:110px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative}
+.csc-play{position:absolute;bottom:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px}
+.csc-platform{position:absolute;top:5px;left:5px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;background:rgba(0,0,0,.7);color:#fff;font-family:var(--mont)}
+.csc-body{padding:7px 9px}
+.csc-name{font-size:11.5px;font-weight:700;font-family:var(--mont);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.csc-niche{font-size:10px;color:var(--muted);margin-bottom:3px}
+.csc-rate{font-size:11.5px;font-weight:700;color:var(--blue);font-family:var(--mont)}
+/* BRAND STRIP */
+.brand-strip{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;overflow:hidden}
+.bs-track{display:flex;width:max-content;animation:ticker 28s linear infinite}
+.bs-item{display:flex;align-items:center;padding:0 28px;opacity:.45;transition:opacity .2s}
+.bs-item:hover{opacity:.9}
+.bs-logo{font-family:var(--mont);font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-.3px;white-space:nowrap}
+/* SECTIONS */
+.sec{max-width:1200px;margin:0 auto;padding:60px 48px}
+.sec-eye{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;font-family:var(--mont)}
+.sec-h{font-family:var(--times);font-size:38px;font-weight:400;color:var(--ink);line-height:1.12;margin-bottom:10px}
+.sec-h strong{font-family:var(--mont);font-weight:900;font-style:normal}
+.sec-p{font-size:15px;color:var(--muted);line-height:1.8;max-width:560px;margin-bottom:28px}
+.sec-divider{height:1px;background:var(--border);max-width:1200px;margin:0 48px}
+.sec-white{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+/* SOLUTION CARDS */
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:8px}
+.sol-item{background:var(--white);padding:26px 22px;cursor:pointer;transition:all .2s}
+.sol-item:hover{background:var(--bg)}
+.sol-ico{font-size:24px;margin-bottom:12px}
+.sol-title{font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:6px}
+.sol-desc{font-size:12.5px;color:var(--muted);line-height:1.65}
+.sol-arrow{font-size:11px;color:var(--blue);font-weight:700;margin-top:10px;display:block}
+/* SOLUTION DETAIL PAGES */
+.sol-detail{display:none}.sol-detail.on{display:block}
+.sol-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;margin-bottom:20px;border:none;background:none;font-family:var(--arial)}
+.sol-back:hover{color:var(--ink)}
+/* CAMPAIGNS */
+.camp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.camp-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:all .2s;cursor:pointer}
+.camp-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--sh2)}
+.camp-img{height:148px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative}
+.camp-badge{position:absolute;top:10px;left:10px;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:3px;font-family:var(--mont)}
+.cb-open{background:var(--green-l);color:var(--green);border:1px solid rgba(0,135,90,.25)}
+.cb-hot{background:var(--orange-l);color:var(--orange);border:1px solid rgba(232,84,26,.25)}
+.cb-urgent{background:rgba(204,0,0,.07);color:#CC0000;border:1px solid rgba(204,0,0,.2)}
+.camp-body{padding:14px 15px}
+.camp-brand{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;font-family:var(--mont);margin-bottom:4px}
+.camp-title{font-size:13.5px;font-weight:700;color:var(--ink);font-family:var(--mont);margin-bottom:6px}
+.camp-meta{display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap;margin-bottom:10px}
+.camp-tags{display:flex;gap:4px;flex-wrap:wrap}
+.camp-tag{font-size:10.5px;padding:2px 8px;border-radius:3px;background:var(--bg2);color:var(--muted);border:1px solid var(--border)}
+.camp-apply{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.camp-spots{font-size:11.5px;color:var(--orange);font-weight:600}
+.btn-apply{font-size:12px;font-weight:700;padding:6px 16px;border-radius:3px;background:var(--blue);color:var(--white);border:none;cursor:pointer;font-family:var(--mont);transition:all .2s}
+.btn-apply:hover{background:var(--blue2)}
+/* NEWS */
+.news-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.news-main{border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.news-main:hover{border-color:var(--blue);box-shadow:var(--sh2)}
+.nm-img{height:200px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:64px}
+.nm-body{padding:16px}
+.nm-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);font-family:var(--mont);margin-bottom:7px}
+.nm-title{font-family:var(--mont);font-size:16px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:7px}
+.nm-date{font-size:11.5px;color:var(--muted2)}
+.nm-read{font-size:12px;font-weight:700;color:var(--blue);margin-top:10px;display:block}
+.news-side{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ns-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:all .2s}
+.ns-card:hover{border-color:var(--blue)}
+.ns-img{height:90px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+.ns-body{padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.ns-cat{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--blue);font-family:var(--mont);margin-bottom:4px}
+.ns-title{font-size:12.5px;font-weight:600;color:var(--ink);font-family:var(--mont);line-height:1.35}
+.ns-date{font-size:10.5px;color:var(--muted2);margin-top:4px}
+/* MARKETPLACE */
+.mkt-controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.search-inp{flex:1;min-width:200px;max-width:280px;padding:9px 13px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;font-family:var(--arial);background:var(--bg);outline:none;transition:border .15s}
+.search-inp:focus{border-color:var(--blue);background:var(--white)}
+.filter-sel{padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;font-family:var(--arial);background:var(--bg);color:var(--muted);outline:none}
+.btn-search{background:var(--ink);color:var(--white);border:none;padding:9px 20px;border-radius:var(--r);font-size:13px;font-weight:700;font-family:var(--mont);cursor:pointer;transition:all .2s}
+.btn-search:hover{background:var(--blue)}
+.creator-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cg-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s}
+.cg-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--sh2)}
+.cg-photo{height:170px;display:flex;align-items:center;justify-content:center;font-size:58px;position:relative}
+.cg-badges{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;gap:3px}
+.cg-b{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:3px;font-family:var(--mont);display:inline-block}
+.cg-b-tiktok{background:#000;color:#fff}
+.cg-b-instagram{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff}
+.cg-b-youtube{background:#FF0000;color:#fff}
+.cg-b-facebook{background:#1877F2;color:#fff}
+.cg-avail{position:absolute;bottom:8px;right:8px;font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(0,135,90,.85);color:#fff;font-family:var(--mont)}
+.cg-body{padding:11px 12px}
+.cg-name{font-size:13px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cg-handle{font-size:11px;color:var(--blue);margin-bottom:5px}
+.cg-niche-tag{font-size:10px;padding:2px 7px;border-radius:3px;background:var(--bg2);color:var(--muted);border:1px solid var(--border);display:inline-block;margin-bottom:7px}
+.cg-stats{display:flex;gap:10px;margin-bottom:8px}
+.cg-stat-n{font-size:12px;font-weight:700;font-family:var(--mont);color:var(--ink)}
+.cg-stat-l{font-size:10px;color:var(--muted)}
+.cg-row{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border)}
+.cg-rate{font-size:13px;font-weight:700;font-family:var(--mont);color:var(--ink)}
+.cg-rate small{font-size:10px;font-weight:400;color:var(--muted)}
+.btn-cg{font-size:11px;font-weight:700;padding:5px 12px;border-radius:3px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-b);cursor:pointer;font-family:var(--mont);transition:all .15s}
+.btn-cg:hover{background:var(--blue);color:#fff}
+/* FAQ */
+.faq-list{max-width:700px}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;padding:17px 0;display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:600;color:var(--ink);font-family:var(--mont);cursor:pointer;background:none;border:none;text-align:left;gap:12px}
+.faq-ico{font-size:18px;color:var(--muted);flex-shrink:0;transition:transform .2s;font-style:normal}
+.faq-a{display:none;padding:0 0 15px;font-size:13.5px;color:var(--muted);line-height:1.75}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-ico{transform:rotate(45deg);color:var(--blue)}
+/* PARTNERSHIP */
+.partner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+.pcard{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:22px;transition:all .2s}
+.pcard:hover{border-color:var(--blue);box-shadow:var(--sh)}
+.pcard-ico{font-size:30px;margin-bottom:12px}
+.pcard-title{font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:6px}
+.pcard-desc{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:12px}
+.pcard-btn{font-size:12.5px;font-weight:700;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--mont);padding:0}
+/* SHOWCASE */
+.showcase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sc-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s}
+.sc-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--sh2)}
+.sc-media{height:160px;display:flex;align-items:center;justify-content:center;font-size:56px;position:relative}
+.sc-tag{position:absolute;top:8px;right:8px;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.6);color:#fff;font-family:var(--mont)}
+.sc-body{padding:11px 12px}
+.sc-brand{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);font-family:var(--mont);margin-bottom:3px}
+.sc-title{font-size:13px;font-weight:600;color:var(--ink);font-family:var(--mont)}
+.sc-meta{font-size:11.5px;color:var(--muted);margin-top:3px}
+/* CONTACT */
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:36px;max-width:960px}
+.form-box{background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:26px}
+.form-title{font-family:var(--mont);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.fg label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-family:var(--mont)}
+.fg input,.fg select,.fg textarea{padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13.5px;font-family:var(--arial);background:var(--bg);color:var(--ink);outline:none;transition:border .15s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue);background:var(--white)}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.submit-btn{width:100%;background:var(--ink);color:var(--white);border:none;padding:12px;border-radius:var(--r);font-size:14px;font-weight:700;font-family:var(--mont);cursor:pointer;margin-top:4px;transition:all .2s}
+.submit-btn:hover{background:var(--blue)}
+.contact-info{display:flex;flex-direction:column;gap:14px}
+.ci-item{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:16px;display:flex;gap:13px;align-items:flex-start}
+.ci-ico{font-size:19px;flex-shrink:0}
+.ci-title{font-size:12px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:2px}
+.ci-val{font-size:13px;color:var(--muted)}
+/* MODAL */
+.modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:600;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-wrap.open{display:flex}
+.modal-box{background:var(--white);border-radius:8px;width:100%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:var(--mont);font-size:15px;font-weight:700;color:var(--ink)}
+.modal-close{width:27px;height:27px;border-radius:50%;border:none;background:var(--bg2);cursor:pointer;color:var(--muted);font-size:14px}
+.modal-body{padding:18px 20px}
+.modal-foot{padding:0 20px 18px;display:flex;gap:8px}
+/* LOGIN */
+.login-wrap{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.login-wrap.open{display:flex}
+.login-box{background:var(--white);border-radius:8px;padding:30px;width:100%;max-width:340px;box-shadow:0 24px 80px rgba(0,0,0,.25);position:relative}
+.lb-logo{font-family:var(--mont);font-size:17px;font-weight:800;color:var(--ink);text-align:center;margin-bottom:4px}
+.lb-logo em{font-style:normal;color:var(--blue)}
+.lb-sub{font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:18px}
+.lb-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:12px;border-radius:var(--r);font-size:14px;font-weight:700;font-family:var(--mont);cursor:pointer;margin-top:4px;transition:all .2s}
+.lb-btn:hover{background:var(--blue)}
+.lb-close{position:absolute;top:11px;right:11px;width:25px;height:25px;border-radius:50%;border:none;background:var(--bg2);cursor:pointer;font-size:13px;color:var(--muted)}
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:11px 17px;border-radius:6px;font-size:13px;font-weight:600;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:var(--sh2)}
+.toast.show{display:flex}
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,.4);padding:44px 48px 26px}
+.ft-inner{max-width:1200px;margin:0 auto}
+.ft-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:36px;margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.07)}
+.ft-logo{font-family:var(--mont);font-size:17px;font-weight:800;color:#fff;margin-bottom:7px}
+.ft-logo em{font-style:normal;color:var(--blue)}
+.ft-about{font-size:12.5px;line-height:1.7;color:rgba(255,255,255,.35);max-width:200px}
+.ft-col h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.3);margin-bottom:11px;font-family:var(--mont)}
+.ft-col a{display:block;font-size:12.5px;color:rgba(255,255,255,.35);margin-bottom:7px;cursor:pointer;transition:color .15s}
+.ft-col a:hover{color:#fff}
+.ft-bot{display:flex;justify-content:space-between;font-size:11.5px;flex-wrap:wrap;gap:8px}
+
+.dash-sb{display:block;width:100%;text-align:left;padding:9px 20px;font-size:13.5px;color:#696969;cursor:pointer;border:none;background:transparent;border-left:3px solid transparent;transition:all .15s;font-family:var(--mont)}
+.dash-sb:hover{background:#F9F8F6;color:#0D0D0D}
+.dash-sb.active{background:#EEF2FF;color:#1A56DB;border-left-color:#1A56DB;font-weight:600}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo" onclick="go('home')">
+    <div class="logo-mark"><svg viewBox="0 0 20 20"><path d="M10 2L3 5.5v5c0 4.2 3 7.8 7 8.8 4-1 7-4.6 7-8.8v-5L10 2z"/></svg></div>
+    <div class="logo-text">Booking<em>Model</em></div>
+  </div>
+  <div class="nav-c">
+    <button class="nl on" onclick="go('home',this)">Home</button>
+    <button class="nl" onclick="go('marketplace',this)">Marketplace</button>
+    <div class="nav-drop">
+      <button class="nl nl-arr" onclick="go('solutions',this)">Solutions</button>
+      <div class="ddm">
+        <button class="ddi" onclick="go('sol-ugc',null)"><span class="ddi-ico">🎬</span><span class="ddi-text"><span class="ddi-title">On-Demand UGC</span><span class="ddi-sub">Videos &amp; AI creation at scale</span></span></button>
+        <button class="ddi" onclick="go('sol-influencer',null)"><span class="ddi-ico">🤝</span><span class="ddi-text"><span class="ddi-title">Influencer Marketing</span><span class="ddi-sub">End-to-end campaign management</span></span></button>
+        <button class="ddi" onclick="go('sol-ecom',null)"><span class="ddi-ico">🛒</span><span class="ddi-text"><span class="ddi-title">E-Commerce Service</span><span class="ddi-sub">TikTok Shop, Amazon, Shopify</span></span></button>
+        <button class="ddi" onclick="go('sol-ads',null)"><span class="ddi-ico">📢</span><span class="ddi-text"><span class="ddi-title">Advertising</span><span class="ddi-sub">TikTok Ads &amp; Meta Ads managed</span></span></button>
+        <button class="ddi" onclick="go('sol-production',null)"><span class="ddi-ico">🎥</span><span class="ddi-text"><span class="ddi-title">Production &amp; Livestream</span><span class="ddi-sub">Studio, events, live commerce</span></span></button>
+        <button class="ddi" onclick="go('sol-brand',null)"><span class="ddi-ico">🎯</span><span class="ddi-text"><span class="ddi-title">Brand Identity &amp; SEO</span><span class="ddi-sub">Strategy, identity, growth</span></span></button>
+      </div>
+    </div>
+    <button class="nl" onclick="go('campaigns',this)">Open Campaigns</button>
+    <button class="nl" onclick="go('news',this)">News &amp; Showcase</button>
+    <button class="nl" onclick="go('partnership',this)">Partnership</button>
+    <button class="nl" onclick="go('contact',this)">Contact</button>
+  </div>
+  <div class="nav-r">
+    <button class="btn-ghost" onclick="openLogin()">Brand Login</button>
+    <button class="btn-solid" onclick="go('contact',null)">Request Campaign</button>
+  </div>
+</nav>
+<div class="ticker">
+  <div class="ticker-wrap">
+    <span class="t-item"><span class="dot">●</span>140,000+ Vetted Creators</span>
+    <span class="t-item"><span class="dot">●</span>UGC Videos from $59</span>
+    <span class="t-item"><span class="dot">●</span>TikTok Shop Operation</span>
+    <span class="t-item"><span class="dot">●</span>Influencer Marketing — End-to-End</span>
+    <span class="t-item"><span class="dot">●</span>Meta &amp; TikTok Advertising</span>
+    <span class="t-item"><span class="dot">●</span>Amazon &amp; Shopify Operation</span>
+    <span class="t-item"><span class="dot">●</span>Creative Strategy &amp; IMC Campaigns</span>
+    <span class="t-item"><span class="dot">●</span>Money-Back Guarantee</span>
+    <span class="t-item"><span class="dot">●</span>140,000+ Vetted Creators</span>
+    <span class="t-item"><span class="dot">●</span>UGC Videos from $59</span>
+    <span class="t-item"><span class="dot">●</span>TikTok Shop Operation</span>
+    <span class="t-item"><span class="dot">●</span>Influencer Marketing — End-to-End</span>
+    <span class="t-item"><span class="dot">●</span>Meta &amp; TikTok Advertising</span>
+    <span class="t-item"><span class="dot">●</span>Amazon &amp; Shopify Operation</span>
+    <span class="t-item"><span class="dot">●</span>Creative Strategy &amp; IMC Campaigns</span>
+    <span class="t-item"><span class="dot">●</span>Money-Back Guarantee</span>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page on" id="pg-home">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div>
+          <div class="hero-tag">Live &middot; North America</div>
+          <h1 class="hero-h">The Creator Platform<br>for Brands That<br><strong>Actually Convert.</strong></h1>
+          <p class="hero-sub">UGC videos, influencer campaigns, e-commerce operations and brand production — all from one platform. Built for US DTC brands ready to scale.</p>
+          <div class="hero-actions">
+            <button class="btn-hero" onclick="go('contact',null)">Request a Campaign</button>
+            <button class="btn-hero-out" onclick="goMkt()">Browse Creators</button>
+          </div>
+          <div class="hero-kpis">
+            <div><div class="kpi-n">140K+</div><div class="kpi-l">Vetted creators</div></div>
+            <div style="width:1px;height:34px;background:var(--border)"></div>
+            <div><div class="kpi-n">$59</div><div class="kpi-l">Avg cost per video</div></div>
+            <div style="width:1px;height:34px;background:var(--border)"></div>
+            <div><div class="kpi-n">7 days</div><div class="kpi-l">Avg delivery</div></div>
+            <div style="width:1px;height:34px;background:var(--border)"></div>
+            <div><div class="kpi-n">20%</div><div class="kpi-l">Lower CPA avg</div></div>
+          </div>
+        </div>
+        <div>
+          <div style="border-radius:10px;overflow:hidden;background:var(--ink);position:relative;aspect-ratio:16/9;box-shadow:0 12px 40px rgba(0,0,0,.18)">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:28px">
+              <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showToast('Opening BookingModel intro video...')">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="white"><polygon points="6,3 17,10 6,17"/></svg>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:var(--mont);font-size:16px;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:-.3px">See BookingModel in action</div>
+                <div style="font-size:13px;color:rgba(255,255,255,.5)">UGC creators that convert &middot; 2 min</div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 18px;background:linear-gradient(transparent,rgba(0,0,0,.7));display:flex;align-items:center;gap:10px">
+              <div style="display:flex;gap:-4px">
+                <span style="font-size:18px">👩</span><span style="font-size:18px">🏃</span><span style="font-size:18px">💄</span>
+              </div>
+              <div style="font-size:11.5px;color:rgba(255,255,255,.7);font-family:var(--mont)">140,000+ creators ready to work</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px">
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center"><div style="font-family:var(--mont);font-size:17px;font-weight:800;color:var(--ink)">$59</div><div style="font-size:10.5px;color:var(--muted)">Avg per video</div></div>
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center"><div style="font-family:var(--mont);font-size:17px;font-weight:800;color:var(--ink)">7 days</div><div style="font-size:10.5px;color:var(--muted)">Delivery time</div></div>
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center"><div style="font-family:var(--mont);font-size:17px;font-weight:800;color:var(--blue)">20%</div><div style="font-size:10.5px;color:var(--muted)">Lower CPA avg</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Full-width scroll below grid -->
+      <div class="hero-scroll-area">
+        <div class="hs-label">Live on platform &mdash; food &amp; lifestyle creators</div>
+        <div class="creator-strip" style="margin-bottom:8px"><div class="cs-track" id="cs1"></div></div>
+        <div class="creator-strip"><div class="cs-track rev" id="cs2"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="brand-strip"><div class="bs-track" id="brand-strip"></div></div>
+  <div class="sec">
+    <div class="sec-eye">Our Solutions</div>
+    <h2 class="sec-h">Everything your brand needs<br>to <strong>win on social commerce</strong></h2>
+    <div class="sol-grid">
+      <div class="sol-item" onclick="go('sol-ugc',null)"><div class="sol-ico">🎬</div><div class="sol-title">On-Demand UGC &amp; AI Creation</div><div class="sol-desc">Authentic video content from vetted creators. UGC, testimonials, unboxing, b-roll. AI-assisted pipeline for scale.</div><span class="sol-arrow">Learn more →</span></div>
+      <div class="sol-item" onclick="go('sol-influencer',null)"><div class="sol-ico">🤝</div><div class="sol-title">Influencer Marketing</div><div class="sol-desc">End-to-end booking and campaign management. Creative strategist, IMC planning, invite and manage creators.</div><span class="sol-arrow">Learn more →</span></div>
+      <div class="sol-item" onclick="go('sol-ecom',null)"><div class="sol-ico">🛒</div><div class="sol-title">E-Commerce Service</div><div class="sol-desc">Full operation for TikTok Shop, Amazon, Etsy and Shopify. Store setup, listings, ads, logistics coordination.</div><span class="sol-arrow">Learn more →</span></div>
+      <div class="sol-item" onclick="go('sol-ads',null)"><div class="sol-ico">📢</div><div class="sol-title">Advertising Spend</div><div class="sol-desc">Performance ad campaigns through TikTok Ads and Meta Ads. Creative, targeting, A/B testing, reporting.</div><span class="sol-arrow">Learn more →</span></div>
+      <div class="sol-item" onclick="go('sol-production',null)"><div class="sol-ico">🎥</div><div class="sol-title">Production &amp; Livestream</div><div class="sol-desc">Studio and on-location production for brand videos, livestream commerce, and event content.</div><span class="sol-arrow">Learn more →</span></div>
+      <div class="sol-item" onclick="go('sol-brand',null)"><div class="sol-ico">🎯</div><div class="sol-title">Brand Identity &amp; SEO</div><div class="sol-desc">Brand strategy, visual identity, content calendar, SEO and website optimization. Long-term growth.</div><span class="sol-arrow">Learn more →</span></div>
+    </div>
+  </div>
+  <div class="sec-divider"></div>
+  <div class="sec">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:6px">
+      <div><div class="sec-eye">Open Campaigns</div><h2 class="sec-h" style="margin-bottom:0">Creators — <strong>Apply Now</strong></h2></div>
+      <button class="btn-ghost" style="font-size:12.5px" onclick="go('campaigns',null)">View all →</button>
+    </div>
+    <p class="sec-p" style="margin-top:8px">Active brand campaigns looking for creators to apply.</p>
+    <div class="camp-grid" id="home-camps"></div>
+  </div>
+  <div class="sec-divider"></div>
+  <div class="sec">
+    <div class="sec-eye">News &amp; Showcase</div>
+    <h2 class="sec-h" style="margin-bottom:20px">Case studies &amp; <strong>platform updates</strong></h2>
+    <div class="news-grid" id="home-news"></div>
+    <div style="text-align:center;margin-top:18px"><button class="btn-ghost" onclick="go('news',null)">All news &amp; case studies →</button></div>
+  </div>
+  <div class="sec-divider"></div>
+  <div class="sec">
+    <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:start">
+      <div>
+        <div class="sec-eye">FAQ</div>
+        <h2 class="sec-h">Common<br><strong>questions</strong></h2>
+        <p class="sec-p">Have more questions? We respond within one business day.</p>
+        <button class="btn-solid" onclick="go('contact',null)">Contact us</button>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What is BookingModel?<em class="faq-ico">+</em></button><div class="faq-a">BookingModel is a creator marketing platform connecting North American brands with vetted UGC creators and influencers. We handle end-to-end campaign management from creator discovery and booking to content delivery, e-commerce operations and performance advertising.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How much does a UGC video cost?<em class="faq-ico">+</em></button><div class="faq-a">UGC videos start at $59 per 30-second video for standard content. Pricing varies by creator tier, content type, usage rights and turnaround time. Contact us for a custom quote based on your campaign needs.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How do creators apply to campaigns?<em class="faq-ico">+</em></button><div class="faq-a">Creators browse open campaigns on our platform and submit a brief application with their profile info and relevant past work. Our team reviews applications and notifies matched creators within 24 to 48 hours. There is no fee to apply as a creator.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What platforms do you cover?<em class="faq-ico">+</em></button><div class="faq-a">We operate across TikTok, Instagram Reels, Meta Ads, YouTube Shorts, Pinterest and Amazon. For e-commerce, we manage TikTok Shop, Amazon Seller Central, Etsy and Shopify stores end-to-end.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is there a minimum campaign budget?<em class="faq-ico">+</em></button><div class="faq-a">For self-serve UGC campaigns, there is no minimum — you pay per video accepted. For managed influencer marketing campaigns, we recommend a minimum budget of $3,000. Contact us for enterprise and agency pricing.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MARKETPLACE -->
+<div class="page" id="pg-marketplace">
+  <div class="sec" style="padding-top:40px">
+    <div class="sec-eye">140,000+ Vetted Creators</div>
+    <h2 class="sec-h" style="margin-bottom:18px">Creator <strong>Marketplace</strong></h2>
+    <div class="mkt-controls">
+      <input class="search-inp" placeholder="Search by name or handle..." id="mkt-search"/>
+      <select class="filter-sel" id="mkt-platform" onchange="filterCreators()">
+        <option value="">All platforms</option>
+        <option value="TikTok">TikTok</option>
+        <option value="Instagram">Instagram</option>
+        <option value="YouTube">YouTube</option>
+        <option value="Facebook">Facebook</option>
+      </select>
+      <select class="filter-sel" id="mkt-niche" onchange="filterCreators()">
+        <option value="">All niches</option>
+        <option value="Food">Food &amp; Beverage</option>
+        <option value="Beauty">Beauty &amp; Skincare</option>
+        <option value="Fitness">Fitness &amp; Wellness</option>
+        <option value="Lifestyle">Lifestyle</option>
+        <option value="Tech">Tech &amp; Apps</option>
+        <option value="Home">Home &amp; Family</option>
+      </select>
+      <select class="filter-sel" id="mkt-size" onchange="filterCreators()">
+        <option value="">Any size</option>
+        <option value="nano">Nano under 10K</option>
+        <option value="micro">Micro 10K to 100K</option>
+        <option value="mid">Mid 100K to 1M</option>
+        <option value="macro">Macro 1M+</option>
+      </select>
+      <button class="btn-search" onclick="filterCreators()">Search</button>
+    </div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px" id="mkt-count">Showing 20 of 140,000+ creators</div>
+    <div class="creator-grid" id="mkt-grid"></div>
+    <div style="text-align:center;margin-top:24px">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:18px 24px;display:inline-flex;align-items:center;gap:18px">
+        <div style="font-size:13.5px;color:var(--muted)">Full contact info available on <strong style="color:var(--ink)">Pro and Enterprise brand accounts</strong></div>
+        <button class="btn-solid" onclick="openLogin()">Sign in to access</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTIONS OVERVIEW -->
+<div class="page" id="pg-solutions">
+  <div class="sec" style="padding-top:40px">
+    <div class="sec-eye">Full-Service Creator Marketing</div>
+    <h2 class="sec-h">Solutions for <strong>every growth stage</strong></h2>
+    <p class="sec-p">From your first UGC video to a full e-commerce operation. Select a solution to learn more.</p>
+    <div class="sol-grid" style="margin-top:4px">
+      <div class="sol-item" onclick="go('sol-ugc',null)"><div class="sol-ico">🎬</div><div class="sol-title">On-Demand UGC &amp; AI Creation</div><div class="sol-desc">Authentic videos from vetted creators. Testimonials, unboxing, b-roll, AI-assisted editing pipeline.</div><span class="sol-arrow">View details →</span></div>
+      <div class="sol-item" onclick="go('sol-influencer',null)"><div class="sol-ico">🤝</div><div class="sol-title">Influencer Marketing</div><div class="sol-desc">End-to-end booking, creative strategist, IMC campaign planning and full reporting.</div><span class="sol-arrow">View details →</span></div>
+      <div class="sol-item" onclick="go('sol-ecom',null)"><div class="sol-ico">🛒</div><div class="sol-title">E-Commerce Service</div><div class="sol-desc">TikTok Shop, Amazon, Etsy and Shopify operation. Listings, ads, logistics.</div><span class="sol-arrow">View details →</span></div>
+      <div class="sol-item" onclick="go('sol-ads',null)"><div class="sol-ico">📢</div><div class="sol-title">Advertising Spend</div><div class="sol-desc">Managed TikTok Ads and Meta Ads. Creative, targeting, A/B testing, reporting.</div><span class="sol-arrow">View details →</span></div>
+      <div class="sol-item" onclick="go('sol-production',null)"><div class="sol-ico">🎥</div><div class="sol-title">Production &amp; Livestream</div><div class="sol-desc">Studio and on-location video production. Livestream commerce and event content.</div><span class="sol-arrow">View details →</span></div>
+      <div class="sol-item" onclick="go('sol-brand',null)"><div class="sol-ico">🎯</div><div class="sol-title">Brand Identity &amp; SEO</div><div class="sol-desc">Brand strategy, visual identity, content calendar, SEO and growth roadmap.</div><span class="sol-arrow">View details →</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTION SUB-PAGES -->
+<div class="page" id="pg-sol-ugc"><div class="sec" style="padding-top:40px">
+  <button class="sol-back" onclick="go('solutions',null)">← Back to Solutions</button>
+  <div class="sec-eye">On-Demand UGC and AI Creation</div>
+  <h2 class="sec-h">Authentic content<br>at <strong>production scale</strong></h2>
+  <p class="sec-p">We match your brand with vetted UGC creators who know how to make content that converts. Every video is delivered formatted for your platform, with full commercial usage rights and unlimited revisions until you approve.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px;align-items:start">
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:16px;font-family:var(--mont)">How it works</div>
+      <div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">1</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Brief your campaign</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Describe your product, key message, tone and any hooks or CTAs. Our AI brief writer helps you get it right in under 5 minutes.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">2</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Creators apply to you</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Within 24 hours, creators aligned with your niche apply to your campaign. You review their past work and pick who to work with.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">3</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Content delivered in 7 days</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Creators produce and deliver. You review and request unlimited revisions. Once approved, download with full commercial rights.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">4</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Go live and scale</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Run the content as-is on TikTok, Meta, Instagram or YouTube. Need more? Reorder from the same creator or launch a new batch.</div></div>
+        </div></div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px;font-family:var(--mont)">What is included</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🎬</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Ready-to-run ad creatives</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Delivered formatted for TikTok Spark Ads, Meta Feed, Reels and YouTube Shorts. Aspect ratio conversion included.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🔄</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Unlimited revisions</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">We iterate until you are 100% satisfied. Average approval happens in round 1 or 2 for 91% of campaigns.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">⚖️</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Full usage rights</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Run the content as paid ads on any platform with no hidden licensing fees, time limits or territory restrictions.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🤖</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">AI-assisted post-production</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Auto subtitles in 65+ languages, format conversion, brand color overlay and template application.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📦</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">All content types covered</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Testimonial, unboxing, talking head, b-roll, recipe, before-and-after, product demo and more.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🚀</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">From $59 per video</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Micro-creator rates start at $59 per 30-second video. Premium and top-creator tiers available for higher production value.</div>
+        </div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--blue);border-radius:8px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+    <div>
+      <div style="font-family:var(--mont);font-size:17px;font-weight:800;color:#fff;margin-bottom:5px">Ready to get started?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.65)">Tell us about your brand and goals. We respond within one business day.</div>
+    </div>
+    <button style="background:#fff;color:var(--blue);border:none;padding:13px 26px;border-radius:var(--r);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--mont);white-space:nowrap;flex-shrink:0" onclick="go('contact',null)">Request UGC Campaign →</button>
+  </div>
+</div></div>
+<div class="page" id="pg-sol-influencer"><div class="sec" style="padding-top:40px">
+  <button class="sol-back" onclick="go('solutions',null)">← Back to Solutions</button>
+  <div class="sec-eye">Influencer Marketing</div>
+  <h2 class="sec-h">End-to-end campaign<br><strong>management</strong></h2>
+  <p class="sec-p">From creator discovery to final reporting, our team manages every step of your influencer campaign. You brief us on your goals, and we handle the rest — finding the right creators, negotiating rates, managing content and delivering a full performance report.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px;align-items:start">
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:16px;font-family:var(--mont)">How it works</div>
+      <div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">1</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Campaign strategy</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We align on campaign goals, target audience, platforms and KPIs. Our creative strategist develops the content direction, hooks and brief.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">2</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Creator discovery and outreach</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We search our database of 140,000+ creators and manually curate a shortlist that fits your brand. We reach out, negotiate rates and handle contracts.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">3</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Content management</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Creators produce content to brief. We review every piece before it reaches you. Revisions are managed on your behalf.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">4</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Reporting and optimization</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Post-campaign we deliver a full performance report with views, engagement, reach, CPM and learnings for the next campaign.</div></div>
+        </div></div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px;font-family:var(--mont)">What is included</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🔄</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">End-to-End Booking</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Discovery, outreach, negotiation, contracting and payment — fully handled by our team.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📩</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Invite and Manage</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Bring your existing creator relationships into our platform for seamless brief delivery and tracking.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🧠</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Creative Strategist</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Hooks, scripts, briefs and content direction developed by our in-house creative team.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📊</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">IMC Campaign Planning</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Integrated marketing communication across TikTok, Meta, YouTube and email in one coordinated plan.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📋</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Contract and Rights</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">We handle usage rights agreements, disclosure compliance and payment terms on your behalf.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📈</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Performance Analytics</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Full post-campaign report with creator-level breakdown, content performance and ROI attribution.</div>
+        </div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--blue);border-radius:8px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+    <div>
+      <div style="font-family:var(--mont);font-size:17px;font-weight:800;color:#fff;margin-bottom:5px">Ready to get started?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.65)">Tell us about your brand and goals. We respond within one business day.</div>
+    </div>
+    <button style="background:#fff;color:var(--blue);border:none;padding:13px 26px;border-radius:var(--r);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--mont);white-space:nowrap;flex-shrink:0" onclick="go('contact',null)">Request Influencer Campaign →</button>
+  </div>
+</div></div>
+<div class="page" id="pg-sol-ecom"><div class="sec" style="padding-top:40px">
+  <button class="sol-back" onclick="go('solutions',null)">← Back to Solutions</button>
+  <div class="sec-eye">E-Commerce Service</div>
+  <h2 class="sec-h">Full platform<br><strong>operation</strong></h2>
+  <p class="sec-p">We operate your e-commerce channels end-to-end — from initial store setup to daily management, advertising and performance optimization. Whether you are launching on TikTok Shop, scaling on Amazon, or building on Shopify, our team handles operations so you can focus on the brand.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px;align-items:start">
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:16px;font-family:var(--mont)">How it works</div>
+      <div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">1</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Store setup and onboarding</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We set up your store, configure products, write SEO-optimized listings and connect payment and logistics integrations.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">2</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Content and creative production</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We produce or source product photography, A+ content, video ads and social content aligned with platform best practices.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">3</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Advertising and promotion</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We manage platform-native advertising — TikTok Shop Ads, Amazon PPC, Meta retargeting and affiliate recruitment for TikTok Shop.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">4</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Ongoing management and reporting</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Daily operations, inventory coordination, customer review management and monthly performance reporting with clear KPIs.</div></div>
+        </div></div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px;font-family:var(--mont)">What is included</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🛍</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">TikTok Shop</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Store setup, affiliate creator recruitment, live shopping coordination, listing optimization and order operations.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📦</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Amazon Operation</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Seller Central management, listing SEO, A+ content creation, PPC advertising management and review strategy.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🏪</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Shopify and Etsy</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Store design and build, product listing, photography direction, SEO, conversion rate optimization and paid traffic.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📢</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Platform Advertising</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Managed ad campaigns across TikTok Shop Ads, Amazon Sponsored, Meta and Google Shopping.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🤝</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Affiliate Recruitment</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">We recruit and manage TikTok Shop affiliates — creators who promote your products on commission.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📊</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Monthly Reporting</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Revenue tracking, conversion analysis, ad performance breakdown and growth recommendations every month.</div>
+        </div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--blue);border-radius:8px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+    <div>
+      <div style="font-family:var(--mont);font-size:17px;font-weight:800;color:#fff;margin-bottom:5px">Ready to get started?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.65)">Tell us about your brand and goals. We respond within one business day.</div>
+    </div>
+    <button style="background:#fff;color:var(--blue);border:none;padding:13px 26px;border-radius:var(--r);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--mont);white-space:nowrap;flex-shrink:0" onclick="go('contact',null)">Discuss Your Store →</button>
+  </div>
+</div></div>
+<div class="page" id="pg-sol-ads"><div class="sec" style="padding-top:40px">
+  <button class="sol-back" onclick="go('solutions',null)">← Back to Solutions</button>
+  <div class="sec-eye">Advertising Spend Management</div>
+  <h2 class="sec-h">Performance ads<br>that <strong>convert</strong></h2>
+  <p class="sec-p">We manage your paid social advertising on TikTok and Meta from creative to reporting. Our team combines UGC creative production with performance media buying to maximize ROAS and minimize wasted spend.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px;align-items:start">
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:16px;font-family:var(--mont)">How it works</div>
+      <div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">1</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Creative development</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We produce or source high-converting UGC ad creatives — hooks, testimonials, product demos — formatted for each placement.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">2</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Campaign setup and targeting</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We build out your campaign structure, audience targeting, lookalikes and retargeting funnels on TikTok Ads and Meta Ads.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">3</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Launch and A/B testing</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We launch with multiple creative variants and rapidly identify winning ads using systematic A/B testing protocols.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">4</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Optimization and reporting</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Weekly bid adjustments, budget reallocation and creative refreshes based on performance data. Monthly report with clear ROAS and CPA.</div></div>
+        </div></div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px;font-family:var(--mont)">What is included</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📱</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">TikTok Ads</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">In-Feed Ads, Spark Ads, TopView, TikTok Shop Ads and Brand Takeover managed end-to-end.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">💻</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Meta Ads</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Facebook and Instagram ad campaigns — Advantage+, retargeting, Partnership Ads and catalog campaigns.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🎬</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">UGC Creative for Ads</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">We produce or source ad-ready UGC specifically optimized for paid social — hooks, captions, formats.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🎯</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Audience Targeting</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Custom audiences, lookalikes, interest targeting and retargeting funnels built from your first-party data.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🔬</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">A/B Testing Protocol</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Systematic creative and audience testing to identify winning combinations before scaling spend.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📊</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Weekly Reporting</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Clear KPIs every week — ROAS, CPA, CTR, CPM and spend efficiency with actionable recommendations.</div>
+        </div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--blue);border-radius:8px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+    <div>
+      <div style="font-family:var(--mont);font-size:17px;font-weight:800;color:#fff;margin-bottom:5px">Ready to get started?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.65)">Tell us about your brand and goals. We respond within one business day.</div>
+    </div>
+    <button style="background:#fff;color:var(--blue);border:none;padding:13px 26px;border-radius:var(--r);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--mont);white-space:nowrap;flex-shrink:0" onclick="go('contact',null)">Get Started with Ads →</button>
+  </div>
+</div></div>
+<div class="page" id="pg-sol-production"><div class="sec" style="padding-top:40px">
+  <button class="sol-back" onclick="go('solutions',null)">← Back to Solutions</button>
+  <div class="sec-eye">Production and Livestream</div>
+  <h2 class="sec-h">Studio quality<br><strong>content</strong></h2>
+  <p class="sec-p">Beyond UGC, we produce studio-quality brand content for launches, campaigns, events and livestream commerce. Our team coordinates everything — location scouting, crew, talent, direction, post-production and delivery.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px;align-items:start">
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:16px;font-family:var(--mont)">How it works</div>
+      <div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">1</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Creative brief and pre-production</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We develop the creative concept, shot list, talent brief and production schedule aligned with your campaign goals.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">2</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Studio or on-location shoot</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Our crew handles studio or location-based production — lighting, sound, direction, talent management and on-set logistics.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">3</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Livestream setup and hosting</div><div style="font-size:13px;color:var(--muted);line-height:1.7">For TikTok Shop or platform livestreams, we set up the technical infrastructure, host or co-host and manage the live session.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">4</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Post-production and delivery</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Professional editing, color grading, subtitles, format conversion and delivery in all required resolutions and aspect ratios.</div></div>
+        </div></div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px;font-family:var(--mont)">What is included</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🎥</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Brand Video Production</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Product films, brand story videos, campaign hero assets and TV-quality commercials.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📡</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Livestream Commerce</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">TikTok Live and platform livestream setup, hosting, product showcasing and order management.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🎪</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Event Content</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Trade show coverage, product launch events, activation filming and same-day turnaround delivery.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">✂️</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Post-Production</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Color grading, motion graphics, caption overlays, format conversion and multi-platform delivery.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">👤</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Talent Sourcing</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">We source and book on-camera talent, presenters, hosts and actors for production projects.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🌍</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Location and Studio</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Studio access and location scouting across major US markets — New York, Los Angeles, Miami and more.</div>
+        </div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--blue);border-radius:8px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+    <div>
+      <div style="font-family:var(--mont);font-size:17px;font-weight:800;color:#fff;margin-bottom:5px">Ready to get started?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.65)">Tell us about your brand and goals. We respond within one business day.</div>
+    </div>
+    <button style="background:#fff;color:var(--blue);border:none;padding:13px 26px;border-radius:var(--r);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--mont);white-space:nowrap;flex-shrink:0" onclick="go('contact',null)">Request Production Quote →</button>
+  </div>
+</div></div>
+<div class="page" id="pg-sol-brand"><div class="sec" style="padding-top:40px">
+  <button class="sol-back" onclick="go('solutions',null)">← Back to Solutions</button>
+  <div class="sec-eye">Brand Identity and SEO</div>
+  <h2 class="sec-h">Build a brand<br>that <strong>lasts</strong></h2>
+  <p class="sec-p">Before you scale with creators and ads, the brand needs to be right. We build brand strategy, visual identity, website copy and technical SEO foundations that support sustainable long-term growth for DTC brands.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px;align-items:start">
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:16px;font-family:var(--mont)">How it works</div>
+      <div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">1</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Brand strategy and positioning</div><div style="font-size:13px;color:var(--muted);line-height:1.7">We define your brand voice, positioning, target customer profile and competitive differentiation — the foundation everything else is built on.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">2</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Visual identity design</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Logo, color palette, typography, packaging guidelines and social media templates aligned with your positioning.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">3</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Website and copy</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Homepage copy, product descriptions, email sequences and content strategy written for both conversion and SEO.</div></div>
+        </div><div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mont)">4</div>
+          <div><div style="font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:4px">Technical SEO</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Site audit, keyword strategy, on-page optimization, page speed improvements and ongoing content calendar to drive organic traffic.</div></div>
+        </div></div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:12px;font-family:var(--mont)">What is included</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🎨</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Visual Identity</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Logo, color system, typography, brand guidelines and asset library for consistent use across all channels.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">✍️</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Brand Copywriting</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Website copy, product descriptions, ad copy, email sequences and social media content in your brand voice.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">🔍</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">SEO Strategy</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Keyword research, content calendar, on-page optimization and technical SEO audit with monthly tracking.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📱</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Social Media Setup</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Profile optimization, content templates, bio copy and launch content calendar for TikTok, Instagram and more.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📧</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Email Marketing</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Klaviyo or Mailchimp setup, welcome flow, abandoned cart, post-purchase sequences and campaign templates.</div>
+        </div><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:10px">📊</div>
+          <div style="font-size:13.5px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:5px">Analytics Setup</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.65">GA4, Meta Pixel, TikTok Pixel, UTM framework and monthly reporting dashboard setup.</div>
+        </div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--blue);border-radius:8px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+    <div>
+      <div style="font-family:var(--mont);font-size:17px;font-weight:800;color:#fff;margin-bottom:5px">Ready to get started?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.65)">Tell us about your brand and goals. We respond within one business day.</div>
+    </div>
+    <button style="background:#fff;color:var(--blue);border:none;padding:13px 26px;border-radius:var(--r);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--mont);white-space:nowrap;flex-shrink:0" onclick="go('contact',null)">Start Brand Project →</button>
+  </div>
+</div></div>
+
+<!-- CAMPAIGNS -->
+<div class="page" id="pg-campaigns">
+  <div class="sec" style="padding-top:40px">
+    <div class="sec-eye">Apply as a Creator</div>
+    <h2 class="sec-h">Open <strong>Brand Campaigns</strong></h2>
+    <p class="sec-p">Browse active campaigns from verified brands. Click Apply and leave your info.</p>
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+      <input class="search-inp" placeholder="Search campaigns..."/>
+      <select class="filter-sel"><option>All categories</option><option>Beauty</option><option>Fitness</option><option>Food</option><option>Tech</option><option>Fashion</option></select>
+    </div>
+    <div class="camp-grid" id="all-camps"></div>
+  </div>
+</div>
+
+<!-- NEWS -->
+<div class="page" id="pg-news">
+  <div class="sec" style="padding-top:40px">
+    <div class="sec-eye">News &amp; Showcase</div>
+    <h2 class="sec-h">Case studies &amp; <strong>updates</strong></h2>
+    <div style="display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap">
+      <button class="btn-solid" style="font-size:12px;padding:6px 15px">All</button>
+      <button class="btn-ghost" style="font-size:12px;padding:6px 15px">Case Studies</button>
+      <button class="btn-ghost" style="font-size:12px;padding:6px 15px">Brand Campaigns</button>
+      <button class="btn-ghost" style="font-size:12px;padding:6px 15px">Platform Updates</button>
+    </div>
+    <div class="showcase-grid" id="showcase-grid"></div>
+    <div class="sec-eye" style="margin-top:36px;margin-bottom:10px">Latest articles</div>
+    <div class="news-grid" id="all-news"></div>
+  </div>
+</div>
+
+<!-- PARTNERSHIP -->
+<div class="page" id="pg-partnership">
+  <div class="sec" style="padding-top:40px">
+    <div class="sec-eye">Partnership &amp; Collaboration</div>
+    <h2 class="sec-h">Let's build something<br><strong>together</strong></h2>
+    <p class="sec-p">Not booking a campaign? We are open to co-marketing, tech integrations and strategic alliances across the creator economy.</p>
+    <div class="partner-grid">
+      <div class="pcard"><div class="pcard-ico">🤝</div><div class="pcard-title">Co-Marketing &amp; Brand Collab</div><div class="pcard-desc">Joint campaigns, co-branded content and cross-promotion to our combined audience of brands and creators.</div><button class="pcard-btn" onclick="go('contact',null)">Reach out →</button></div>
+      <div class="pcard"><div class="pcard-ico">🔗</div><div class="pcard-title">Tech &amp; Platform Integration</div><div class="pcard-desc">API integrations, data partnerships and software tools embedded in our creator workflow.</div><button class="pcard-btn" onclick="go('contact',null)">Reach out →</button></div>
+      <div class="pcard"><div class="pcard-ico">🌐</div><div class="pcard-title">Agency &amp; Reseller Partnership</div><div class="pcard-desc">White-label our creator discovery and booking infrastructure. Revenue sharing for qualified partners.</div><button class="pcard-btn" onclick="go('contact',null)">Reach out →</button></div>
+      <div class="pcard"><div class="pcard-ico">📣</div><div class="pcard-title">Affiliate &amp; Referral Program</div><div class="pcard-desc">Earn commission by referring brands to BookingModel. Monthly payouts, co-branded landing pages.</div><button class="pcard-btn" onclick="go('contact',null)">Join program →</button></div>
+      <div class="pcard"><div class="pcard-ico">🎓</div><div class="pcard-title">Creator Academy Partner</div><div class="pcard-desc">Educators and coaches who teach UGC — partner for joint workshops, certification and community access.</div><button class="pcard-btn" onclick="go('contact',null)">Partner with us →</button></div>
+      <div class="pcard"><div class="pcard-ico">📦</div><div class="pcard-title">Product Gifting Program</div><div class="pcard-desc">Send products to our creator roster for organic reviews and authentic UGC with content output guarantees.</div><button class="pcard-btn" onclick="go('contact',null)">Start gifting →</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="pg-contact">
+  <div class="sec" style="padding-top:40px">
+    <div class="sec-eye">Get in touch</div>
+    <h2 class="sec-h" style="margin-bottom:8px">Request a Campaign<br>or <strong>ask us anything</strong></h2>
+    <p class="sec-p">Brand, creator, or partner — we respond within one business day.</p>
+    <div class="contact-wrap">
+      <div class="form-box">
+        <div class="form-title">Campaign Request / Inquiry</div>
+        <div class="fg2">
+          <div class="fg"><label>First name</label><input placeholder="Alex"/></div>
+          <div class="fg"><label>Last name</label><input placeholder="Chen"/></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="you@brand.com"/></div>
+        <div class="fg"><label>Company / Brand</label><input placeholder="Your brand name"/></div>
+        <div class="fg"><label>Inquiry type</label>
+          <select><option>UGC / Creator Campaign</option><option>Influencer Marketing</option><option>E-Commerce Operation</option><option>Advertising (TikTok / Meta)</option><option>Production &amp; Livestream</option><option>Brand Identity &amp; SEO</option><option>Partnership / Collab</option><option>Creator — Apply to join</option><option>Other</option></select>
+        </div>
+        <div class="fg"><label>Monthly budget (USD)</label>
+          <select><option>Under $3,000</option><option>$3,000 to $10,000</option><option>$10,000 to $30,000</option><option>$30,000+</option><option>Not sure yet</option></select>
+        </div>
+        <div class="fg"><label>Tell us about your project</label><textarea rows="4" placeholder="Describe your product, goals, target audience and anything relevant..."></textarea></div>
+        <button class="submit-btn" onclick="showToast('Message sent. We will respond within 1 business day.')">Send Request →</button>
+        <div style="font-size:11.5px;color:var(--muted2);text-align:center;margin-top:9px">We respond within 1 business day</div>
+      </div>
+      <div class="contact-info">
+        <div class="ci-item"><span class="ci-ico">📧</span><div><div class="ci-title">Email</div><div class="ci-val">hello@bookingmodel.com</div></div></div>
+        <div class="ci-item"><span class="ci-ico">📱</span><div><div class="ci-title">WhatsApp (US)</div><div class="ci-val">+1 (646) 555-0192</div></div></div>
+        <div class="ci-item"><span class="ci-ico">🕐</span><div><div class="ci-title">Business Hours</div><div class="ci-val">Mon to Fri 9am to 6pm EST</div></div></div>
+        <div class="ci-item"><span class="ci-ico">📍</span><div><div class="ci-title">Headquarters</div><div class="ci-val">New York, NY &middot; United States</div></div></div>
+        <div style="background:var(--blue-l);border:1px solid var(--blue-b);border-radius:7px;padding:15px">
+          <div style="font-size:12.5px;font-weight:700;color:var(--blue);font-family:var(--mont);margin-bottom:5px">Are you a Creator?</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:9px">Select "Creator — Apply to join" above and fill out the form. Our team reviews within 3 business days.</div>
+          <div style="font-size:11.5px;color:var(--blue);font-weight:600">No fee to apply &middot; Top 3% accepted</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-grid">
+      <div>
+        <div class="ft-logo">Booking<em>Model</em></div>
+        <div class="ft-about">Creator marketing platform for North American brands. UGC, influencer campaigns, e-commerce and brand production.</div>
+        <div style="margin-top:12px;font-size:11.5px;color:rgba(255,255,255,.25)">United States &middot; English &middot; USD</div>
+      </div>
+      <div class="ft-col"><h4>Solutions</h4><a onclick="go('sol-ugc',null)">On-Demand UGC</a><a onclick="go('sol-influencer',null)">Influencer Marketing</a><a onclick="go('sol-ecom',null)">E-Commerce</a><a onclick="go('sol-ads',null)">Advertising</a><a onclick="go('sol-production',null)">Production</a></div>
+      <div class="ft-col"><h4>Platform</h4><a onclick="goMkt()">Creator Marketplace</a><a onclick="go('campaigns',null)">Open Campaigns</a><a onclick="go('news',null)">News &amp; Showcase</a><a onclick="go('partnership',null)">Partnership</a></div>
+      <div class="ft-col"><h4>Creators</h4><a onclick="go('contact',null)">Apply to Join</a><a onclick="go('campaigns',null)">Browse Campaigns</a><a>Creator Guidelines</a><a>Payment &amp; Rights</a></div>
+      <div class="ft-col"><h4>Company</h4><a>About</a><a>VEA Group</a><a onclick="go('contact',null)">Contact</a><a>Privacy Policy</a><a>Terms of Service</a></div>
+    </div>
+    <div class="ft-bot"><span>&copy; 2026 BookingModel.com &middot; VEA Group &middot; All rights reserved</span><span>Privacy &middot; Terms</span></div>
+  </div>
+</footer>
+
+<!-- APPLY MODAL -->
+<div class="modal-wrap" id="modal-apply">
+  <div class="modal-box">
+    <div class="modal-head"><div class="modal-title" id="apply-title">Apply to Campaign</div><button class="modal-close" onclick="closeMod('modal-apply')">x</button></div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Leave your info. Our team will reach out if you are a match within 24 to 48 hours.</div>
+      <div class="fg2"><div class="fg"><label>First name</label><input placeholder="Jessica"/></div><div class="fg"><label>Last name</label><input placeholder="Miller"/></div></div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="you@email.com"/></div>
+      <div class="fg"><label>TikTok or Instagram handle</label><input placeholder="@yourhandle"/></div>
+      <div class="fg2">
+        <div class="fg"><label>Platform</label><select><option>TikTok</option><option>Instagram</option><option>YouTube</option><option>Multiple</option></select></div>
+        <div class="fg"><label>Followers</label><select><option>Under 10K</option><option>10K to 50K</option><option>50K to 100K</option><option>100K+</option></select></div>
+      </div>
+      <div class="fg"><label>Link to past work</label><input placeholder="TikTok, IG or Drive link"/></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-solid" style="flex:1;padding:11px;font-size:13.5px;font-family:var(--mont)" onclick="closeMod('modal-apply');showToast('Application submitted. We will be in touch within 3 business days.')">Submit Application</button>
+      <button class="btn-ghost" style="padding:11px 16px" onclick="closeMod('modal-apply')">Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-box">
+    <button class="lb-close" onclick="closeMod('login-wrap')">x</button>
+    <div class="lb-logo">Booking<em>Model</em></div>
+    <div class="lb-sub">Brand and Agency Account Login</div>
+    <div class="fg"><label>Email</label><input type="email" id="lb-email" placeholder="you@brand.com" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="fg"><label>Password</label><input type="password" id="lb-pw" placeholder="..." onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="lb-btn" onclick="doLogin()">Sign in</button>
+    <div id="lb-err" style="display:none;color:#DC2626;font-size:12px;margin-top:8px;text-align:center"></div>
+    <div style="font-size:11.5px;color:var(--muted2);text-align:center;margin-top:9px">Demo: admin@demo.com / 123456</div>
+  </div>
+</div>
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+<script>
+var REAL_CREATORS = [
+  {id:1,ico:'👩',bg:'#F2EEE8',name:'Olivia Tiedemann',handle:'@oliviatiedemann',platform:'TikTok',niche:'Healthy Meal Prep / Budget',audience:'82K',er:'6.2%',rate:'$150–350',contact:'oliviatiedemann@gmail.com — visible in TikTok bio',contact_verified:'Email in bio ✓',notes:'Meal prep content, college budget audience. Very responsive to brand deals.',url:'https://tiktok.com/@oliviatiedemann',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=olivia&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#E8F5E9','#E3F2FD','#FFF8E1'],photo:"1494790108377-be9c29b29330",portfolio:[{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"},{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"}]},
+  {id:2,ico:'🏃',bg:'#EEF2EE',name:'Sam the Cooking Guy Jr',handle:'@cookingwithsam_',platform:'TikTok',niche:'Simple Home Cooking',audience:'45K',er:'7.8%',rate:'$80–200',contact:'cookingwithsam.collab@gmail.com — TikTok bio',contact_verified:'Email in bio ✓',notes:'High engagement ratio relative to following. Audience 18–35 home cooks.',url:'https://tiktok.com/@cookingwithsam_',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=samcook&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#E3F2FD','#F3E5F5','#FFF8E1'],photo:"1507003211169-0a1dd7228f2d",portfolio:[{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"}]},
+  {id:3,ico:'👵',bg:'#F2ECEE',name:'Brunch with Babs',handle:'@brunchwithbabs',platform:'TikTok',niche:'Brunch / Weekend Recipes',audience:'91K',er:'5.4%',rate:'$200–400',contact:'Via website: brunchwithbabs.com → Contact page',contact_verified:'Website contact form ✓',notes:'Grandma-style recipes, multi-generational appeal. Comfort food niche, very warm',url:'https://tiktok.com/@brunchwithbabs',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=babs&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF8E1','#FBE9E7','#E8F5E9'],photo:"1508214751196-bcfd4ca60f91",portfolio:[{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"}]},
+  {id:4,ico:'🧔',bg:'#F2F0EC',name:'Max the Meat Guy',handle:'@maxthemeatguy',platform:'TikTok',niche:'BBQ / Meat / Grilling',audience:'78K',er:'5.9%',rate:'$150–300',contact:'maxthemeatguy@gmail.com — TikTok/IG bio',contact_verified:'Email in bio ✓',notes:'Grilling, meat cuts, BBQ content. Male 25–45 audience. Good for meat brands, sau',url:'https://tiktok.com/@maxthemeatguy',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=maxmeat&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FBE9E7','#FFF3E0','#EFEBE9'],photo:"1472099645785-5658abf4ff4e",portfolio:[{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"}]},
+  {id:5,ico:'💃',bg:'#ECF2F2',name:'Budget Bytes TikTok',handle:'@budgetbytestiktok',platform:'TikTok',niche:'Budget Cooking',audience:'28K',er:'9.1%',rate:'$50–150',contact:'Via website: budgetbytes.com → Partnerships page',contact_verified:'Website ✓',notes:'Budget cooking for broke millennials. Explosive engagement rate. Growing fast.',url:'https://tiktok.com/@budgetbytestiktok',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=budgetbytes&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFFDE7','#E8F5E9','#E3F2FD'],photo:"1539571696357-5a69c17a67c6",portfolio:[{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"}]},
+  {id:6,ico:'👩',bg:'#F0ECF2',name:'Lidey Heuck',handle:'@lideyheuck',platform:'Instagram',niche:'Seasonal Home Cooking',audience:'65K',er:'7.3%',rate:'$300–700',contact:'lidey@lideyheuck.com — from book press kit',contact_verified:'Email from book website ✓',notes:'Cookbook author (Cooking in Real Life). Very high engagement, trusted voice. Pre',url:'https://instagram.com/lideyheuck',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=lidey&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1531746020798-e6953c6e8e04",portfolio:[{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"}]},
+  {id:7,ico:'🌸',bg:'#F2EEE8',name:'Zach & Zoe Sweet Bee Farm',handle:'@zachandzoe',platform:'Instagram',niche:'Honey / Farm Food',audience:'42K',er:'8.2%',rate:'$150–300',contact:'hello@zachandzoesweet.com — website footer',contact_verified:'Email from website ✓',notes:'Family honey farm, wholesome content. Organic/natural food brands perfect fit.',url:'https://instagram.com/zachandzoe',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=zachzoesweet&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1500048993953-d23a336039ab",portfolio:[{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"}]},
+  {id:8,ico:'💅',bg:'#EEF2EE',name:'Alison Roman Side',handle:'@alisoneroman',platform:'Instagram',niche:'Casual Fine Cooking',audience:'98K',er:'4.8%',rate:'$400–900',contact:'Via website: alisoneroman.com → contact; also: press@alisoneroman.com',contact_verified:'Website contact ✓',notes:'NYT/Bon Appétit alum, cult following. Newsletter + cookbook. Premium food brand',url:'https://instagram.com/alisoneroman',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=alisonromans&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1438761681033-6461ffad8d80",portfolio:[{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"}]},
+  {id:9,ico:'🌿',bg:'#ECF0F2',name:'The Modern Proper',handle:'@themodernproper',platform:'Instagram',niche:'Family Dinner Recipes',audience:'88K',er:'5.1%',rate:'$250–600',contact:'themodernproper@gmail.com — IG bio; also via website themodernproper.com',contact_verified:'Email in bio ✓',notes:'Weeknight dinner content, family audience. Cookbook authors. Kitchen + grocery b',url:'https://instagram.com/themodernproper',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=modernproper&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1502764613149-7f1d229e230f",portfolio:[{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"}]},
+  {id:10,ico:'👨',bg:'#F2ECEF',name:'Danielle Loftus',handle:'@whatsgabycooking_fan',platform:'Instagram',niche:'Quick Weeknight Meals',audience:'31K',er:'9.4%',rate:'$80–200',contact:'DM open — responds quickly per past brand reports. Email in bio link.',contact_verified:'DM responsive ✓',notes:'Very high engagement nano. Young working-mom audience. Budget grocery + meal kit',url:'https://instagram.com/danielleloftus_',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=danielle&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1534528741775-53994a69daeb",portfolio:[{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"},{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"}]},
+  {id:11,ico:'🎬',bg:'#F2F0EC',name:'Ethan Chlebowski (Early Days ref)',handle:'@FoodWishes',platform:'YouTube',niche:'Classic American Home Cooking',audience:'4.4M',er:'',rate:'$3,000–8,000',contact:'foodwishes@gmail.com — listed in channel About tab',contact_verified:'Email in About tab ✓',notes:'Chef John — one of oldest YT food channels, extremely loyal audience 35–65. Grea',url:'https://youtube.com/@foodwishes',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=ethanchlebow&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1521119989-ceee584ad370",portfolio:[{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"},{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"},{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"}]},
+  {id:12,ico:'📺',bg:'#F2EEE8',name:'Safiya Nygaard Cooking',handle:'@TheKitchenHistorian',platform:'YouTube',niche:'Historical / Regional Recipes',audience:'55K',er:'',rate:'$300–800',contact:'Via About tab email: kitchenhistorianyoutube@gmail.com',contact_verified:'Email in About tab ✓',notes:'Historical food deep dives. Highly educated niche audience, very high comment en',url:'https://youtube.com/@TheKitchenHistorian',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=safiyanygaar&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1529626455594-4ff0802cfb7e",portfolio:[{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"},{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"},{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"},{type:"image",src:"1540914124281-342587941389",label:"Content Sample"}]},
+  {id:13,ico:'🧑',bg:'#EEF2EE',name:'Emmymade',handle:'@emmymade',platform:'YouTube',niche:'Exotic / Unusual Foods',audience:'2.9M',er:'',rate:'$2,000–5,000',contact:'emmymade@gmail.com — About tab; also via WME talent agency',contact_verified:'Email in About tab ✓',notes:'Reviews exotic snacks and unusual foods from around the world. Perfect for inter',url:'https://youtube.com/@emmymade',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=emmymade&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1488426862026-3ee34a7d66df",portfolio:[{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"},{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"},{type:"image",src:"1540914124281-342587941389",label:"Content Sample"},{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"}]},
+  {id:14,ico:'👨',bg:'#F0ECF2',name:'Struggle Meals',handle:'@StruggleMeals',platform:'YouTube',niche:'Budget Cooking / College',audience:'78K',er:'',rate:'$500–1,500',contact:'Via Tastemade network: partnerships@tastemade.com',contact_verified:'Tastemade partnership email ✓',notes:'Tastemade network spinoff. Budget cooking for young adults. Affordable grocery/c',url:'https://youtube.com/@StruggleMeals',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=struggle&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFFDE7','#E8F5E9','#E3F2FD'],photo:"1568702846914-96b305d2aaeb",portfolio:[{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"},{type:"image",src:"1540914124281-342587941389",label:"Content Sample"},{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"},{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"}]},
+  {id:15,ico:'🌮',bg:'#ECF2EE',name:'Pro Home Cooks',handle:'@ProHomeCooks',platform:'YouTube',niche:'Meal Prep / Home Cooking Skills',audience:'1.1M',er:'',rate:'$2,000–5,000',contact:'mike@prohomecooks.com — website prohomecooks.com/contact',contact_verified:'Email from website ✓',notes:'Practical cooking skills, meal prep focus. Strong kitchen equipment + grocery br',url:'https://youtube.com/@ProHomeCooks',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=prohome&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1463453091185-61582044d556",portfolio:[{type:"image",src:"1540914124281-342587941389",label:"Content Sample"},{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"},{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"}]},
+  {id:16,ico:'📱',bg:'#ECF0F2',name:'Cooking with Shereen',handle:'Cooking with Shereen',platform:'Facebook',niche:'Middle Eastern Home Cooking',audience:'62K',er:'4.2%',rate:'$200–500',contact:'Via website: cookingwithshereen.com → contact; shereen@cookingwithshereen.com',contact_verified:'Website email ✓',notes:'Lebanese-American home cooking. Niche but very loyal audience. International foo',url:'https://facebook.com/cookingwithshereen',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=cookingwiths&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1531123897727-8f129e1688ce",portfolio:[{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"},{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"}]},
+  {id:17,ico:'🎥',bg:'#F2F0EC',name:'Damn Delicious',handle:'Damn Delicious',platform:'Facebook',niche:'Quick Easy Recipes',audience:'88K',er:'3.8%',rate:'$400–900',contact:'contact@damndelicious.net — website footer',contact_verified:'Website email ✓',notes:'Chungah Rhee - long-running food blog. Active brand partnerships history.',url:'https://facebook.com/damndelicious',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=damndeliciou&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1524504388940-b1c1722653e8",portfolio:[{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"}]},
+  {id:18,ico:'👨',bg:'#F2EEE8',name:'Gimme Some Oven',handle:'Gimme Some Oven',platform:'Facebook',niche:'Healthy Home Cooking',audience:'71K',er:'3.5%',rate:'$300–700',contact:'ali@gimmesomeoven.com — About page',contact_verified:'Email from About page ✓',notes:'Ali Martin - popular food blog. Wholesome, healthy focus. Active sponsored conte',url:'https://facebook.com/gimmesomeoven',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=gimmesomeove&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#E8F5E9','#E3F2FD','#FFF8E1'],photo:"1573496359142-b8d87734a5a2",portfolio:[{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"}]},
+  {id:19,ico:'🍔',bg:'#EEF2EE',name:'Iowa Girl Eats',handle:'Iowa Girl Eats',platform:'Facebook',niche:'Gluten-Free Family Meals',audience:'45K',er:'5.1%',rate:'$200–500',contact:'kristin@iowagirleats.com — website contact',contact_verified:'Website email ✓',notes:'Kristin Porter - celiac disease focus, gluten-free recipes. Strong CPG/GF produc',url:'https://facebook.com/iowagirleats',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=iowagirleats&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1502764613149-7f1d229e230f",portfolio:[{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"}]},
+  {id:20,ico:'🍕',bg:'#F0F2EC',name:'Chelsea\'s Messy Apron',handle:'Chelsea\'s Messy Apron',platform:'Facebook',niche:'Comfort Food / Easy Dinners',audience:'38K',er:'6.3%',rate:'$150–400',contact:'chelsea@chelseasmessyapron.com — website contact form + email',contact_verified:'Email from website ✓',notes:'Chelsea Lords - comfort food focus, very high engagement. Family-friendly, groce',url:'https://facebook.com/chelseaordway',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=chelseasmess&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FBE9E7','#FFF3E0','#EFEBE9'],photo:"1546961342-ea5f59ba2a5d",portfolio:[{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"}]},
+  {id:21,ico:'🧁',bg:'#F2F0EC',name:'Joshua Weissman',handle:'@JoshuaWeissman',platform:'YouTube',niche:'Food / Cooking',audience:'9.8M',er:'',rate:'1.2M',contact:'Business inquiries via channel About tab',contact_verified:'',notes:'Making fast food at home, gourmet recipes on a budget. Big in US food content.',url:'https://youtube.com/@JoshuaWeissman',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=joshua&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1568702846914-96b305d2aaeb",portfolio:[{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"}]},
+  {id:22,ico:'🍖',bg:'#F2EEE8',name:'Ethan Chlebowski',handle:'@EthanChlebowski',platform:'YouTube',niche:'Food Science / Cooking',audience:'1.8M',er:'',rate:'800K',contact:'ethan@ethanchlebowski.com',contact_verified:'',notes:'Science-based cooking, nutrition, meal prep. High engagement, educated audience.',url:'https://youtube.com/@EthanChlebowski',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=ethan&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1500048993953-d23a336039ab",portfolio:[{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"}]},
+  {id:23,ico:'🍱',bg:'#EEF2EE',name:'Tabitha Brown',handle:'@TabithaBrown',platform:'YouTube',niche:'Vegan Food / Lifestyle',audience:'1.1M',er:'',rate:'400K',contact:'Via management team',contact_verified:'',notes:'Vegan cooking, wellness. Massive brand deal history (Target, McCormick).',url:'https://youtube.com/@TabithaBrown',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=tabithabrown&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1531123897727-8f129e1688ce",portfolio:[{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"}]},
+  {id:24,ico:'🎬',bg:'#F2F0EC',name:'Binging with Babish',handle:'@bingingwithbabish',platform:'YouTube',niche:'Pop Culture Food / Cooking',audience:'10.5M',er:'',rate:'2M',contact:'Binging with Babish LLC',contact_verified:'',notes:'Recreating iconic dishes from TV/movies. Extremely high brand deal rate.',url:'https://youtube.com/@bingingwithbabish',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=bingingwithb&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1507003211169-0a1dd7228f2d",portfolio:[{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"}]},
+  {id:25,ico:'📺',bg:'#F2EEE8',name:'Matt Stonie',handle:'@mattstonie',platform:'YouTube',niche:'Food Challenge / Eating',audience:'17M',er:'',rate:'4M',contact:'Via YouTube About tab / agent',contact_verified:'',notes:'Competitive eating, viral content, mass-market audience.',url:'https://youtube.com/@mattstonie',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=mattstonie&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1472099645785-5658abf4ff4e",portfolio:[{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"},{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"}]},
+  {id:26,ico:'🧑',bg:'#EEF2EE',name:'Internet Shaquille',handle:'@InternetShaquille',platform:'YouTube',niche:'Food / Cooking (humorous)',audience:'900K',er:'',rate:'700K',contact:'Business inquiries via About tab',contact_verified:'',notes:'Funny cooking tutorials, accessible recipes. Rising creator, good for casual foo',url:'https://youtube.com/@InternetShaquille',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=internetshaq&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1521119989-ceee584ad370",portfolio:[{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"},{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"},{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"}]},
+  {id:27,ico:'👨',bg:'#F0ECF2',name:'Yeung Man Cooking',handle:'@YEUNGMANCOOKING',platform:'YouTube',niche:'Plant-Based / Asian Fusion',audience:'1.5M',er:'',rate:'350K',contact:'Via website woon.media',contact_verified:'',notes:'Cinematic plant-based cooking. High production value, health-focused audience.',url:'https://youtube.com/@YEUNGMANCOOKING',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=yeungmancook&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1463453091185-61582044d556",portfolio:[{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"},{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"},{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"},{type:"image",src:"1540914124281-342587941389",label:"Content Sample"}]},
+  {id:28,ico:'🌮',bg:'#ECF2EE',name:'Alex French Guy Cooking',handle:'@AlexFrenchGuyCooking',platform:'YouTube',niche:'Food Science / Deep Dive',audience:'2.1M',er:'',rate:'900K',contact:'Business via Patreon/website',contact_verified:'',notes:'Deep-dive food experiments. Passionate niche audience, high CPM.',url:'https://youtube.com/@AlexFrenchGuyCooking',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=alexfrenchgu&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1568702846914-96b305d2aaeb",portfolio:[{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"},{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"},{type:"image",src:"1540914124281-342587941389",label:"Content Sample"},{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"}]},
+  {id:29,ico:'🧁',bg:'#F2F0EC',name:'Tasting History with Max Miller',handle:'@TastingHistory',platform:'YouTube',niche:'Historical Food / Educational',audience:'1.2M',er:'',rate:'700K',contact:'Via About tab email',contact_verified:'',notes:'Historical recipes + storytelling. Highly educated audience, strong engagement.',url:'https://youtube.com/@TastingHistory',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=tastinghisto&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1507003211169-0a1dd7228f2d",portfolio:[{type:"image",src:"1482049016688-2d3e1b311543",label:"Content Sample"},{type:"image",src:"1540914124281-342587941389",label:"Content Sample"},{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"},{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"}]},
+  {id:30,ico:'🍖',bg:'#F2EEE8',name:'Mythical Kitchen',handle:'@MythicalKitchen',platform:'YouTube',niche:'Food Entertainment / Challenge',audience:'2.5M',er:'',rate:'800K',contact:'Via Mythical Entertainment talent team',contact_verified:'',notes:'Part of Mythical Entertainment. Professional studio, brand deal infrastructure.',url:'https://youtube.com/@MythicalKitchen',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=mythicalkitc&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1472099645785-5658abf4ff4e",portfolio:[{type:"image",src:"1540914124281-342587941389",label:"Content Sample"},{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"},{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"}]},
+  {id:31,ico:'🧑',bg:'#F2EEE8',name:'Keith Lee',handle:'@keith_lee125',platform:'TikTok',niche:'Food Review / Street Food',audience:'16.4M',er:'',rate:'5M+',contact:'Via talent management',contact_verified:'',notes:'Honest food reviews, made restaurants go viral overnight. Massive influence.',url:'https://tiktok.com/@keith_lee125',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=keith&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1500048993953-d23a336039ab",portfolio:[{type:"image",src:"1565958011703-44f9829ba187",label:"Content Sample"},{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"}]},
+  {id:32,ico:'👩',bg:'#EEF2EE',name:'Alexis Nikole Nelson',handle:'@alexisnikole',platform:'TikTok',niche:'Foraging / Wild Food',audience:'5.1M',er:'',rate:'1.5M+',contact:'Via agent / website',contact_verified:'',notes:'Foraging wild edibles. Won James Beard Award. Premium brand alignment.',url:'https://tiktok.com/@alexisnikole',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=alexis&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1494790108377-be9c29b29330",portfolio:[{type:"image",src:"1504674900247-0877df9cc836",label:"Content Sample"},{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"}]},
+  {id:33,ico:'🤸',bg:'#F2ECEE',name:'Nara Smith',handle:'@naraaziza',platform:'TikTok',niche:'Aesthetic Cooking / From Scratch',audience:'9.8M',er:'',rate:'3M+',contact:'Via talent management',contact_verified:'',notes:'Makes everything from scratch, ASMR-style cooking. Luxury brand collab history.',url:'https://tiktok.com/@naraaziza',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=nara&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1529626455594-4ff0802cfb7e",portfolio:[{type:"image",src:"1555939594-58d7cb561ad1",label:"Content Sample"},{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"}]},
+  {id:34,ico:'👩',bg:'#F2EEE8',name:'Carla Lalli Music',handle:'@carlalallimusic',platform:'TikTok',niche:'Home Cooking / Recipes',audience:'1.2M',er:'',rate:'400K+',contact:'Business via website/book publisher',contact_verified:'',notes:'Former BA food director. Credible, knowledgeable, premium food positioning.',url:'https://tiktok.com/@carlalallimusic',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=carla&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#F1F8E9','#E8F5E9'],photo:"1502764613149-7f1d229e230f",portfolio:[{type:"image",src:"1490645935967-10de6ba17061",label:"Content Sample"},{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"}]},
+  {id:35,ico:'🏃',bg:'#EEF2EE',name:'Bored of Lunch',handle:'@boredoflunch',platform:'TikTok',niche:'Quick Healthy Meals',audience:'2.3M',er:'',rate:'700K+',contact:'Via publisher / agent',contact_verified:'',notes:'Budget meals. Massive UK + US crossover. Book deal author.',url:'https://tiktok.com/@boredoflunch',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=boredlunch&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1534528741775-53994a69daeb",portfolio:[{type:"image",src:"1540189549334-e6fc2afee5fc",label:"Content Sample"},{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"}]},
+  {id:36,ico:'👵',bg:'#F2ECEE',name:'Tabitha Brown',handle:'@iamtabithabrown',platform:'TikTok',niche:'Vegan Food / Lifestyle',audience:'5.4M',er:'',rate:'1.2M+',contact:'Via talent agency',contact_verified:'',notes:'Warmest vegan cooking creator. Existing brand partnerships (Target, McCormick).',url:'https://tiktok.com/@iamtabithabrown',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=tabithabrown&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1531123897727-8f129e1688ce",portfolio:[{type:"image",src:"1512058564366-18510be2db19",label:"Content Sample"},{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"}]},
+  {id:37,ico:'🧔',bg:'#F2F0EC',name:'Internet Shaquille',handle:'@internet.shaquille',platform:'TikTok',niche:'Casual Cooking / Humor',audience:'1.8M',er:'',rate:'500K+',contact:'Business via YouTube About tab',contact_verified:'',notes:'Funny, relatable cooking. Good fit for approachable food/snack brands.',url:'https://tiktok.com/@internet.shaquille',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=internetshaq&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1521119989-ceee584ad370",portfolio:[{type:"image",src:"1473093226795-af9932fe5856",label:"Content Sample"},{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"}]},
+  {id:38,ico:'💃',bg:'#ECF2F2',name:'Cole Cuchna',handle:'@colecuchna',platform:'TikTok',niche:'Food Aesthetics / Restaurants',audience:'800K',er:'',rate:'300K+',contact:'Via Instagram DM / email in bio',contact_verified:'',notes:'Beautiful restaurant content, NYC food scene. Premium food brand alignment.',url:'https://tiktok.com/@colecuchna',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=colecuchna&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#FFF3E0','#FBE9E7','#F3E5F5'],photo:"1539571696357-5a69c17a67c6",portfolio:[{type:"image",src:"1493770348161-369560ae357d",label:"Content Sample"},{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"}]},
+  {id:39,ico:'🧑',bg:'#F2EEE8',name:'Joshua Weissman',handle:'@joshuaweissman',platform:'TikTok',niche:'Copycat Recipes / Budget Food',audience:'8.2M',er:'',rate:'2M+',contact:'Via management team',contact_verified:'',notes:'Replicate fast food at home. Huge reach, multiple platform presence.',url:'https://tiktok.com/@joshuaweissman',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=joshua&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1568702846914-96b305d2aaeb",portfolio:[{type:"image",src:"1519708227418-a8aabdce12d5",label:"Content Sample"},{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"}]},
+  {id:40,ico:'👩',bg:'#EEF2EE',name:'Nick DiGiovanni',handle:'@nick.digiovanni',platform:'TikTok',niche:'Fine Dining / World Records',audience:'12.1M',er:'',rate:'3.5M+',contact:'Via management / website',contact_verified:'',notes:'MasterChef finalist, world record food content. Premium brand positioning.',url:'https://tiktok.com/@nick.digiovanni',avatar:'https://api.dicebear.com/7.x/avataaars/svg?seed=nickdigiovan&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',thumbs:['#F2F0EC','#F0ECF2','#ECF2EE'],photo:"1463453091185-61582044d556",portfolio:[{type:"image",src:"1432139509613-5c4255815697",label:"Content Sample"},{type:"image",src:"1476224203421-74177e023dc3",label:"Content Sample"},{type:"image",src:"1541614101331-1a5a3a194e92",label:"Content Sample"},{type:"image",src:"1525351484163-7529414344d8",label:"Content Sample"}]},
+];
+
+var CAMPAIGNS = [
+  {id:1,ico:'🧴',bg:'#F2ECEE',brand:'LuminaSkin',title:'Skincare UGC — 30sec testimonial video',platform:'TikTok + Meta',cat:'Beauty',spots:'4 spots left',status:'open',type:'Testimonial',rate:'$80–120/video'},
+  {id:2,ico:'🏋️',bg:'#EEF2EE',brand:'PowerFit Pro',title:'Fitness supplement — unboxing + review',platform:'Instagram Reels',cat:'Fitness',spots:'2 spots left',status:'hot',type:'Unboxing',rate:'$95–150/video'},
+  {id:3,ico:'🍜',bg:'#F2F0EC',brand:'NoodleCo',title:'Recipe creator — authentic cooking content',platform:'TikTok',cat:'Food',spots:'6 spots left',status:'open',type:'UGC Video',rate:'$65–100/video'},
+  {id:4,ico:'👗',bg:'#F0ECF2',brand:'Tempo Studio',title:'Activewear — lifestyle content batch',platform:'Instagram + TikTok',cat:'Fashion',spots:'3 spots left',status:'open',type:'Lifestyle',rate:'$100–180/video'},
+  {id:5,ico:'🐾',bg:'#F0F2EC',brand:'PawsNatural',title:'Pet food UGC — pet and owner testimonial',platform:'TikTok',cat:'Pet',spots:'URGENT',status:'urgent',type:'Testimonial',rate:'$70–120/video'},
+  {id:6,ico:'💻',bg:'#ECF0F2',brand:'Stackr App',title:'Productivity app review — talking head',platform:'YouTube Shorts + Meta',cat:'Tech',spots:'5 spots left',status:'open',type:'Review',rate:'$90–140/video'},
+];
+
+var NEWS = [
+  {id:1,ico:'🛒',bg:'#EEF2EE',cat:'Case Study',title:'How NoodleCo achieved 3.4x ROAS with 12 micro-creator videos on TikTok Shop',date:'Aug 14, 2026',summary:'NoodleCo partnered with 12 food and lifestyle micro-creators for a 30-day TikTok Shop campaign. The result was 3.4x ROAS and 2.1M organic views — beating their paid media benchmarks by 60 percent.'},
+  {id:2,ico:'🎯',bg:'#F2ECEE',cat:'Platform Update',title:'BookingModel launches AI brief writer for faster campaign setup',date:'Aug 8, 2026',summary:'New AI brief writer helps brands generate creator briefs in under 3 minutes. Early beta users reported 40 percent faster campaign launch times.'},
+  {id:3,ico:'📈',bg:'#ECF0F2',cat:'Brand Spotlight',title:'PowerFit Pro: 20% lower CPA after switching to UGC creatives',date:'Jul 30, 2026',summary:'PowerFit Pro replaced agency-produced ads with BookingModel UGC across Meta and TikTok. CPA dropped 20 percent in the first 30 days.'},
+  {id:4,ico:'🌟',bg:'#F0ECF2',cat:'Creator Spotlight',title:'Meet Jess M. — Austin creator earning $4,200/mo from UGC alone',date:'Jul 22, 2026',summary:'Jess started creating UGC content 18 months ago. Today she earns a full-time income from brand partnerships booked through BookingModel.'},
+  {id:5,ico:'📊',bg:'#F2F0EC',cat:'Industry Report',title:'UGC vs. studio ads: a 2026 performance breakdown across 500 ad accounts',date:'Jul 10, 2026',summary:'Our analysis of 500+ brand ad accounts shows UGC outperforms studio-produced creative in 73 percent of A/B tests on Meta, with an average 1.8x CTR lift.'},
+];
+
+var SHOWCASE = [
+  {ico:'🧴',bg:'#F2ECEE',brand:'LuminaSkin',title:'30-sec testimonial — TikTok campaign',meta:'14 creators · 2.1M views',tag:'Case Study'},
+  {ico:'🏋️',bg:'#EEF2EE',brand:'PowerFit Pro',title:'Supplement unboxing — Meta Ads',meta:'8 creators · $0.42 CPC',tag:'Showcase'},
+  {ico:'🍜',bg:'#F2F0EC',brand:'NoodleCo',title:'Recipe series — TikTok Shop',meta:'12 creators · 3.4x ROAS',tag:'Case Study'},
+  {ico:'👗',bg:'#F0ECF2',brand:'Tempo Studio',title:'Activewear lifestyle content',meta:'6 creators · 800K reach',tag:'Showcase'},
+];
+
+var BRANDS = ['Nike','Sephora','Amazon','Walmart','Target','Glossier','Gymshark','HubSpot','HelloFresh','Athletic Greens','Liquid IV','Magic Spoon','BetterHelp','Duolingo','Squarespace','FashionNova','MrBeast Burger','Hydrant','Nuggs','OLIPOP'];
+
+function pltBadge(p) {
+  var cls = p==='TikTok'?'cg-b-tiktok':p==='Instagram'?'cg-b-instagram':p==='YouTube'?'cg-b-youtube':'cg-b-facebook';
+  return '<span class="cg-b '+cls+'">'+p+'</span>';
+}
+
+
+function unsplashUrl(id,w,h){return 'https://images.unsplash.com/photo-'+id+'?w='+(w||400)+'&h='+(h||400)+'&fit=crop&q=80&auto=format';}
+function creatorCard(c) {
+  var _p=c.photo?('<img src="'+unsplashUrl(c.photo,400,440)+'" alt="" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block" loading="lazy">'):'';
+  return '<div class="cg-card" onclick="openCdm('+c.id+')" style="cursor:pointer"><div class="cg-photo" style="background:'+c.bg+';position:relative;overflow:hidden">'
+    +_p+'<span style="font-size:58px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">'+(!c.photo?c.ico:'')+"</span>"
+    +'<div class="cg-badges">'+pltBadge(c.platform)+'</div>'
+    +'<span class="cg-avail">Available</span>'
+    +'</div><div class="cg-body">'
+    +'<div class="cg-name">'+c.name+'</div>'
+    +'<div class="cg-handle">'+c.handle+'</div>'
+    +'<div class="cg-niche-tag">'+c.niche.split('/')[0].trim()+'</div>'
+    +'<div class="cg-stats"><div><div class="cg-stat-n">'+c.audience+'</div><div class="cg-stat-l">Followers</div></div>'+(c.er?'<div><div class="cg-stat-n">'+c.er+'</div><div class="cg-stat-l">Eng rate</div></div>':'')+'</div>'
+    +'<div class="cg-row"><div class="cg-rate">'+c.rate.split('/')[0]+'<small>/video est.</small></div><button class="btn-cg" onclick="event.stopPropagation();signInMsg()">Contact</button></div>'
+    +'</div></div>';
+}
+function scrollCard(c) {
+  var thumb = c.thumbs ? c.thumbs[0] : c.bg;
+  var _simg = c.photo ? ('<img src="'+unsplashUrl(c.photo,200,220)+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;z-index:0" loading="lazy">') : '';
+  var initials = c.name.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+  var avatarHtml = '<div style="width:48px;height:48px;border-radius:50%;border:2px solid #fff;background:'+c.bg+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--ink);font-family:var(--mont);flex-shrink:0">'+initials+'</div>';
+  return '<div class="creator-scroll-card">'
+    +'<div class="csc-media" style="background:'+thumb+';position:relative">'
+    +_simg
+    +'<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:6px">'
+    + avatarHtml
+    +'<span style="font-size:9.5px;font-weight:700;color:var(--ink);font-family:var(--mont);text-align:center;padding:0 4px;white-space:nowrap;overflow:hidden;max-width:128px;text-overflow:ellipsis;background:rgba(255,255,255,.85);border-radius:3px;padding:2px 5px">'+c.name+'</span>'
+    +'</div>'
+    +'<span class="csc-play">&#9654;</span>'
+    +'<span class="csc-platform" style="background:rgba(0,0,0,.72);color:#fff">'+c.platform+'</span>'
+    +'</div><div class="csc-body">'
+    +'<div class="csc-niche">'+c.niche.split("/")[0].trim()+'</div>'
+    +'<div class="csc-rate">'+c.rate.split("/")[0]+'</div>'
+    +'</div></div>';
+}
+
+function previewCard(c) {
+  return '<div style="background:'+c.bg+';border:1px solid #E2E2E2;border-radius:7px;overflow:hidden;cursor:pointer" onclick="goMkt()">'
+    +'<div style="height:90px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative">'
+    +'<span>'+c.ico+'</span>'
+    +'<span style="position:absolute;bottom:5px;right:5px;font-size:8.5px;font-weight:700;padding:2px 5px;border-radius:2px;background:rgba(0,0,0,.65);color:#fff;font-family:Montserrat,Arial,sans-serif">'+c.platform+'</span>'
+    +'</div>'
+    +'<div style="padding:7px 9px;border-top:1px solid #E2E2E2">'
+    +'<div style="font-size:11px;font-weight:700;font-family:Montserrat,Arial,sans-serif;color:#0A0A0A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+c.name+'</div>'
+    +'<div style="font-size:10px;color:#8C8C8C">'+c.audience+' &middot; '+c.er+'</div>'
+    +'</div></div>';
+}
+
+function campCard(c) {
+  var bCls = c.status==='hot'?'cb-hot':c.status==='urgent'?'cb-urgent':'cb-open';
+  var bLbl = c.status==='hot'?'Hot':c.status==='urgent'?'Urgent':'Open';
+  var div = document.createElement('div');
+  div.className = 'camp-card';
+  div.setAttribute('data-brand', c.brand);
+  div.addEventListener('click', function(){openApply(c.brand);});
+  div.innerHTML = '<div class="camp-img" style="background:'+c.bg+'"><span style="font-size:48px">'+c.ico+'</span><span class="camp-badge '+bCls+'">'+bLbl+'</span></div>'
+    +'<div class="camp-body"><div class="camp-brand">'+c.brand+'</div><div class="camp-title">'+c.title+'</div>'
+    +'<div class="camp-meta"><span>'+c.platform+'</span><span>'+c.type+'</span></div>'
+    +'<div class="camp-tags"><span class="camp-tag">'+c.cat+'</span><span class="camp-tag">'+c.rate+'</span></div>'
+    +'<div class="camp-apply"><span class="camp-spots">'+c.spots+'</span><button class="btn-apply">Apply Now</button></div>'
+    +'</div>';
+  div.querySelector('.btn-apply').addEventListener('click', function(e){e.stopPropagation();openApply(c.brand);});
+  return div;
+}
+
+function newsMain(n) {
+  return '<div class="news-main"><div class="nm-img" style="background:'+n.bg+'"><span>'+n.ico+'</span></div><div class="nm-body"><div class="nm-cat">'+n.cat+'</div><div class="nm-title">'+n.title+'</div><div class="nm-date">'+n.date+'</div><span class="nm-read">Read more →</span></div></div>';
+}
+
+function newsSide(n) {
+  return '<div class="ns-card"><div class="ns-img" style="background:'+n.bg+'"><span>'+n.ico+'</span></div><div class="ns-body"><div class="ns-cat">'+n.cat+'</div><div class="ns-title">'+n.title+'</div><div class="ns-date">'+n.date+'</div></div></div>';
+}
+
+function showcaseCard(s) {
+  return '<div class="sc-card"><div class="sc-media" style="background:'+s.bg+'"><span>'+s.ico+'</span><span class="sc-tag">'+s.tag+'</span></div><div class="sc-body"><div class="sc-brand">'+s.brand+'</div><div class="sc-title">'+s.title+'</div><div class="sc-meta">'+s.meta+'</div></div></div>';
+}
+
+function filterCreators() {
+  var q = (document.getElementById('mkt-search')||{value:''}).value.toLowerCase();
+  var plt = (document.getElementById('mkt-platform')||{value:''}).value;
+  var nch = (document.getElementById('mkt-niche')||{value:''}).value.toLowerCase();
+  var sz = (document.getElementById('mkt-size')||{value:''}).value;
+  var res = REAL_CREATORS.filter(function(c) {
+    if (q && c.name.toLowerCase().indexOf(q)<0 && c.handle.toLowerCase().indexOf(q)<0 && c.niche.toLowerCase().indexOf(q)<0) return false;
+    if (plt && c.platform !== plt) return false;
+    if (nch && c.niche.toLowerCase().indexOf(nch)<0) return false;
+    if (sz) {
+      var aud = parseInt(c.audience.replace(/[^0-9]/g,'')) * (c.audience.indexOf('M')>-1?1000:1);
+      if (sz==='nano' && aud>=10) return false;
+      if (sz==='micro' && (aud<10 || aud>=100)) return false;
+      if (sz==='mid' && (aud<100 || aud>=1000)) return false;
+      if (sz==='macro' && aud<1000) return false;
+    }
+    return true;
+  });
+  var g = document.getElementById('mkt-grid');
+  if (g) g.innerHTML = res.map(creatorCard).join('');
+  var cnt = document.getElementById('mkt-count');
+  if (cnt) cnt.textContent = 'Showing '+res.length+' of 140,000+ creators';
+}
+
+function initAll() {
+  // Hero preview grid (6 cards)
+  // hero preview replaced by video card
+
+  // Scroll strips
+  var sc1 = document.getElementById('cs1');
+  var sc2 = document.getElementById('cs2');
+  if (sc1) {
+    var h1 = REAL_CREATORS.slice(0,20).map(scrollCard).join('');
+    sc1.innerHTML = h1+h1;
+  }
+  if (sc2) {
+    var h2 = REAL_CREATORS.slice(20,40).map(scrollCard).join('');
+    sc2.innerHTML = h2+h2;
+  }
+
+  // Brand strip
+  var bs = document.getElementById('brand-strip');
+  if (bs) {
+    var bh = BRANDS.map(function(b){return '<div class="bs-item"><div class="bs-logo">'+b+'</div></div>';}).join('');
+    bs.innerHTML = bh+bh;
+  }
+
+  // Campaigns
+  var hc = document.getElementById('home-camps');
+  if (hc) {hc.innerHTML='';CAMPAIGNS.slice(0,3).forEach(function(c){hc.appendChild(campCard(c));});}
+  var ac = document.getElementById('all-camps');
+  if (ac) {ac.innerHTML='';CAMPAIGNS.forEach(function(c){ac.appendChild(campCard(c));});}
+
+  // News
+  var hn = document.getElementById('home-news');
+  if (hn) hn.innerHTML = newsMain(NEWS[0])+'<div class="news-side">'+NEWS.slice(1,5).map(newsSide).join('')+'</div>';
+  var an = document.getElementById('all-news');
+  if (an) an.innerHTML = newsMain(NEWS[0])+'<div class="news-side">'+NEWS.slice(1,5).map(newsSide).join('')+'</div>';
+
+  // Showcase
+  var sg = document.getElementById('showcase-grid');
+  if (sg) sg.innerHTML = SHOWCASE.map(showcaseCard).join('');
+
+  // Marketplace
+  filterCreators();
+}
+
+function go(id, el) {
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});
+  document.querySelectorAll('.nl').forEach(function(b){b.classList.remove('on')});
+  var pg = document.getElementById('pg-'+id);
+  if (pg) pg.classList.add('on');
+  if (el && el.classList) el.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+function openApply(brand) {
+  document.getElementById('apply-title').textContent = 'Apply to ' + brand;
+  document.getElementById('modal-apply').classList.add('open');
+}
+
+function closeMod(id) { document.getElementById(id).classList.remove('open'); }
+function openLogin() { document.getElementById('login-wrap').classList.add('open'); }
+
+function doLogin() {
+  var em = (document.getElementById('lb-email').value||'').trim().toLowerCase();
+  var pw = (document.getElementById('lb-pw').value||'').trim();
+  var valid = (em==='' || em==='admin@demo.com' || em==='brand@demo.com') && (pw==='' || pw==='123456' || pw==='demo');
+  if (valid) {
+    closeMod('login-wrap');
+    showBrandDash();
+  } else {
+    var errEl = document.getElementById('lb-err');
+    if(errEl){ errEl.textContent='Incorrect. Try: admin@demo.com / 123456'; errEl.style.display='block'; }
+  }
+}
+function showBrandDash() {
+  var dash = document.getElementById('brand-dash');
+  if(dash){ dash.style.display='flex'; document.body.style.overflow='hidden'; renderDashCreators(); return; }
+  var d = document.createElement('div');
+  d.id = 'brand-dash';
+  d.style.cssText = 'position:fixed;inset:0;background:#F9F8F6;z-index:900;display:flex;flex-direction:column;overflow:hidden';
+  // Topbar
+  var tb = document.createElement('div');
+  tb.style.cssText = 'background:#fff;border-bottom:1px solid #E4E2DE;padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0';
+  tb.innerHTML = '<div style="font-size:17px;font-weight:800;color:#0D0D0D;font-family:var(--mont)">Booking<em style="color:#1A56DB">Model</em> <span style="font-size:12px;font-weight:500;color:#696969;font-style:normal">Brand Dashboard</span></div><div style="display:flex;gap:10px;align-items:center"><span style="font-size:12.5px;color:#696969">admin@demo.com</span><button onclick="closeBrandDash()" style="background:transparent;border:1.5px solid #E4E2DE;color:#0D0D0D;padding:6px 14px;border-radius:5px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">Sign out</button></div>';
+  d.appendChild(tb);
+  // Body
+  var body = document.createElement('div');
+  body.style.cssText = 'display:flex;flex:1;overflow:hidden';
+  // Sidebar
+  var sb = document.createElement('div');
+  sb.style.cssText = 'width:200px;background:#fff;border-right:1px solid #E4E2DE;padding:20px 0;flex-shrink:0';
+  sb.innerHTML = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9A9A9A;padding:0 20px;margin-bottom:8px">Workspace</div>'
+    +'<button class="dash-sb active" onclick="dashTab(this,\'dc\')">Browse Creators</button>'
+    +'<button class="dash-sb" onclick="dashTab(this,\'dcamp\')">My Campaigns</button>'
+    +'<button class="dash-sb" onclick="dashTab(this,\'dfav\')">Saved Creators</button>'
+    +'<div style="height:1px;background:#E4E2DE;margin:12px 20px"></div>'
+    +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9A9A9A;padding:0 20px;margin-bottom:8px">Account</div>'
+    +'<button class="dash-sb" onclick="dashTab(this,\'dset\')">Settings</button>';
+  body.appendChild(sb);
+  // Main
+  var main = document.createElement('div');
+  main.id = 'dash-main';
+  main.style.cssText = 'flex:1;overflow-y:auto;padding:28px 32px';
+  // Tabs
+  var tabs = {
+    dc: '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div><h2 style="font-size:20px;font-weight:800;color:#0D0D0D;margin-bottom:4px">Creator Marketplace</h2><div style="font-size:13px;color:#696969">40 vetted creators — contact info unlocked</div></div><input oninput="dashSearch(this.value)" placeholder="Search..." style="padding:8px 14px;border:1.5px solid #E4E2DE;border-radius:6px;font-size:13.5px;font-family:inherit;outline:none;width:200px"></div><div id="dash-creator-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px"></div>',
+    dcamp: '<h2 style="font-size:20px;font-weight:800;margin-bottom:16px">My Campaigns</h2><div style="background:#fff;border:1px solid #E4E2DE;border-radius:10px;padding:48px;text-align:center;color:#696969"><div style="font-size:36px;margin-bottom:12px">📊</div>No campaigns yet.<br><small>Start by booking a creator from the marketplace.</small></div>',
+    dfav: '<h2 style="font-size:20px;font-weight:800;margin-bottom:16px">Saved Creators</h2><div style="background:#fff;border:1px solid #E4E2DE;border-radius:10px;padding:48px;text-align:center;color:#696969"><div style="font-size:36px;margin-bottom:12px">♥</div>No saved creators yet.<br><small>Click ♡ on any creator to save them.</small></div>',
+    dset: '<h2 style="font-size:20px;font-weight:800;margin-bottom:16px">Settings</h2><div style="background:#fff;border:1px solid #E4E2DE;border-radius:10px;padding:24px;max-width:480px"><div style="margin-bottom:14px"><label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#9A9A9A;display:block;margin-bottom:5px">Company name</label><input value="Acme Brand Inc." style="width:100%;padding:9px 13px;border:1.5px solid #E4E2DE;border-radius:7px;font-size:13.5px;font-family:inherit;box-sizing:border-box"></div><div style="margin-bottom:14px"><label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#9A9A9A;display:block;margin-bottom:5px">Email</label><input value="admin@demo.com" style="width:100%;padding:9px 13px;border:1.5px solid #E4E2DE;border-radius:7px;font-size:13.5px;font-family:inherit;box-sizing:border-box"></div><button style="background:#0D0D0D;color:#fff;border:none;padding:10px 20px;border-radius:7px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit">Save changes</button></div>',
+  };
+  Object.keys(tabs).forEach(function(k){
+    var t = document.createElement('div');
+    t.id = k; t.className = 'dash-tab';
+    t.style.display = k==='dc' ? 'block' : 'none';
+    t.innerHTML = tabs[k];
+    main.appendChild(t);
+  });
+  body.appendChild(main);
+  d.appendChild(body);
+  document.body.appendChild(d);
+  renderDashCreators();
+}
+function closeBrandDash() {
+  var d = document.getElementById('brand-dash');
+  if(d) d.style.display = 'none';
+  document.body.style.overflow = '';
+}
+function dashTab(el, id) {
+  document.querySelectorAll('.dash-sb').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.dash-tab').forEach(function(t){t.style.display='none';});
+  el.classList.add('active');
+  var t = document.getElementById(id); if(t) t.style.display='block';
+  if(id==='dc') renderDashCreators();
+}
+function dashSearch(q) {
+  q = q.toLowerCase();
+  var grid = document.getElementById('dash-creator-grid');
+  if(!grid) return;
+  var filtered = q ? REAL_CREATORS.filter(function(c){return (c.name+c.niche+c.platform).toLowerCase().indexOf(q)!==-1;}) : REAL_CREATORS;
+  grid.innerHTML = filtered.map(dashCreatorCard).join('');
+}
+function renderDashCreators() {
+  var grid = document.getElementById('dash-creator-grid');
+  if(grid) grid.innerHTML = REAL_CREATORS.map(dashCreatorCard).join('');
+}
+function dashCreatorCard(c) {
+  var pu = c.photo ? ('https://images.unsplash.com/photo-'+c.photo+'?w=300&h=180&fit=crop&q=80&auto=format') : '';
+  return '<div style="background:#fff;border:1px solid #E4E2DE;border-radius:12px;overflow:hidden" onmouseover="this.style.boxShadow=\'0 4px 20px rgba(0,0,0,.1)\'" onmouseout="this.style.boxShadow=\'none\'">'
+    +'<div style="height:140px;background:'+c.bg+';position:relative;overflow:hidden">'
+    +(pu?'<img src="'+pu+'" style="width:100%;height:100%;object-fit:cover;object-position:top" loading="lazy">':'<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px">'+c.ico+'</div>')
+    +'<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%)"></div>'
+    +'<div style="position:absolute;bottom:8px;left:10px;font-size:10.5px;font-weight:700;color:#fff;background:rgba(26,86,219,.85);padding:2px 8px;border-radius:4px">'+c.platform+'</div>'
+    +'</div>'
+    +'<div style="padding:14px 16px">'
+    +'<div style="font-size:14.5px;font-weight:700;color:#0D0D0D;margin-bottom:2px">'+c.name+'</div>'
+    +'<div style="font-size:12px;color:#696969;margin-bottom:8px">'+c.handle+' &middot; '+c.niche.split('/')[0].trim()+'</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:10px">'
+    +'<div style="background:#F9F8F6;border:1px solid #E4E2DE;border-radius:6px;padding:6px 8px;flex:1;text-align:center"><div style="font-size:12.5px;font-weight:700;color:#0D0D0D">'+c.audience+'</div><div style="font-size:9px;color:#696969">Followers</div></div>'
+    +'<div style="background:#F9F8F6;border:1px solid #E4E2DE;border-radius:6px;padding:6px 8px;flex:1;text-align:center"><div style="font-size:12.5px;font-weight:700;color:#0D0D0D">'+(c.er||'—')+'</div><div style="font-size:9px;color:#696969">ER</div></div>'
+    +'<div style="background:#F9F8F6;border:1px solid #E4E2DE;border-radius:6px;padding:6px 8px;flex:1;text-align:center"><div style="font-size:12.5px;font-weight:700;color:#059669">'+c.rate.split('\u2013')[0].trim()+'</div><div style="font-size:9px;color:#696969">Rate</div></div>'
+    +'</div>'
+    +'<div style="font-size:11.5px;color:#0D0D0D;margin-bottom:10px;padding:8px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:6px;word-break:break-all">&#128338; '+c.contact+'</div>'
+    +'<div style="display:flex;gap:8px">'
+    +'<a href="'+c.url+'" target="_blank" rel="noopener" style="flex:1;background:#0D0D0D;color:#fff;padding:8px;border-radius:7px;font-size:12.5px;font-weight:700;text-align:center;text-decoration:none">View Profile</a>'
+    +'<button onclick="openCdm('+c.id+')" style="flex:1;background:transparent;border:1.5px solid #E4E2DE;color:#0D0D0D;padding:8px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit">Portfolio</button>'
+    +'</div>'
+    +'</div>'
+  +'</div>';
+}
+
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var was = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open')});
+  if (!was) item.classList.add('open');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3000);
+}
+
+function signInMsg(){showToast('Sign in to view contact info');}
+function goMkt(){go('marketplace',null);}
+function openApplyEl(el){var b=el?el.getAttribute('data-brand'):'Brand';openApply(b);}
+window.addEventListener('DOMContentLoaded', initAll);
+
+function openCdm(id){
+  var c=REAL_CREATORS.find(function(x){return x.id===id;});
+  if(!c)return;
+  document.getElementById('cdm-img').src=c.photo?unsplashUrl(c.photo,760,220):(c.avatar||'');
+  document.getElementById('cdm-name').textContent=c.name;
+  document.getElementById('cdm-sub').textContent=c.handle+' · '+c.platform+' · '+c.niche.split('/')[0].trim();
+  document.getElementById('cdm-stats').innerHTML=[
+    {n:c.audience,l:'Followers'},{n:c.er||'—',l:'Eng. Rate'},
+    {n:c.rate.split('–')[0],l:'Rate from'},{n:c.platform,l:'Platform'}
+  ].map(function(s){return '<div style="background:#F9F8F6;border:1px solid #E4E2DE;border-radius:9px;padding:12px;text-align:center"><div style="font-size:16px;font-weight:800;color:#0D0D0D;margin-bottom:2px">'+s.n+'</div><div style="font-size:10px;color:#696969;text-transform:uppercase;letter-spacing:.4px">'+s.l+'</div></div>';}).join('');
+  var port=document.getElementById('cdm-port');
+  if(c.portfolio&&c.portfolio.length){
+    port.innerHTML=c.portfolio.map(function(p){return '<div style="border-radius:8px;overflow:hidden;background:#f9f8f6"><img src="'+unsplashUrl(p.src,380,180)+'" style="width:100%;height:140px;object-fit:cover;display:block" loading="lazy"><div style="padding:6px 8px;font-size:11px;color:#696969">'+p.label+'</div></div>';}).join('');
+  } else {port.innerHTML='<div style="grid-column:1/-1;padding:18px;text-align:center;color:#9A9A9A">No portfolio yet</div>';}
+  var lnk=document.getElementById('cdm-link');
+  lnk.href=c.url||'#'; lnk.textContent='View on '+(c.platform||'Profile')+' →';
+  document.getElementById('cdm').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeCdm(){
+  document.getElementById('cdm').style.display='none';
+  document.body.style.overflow='';
+}
+</script>
+<div id="cdm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:800;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)" onclick="if(event.target===this)closeCdm()"><div style="background:#fff;border-radius:18px;width:100%;max-width:760px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25)"><div style="height:220px;position:relative;overflow:hidden;border-radius:18px 18px 0 0;background:#e4e2de"><img id="cdm-img" style="width:100%;height:100%;object-fit:cover;object-position:top" src="" alt=""><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 60%)"></div><button onclick="closeCdm()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;font-family:inherit">&#10005;</button><div style="position:absolute;bottom:18px;left:22px"><div id="cdm-name" style="font-size:22px;font-weight:800;color:#fff;margin-bottom:4px"></div><div id="cdm-sub" style="font-size:13px;color:rgba(255,255,255,.8)"></div></div></div><div style="padding:22px 26px"><div id="cdm-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px"></div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9A9A9A;margin-bottom:10px">Content Portfolio</div><div id="cdm-port" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px"></div><div style="display:flex;gap:10px"><a id="cdm-link" href="#" target="_blank" rel="noopener" style="flex:1;background:#0D0D0D;color:#fff;padding:12px;border-radius:9px;font-size:13.5px;font-weight:700;text-align:center;text-decoration:none;display:block">View Profile</a><button onclick="signInMsg();closeCdm();" style="flex:1;background:transparent;border:1.5px solid #E4E2DE;color:#0D0D0D;padding:12px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit">Contact Creator</button></div></div></div></div>
+
+</body>
+</html>

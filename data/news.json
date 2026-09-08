@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "ico": "🛒",
+    "bg": "#EEF2EE",
+    "cat": "Case Study",
+    "title": "How NoodleCo achieved 3.4x ROAS with 12 micro-creator videos on TikTok Shop",
+    "date": "Aug 14, 2026",
+    "summary": "NoodleCo partnered with 12 food and lifestyle micro-creators for a 30-day TikTok Shop campaign. The result was 3.4x ROAS and 2.1M organic views — beating their paid media benchmarks by 60 percent."
+  },
+  {
+    "id": 2,
+    "ico": "🎯",
+    "bg": "#F2ECEE",
+    "cat": "Platform Update",
+    "title": "BookingModel launches AI brief writer for faster campaign setup",
+    "date": "Aug 8, 2026",
+    "summary": "New AI brief writer helps brands generate creator briefs in under 3 minutes. Early beta users reported 40 percent faster campaign launch times."
+  },
+  {
+    "id": 3,
+    "ico": "📈",
+    "bg": "#ECF0F2",
+    "cat": "Brand Spotlight",
+    "title": "PowerFit Pro: 20% lower CPA after switching to UGC creatives",
+    "date": "Jul 30, 2026",
+    "summary": "PowerFit Pro replaced agency-produced ads with BookingModel UGC across Meta and TikTok. CPA dropped 20 percent in the first 30 days."
+  },
+  {
+    "id": 4,
+    "ico": "🌟",
+    "bg": "#F0ECF2",
+    "cat": "Creator Spotlight",
+    "title": "Meet Jess M. — Austin creator earning $4,200/mo from UGC alone",
+    "date": "Jul 22, 2026",
+    "summary": "Jess started creating UGC content 18 months ago. Today she earns a full-time income from brand partnerships booked through BookingModel."
+  },
+  {
+    "id": 5,
+    "ico": "📊",
+    "bg": "#F2F0EC",
+    "cat": "Industry Report",
+    "title": "UGC vs. studio ads: a 2026 performance breakdown across 500 ad accounts",
+    "date": "Jul 10, 2026",
+    "summary": "Our analysis of 500+ brand ad accounts shows UGC outperforms studio-produced creative in 73 percent of A/B tests on Meta, with an average 1.8x CTR lift."
+  }
+]

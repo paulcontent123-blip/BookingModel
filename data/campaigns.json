@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "ico": "🧴",
+    "bg": "#F2ECEE",
+    "brand": "LuminaSkin",
+    "title": "Skincare UGC — 30sec testimonial video",
+    "platform": "TikTok + Meta",
+    "cat": "Beauty",
+    "spots": "4 spots left",
+    "status": "open",
+    "type": "Testimonial",
+    "rate": "$80–120/video"
+  },
+  {
+    "id": 2,
+    "ico": "🏋️",
+    "bg": "#EEF2EE",
+    "brand": "PowerFit Pro",
+    "title": "Fitness supplement — unboxing + review",
+    "platform": "Instagram Reels",
+    "cat": "Fitness",
+    "spots": "2 spots left",
+    "status": "hot",
+    "type": "Unboxing",
+    "rate": "$95–150/video"
+  },
+  {
+    "id": 3,
+    "ico": "🍜",
+    "bg": "#F2F0EC",
+    "brand": "NoodleCo",
+    "title": "Recipe creator — authentic cooking content",
+    "platform": "TikTok",
+    "cat": "Food",
+    "spots": "6 spots left",
+    "status": "open",
+    "type": "UGC Video",
+    "rate": "$65–100/video"
+  },
+  {
+    "id": 4,
+    "ico": "👗",
+    "bg": "#F0ECF2",
+    "brand": "Tempo Studio",
+    "title": "Activewear — lifestyle content batch",
+    "platform": "Instagram + TikTok",
+    "cat": "Fashion",
+    "spots": "3 spots left",
+    "status": "open",
+    "type": "Lifestyle",
+    "rate": "$100–180/video"
+  },
+  {
+    "id": 5,
+    "ico": "🐾",
+    "bg": "#F0F2EC",
+    "brand": "PawsNatural",
+    "title": "Pet food UGC — pet and owner testimonial",
+    "platform": "TikTok",
+    "cat": "Pet",
+    "spots": "URGENT",
+    "status": "urgent",
+    "type": "Testimonial",
+    "rate": "$70–120/video"
+  },
+  {
+    "id": 6,
+    "ico": "💻",
+    "bg": "#ECF0F2",
+    "brand": "Stackr App",
+    "title": "Productivity app review — talking head",
+    "platform": "YouTube Shorts + Meta",
+    "cat": "Tech",
+    "spots": "5 spots left",
+    "status": "open",
+    "type": "Review",
+    "rate": "$90–140/video"
+  }
+]

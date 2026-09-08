@@ -1,0 +1,34 @@
+[
+  {
+    "ico": "🧴",
+    "bg": "#F2ECEE",
+    "brand": "LuminaSkin",
+    "title": "30-sec testimonial — TikTok campaign",
+    "meta": "14 creators · 2.1M views",
+    "tag": "Case Study"
+  },
+  {
+    "ico": "🏋️",
+    "bg": "#EEF2EE",
+    "brand": "PowerFit Pro",
+    "title": "Supplement unboxing — Meta Ads",
+    "meta": "8 creators · $0.42 CPC",
+    "tag": "Showcase"
+  },
+  {
+    "ico": "🍜",
+    "bg": "#F2F0EC",
+    "brand": "NoodleCo",
+    "title": "Recipe series — TikTok Shop",
+    "meta": "12 creators · 3.4x ROAS",
+    "tag": "Case Study"
+  },
+  {
+    "ico": "👗",
+    "bg": "#F0ECF2",
+    "brand": "Tempo Studio",
+    "title": "Activewear lifestyle content",
+    "meta": "6 creators · 800K reach",
+    "tag": "Showcase"
+  }
+]
