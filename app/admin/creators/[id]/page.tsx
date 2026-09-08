@@ -71,6 +71,7 @@ export default async function EditCreatorPage({
           return updateCreatorAction(id, formData);
         }}
         creator={creator}
+        portfolio={portfolio}
         submitLabel="Save changes"
       />
 

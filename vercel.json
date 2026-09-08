@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/creator-booking-timeouts",
+      "schedule": "0 * * * *"
+    }
+  ]
+}

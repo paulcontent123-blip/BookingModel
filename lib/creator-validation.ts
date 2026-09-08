@@ -18,6 +18,7 @@ export interface CreatorValidationInput {
   rate?: string;
   contactEmail?: string;
   photoUrl?: string;
+  avatarUrl?: string;
   videoUrl?: string;
   status?: string;
 }
@@ -69,6 +70,7 @@ export function validateCreatorInput(input: CreatorValidationInput): string | nu
   const rate = (input.rate ?? '').trim();
   const contactEmail = (input.contactEmail ?? '').trim();
   const photoUrl = (input.photoUrl ?? '').trim();
+  const avatarUrl = (input.avatarUrl ?? '').trim();
   const videoUrl = (input.videoUrl ?? '').trim();
   const status = (input.status ?? 'active').trim();
 
@@ -130,6 +132,10 @@ export function validateCreatorInput(input: CreatorValidationInput): string | nu
     return 'Photo URL must start with http:// or https://.';
   }
 
+  if (avatarUrl && !isHttpUrl(avatarUrl)) {
+    return 'Avatar URL must start with http:// or https://.';
+  }
+
   if (videoUrl && !extractYouTubeId(videoUrl)) {
     return 'Portfolio video must be a valid YouTube URL.';
   }
@@ -139,4 +145,83 @@ export function validateCreatorInput(input: CreatorValidationInput): string | nu
   }
 
   return null;
+}
+
+// ── Portfolio gallery ──────────────────────────────────────────────────────
+// The seeded roster carries several samples per creator, so the admin form
+// posts the whole gallery as one JSON field and the server action rewrites the
+// creator_portfolio rows from it.
+
+export const PORTFOLIO_MAX_ITEMS = 8;
+
+export interface PortfolioDraft {
+  type: 'image' | 'video';
+  url: string;
+  thumbnail: string | null;
+  youtube_id: string | null;
+  label: string | null;
+}
+
+/**
+ * Parse the `portfolio` form field. Returns the cleaned drafts in display
+ * order, or the first human-readable error.
+ */
+export function parsePortfolioInput(
+  raw: string | null | undefined,
+): { items: PortfolioDraft[]; error: string | null } {
+  const text = (raw ?? '').trim();
+  if (!text) return { items: [], error: null };
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return { items: [], error: 'The portfolio gallery could not be read. Please try again.' };
+  }
+  if (!Array.isArray(parsed)) {
+    return { items: [], error: 'The portfolio gallery could not be read. Please try again.' };
+  }
+  if (parsed.length > PORTFOLIO_MAX_ITEMS) {
+    return { items: [], error: `A creator can have at most ${PORTFOLIO_MAX_ITEMS} portfolio items.` };
+  }
+
+  const items: PortfolioDraft[] = [];
+  for (const entry of parsed) {
+    const row = (entry ?? {}) as Record<string, unknown>;
+    const url = String(row.url ?? '').trim();
+    const type = String(row.type ?? '').trim();
+    const label = String(row.label ?? '').trim();
+
+    if (type !== 'image' && type !== 'video') {
+      return { items: [], error: 'Every portfolio item must be an image or a video.' };
+    }
+    if (!url) return { items: [], error: 'Every portfolio item needs a URL.' };
+
+    if (type === 'video') {
+      const youtubeId = extractYouTubeId(url);
+      if (!youtubeId) return { items: [], error: `"${url}" is not a valid YouTube URL.` };
+      items.push({
+        type: 'video',
+        url,
+        thumbnail: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
+        youtube_id: youtubeId,
+        label: label || 'Portfolio video',
+      });
+      continue;
+    }
+
+    if (!isHttpUrl(url)) {
+      return { items: [], error: 'Portfolio image URLs must start with http:// or https://.' };
+    }
+    const thumbnail = String(row.thumbnail ?? '').trim();
+    items.push({
+      type: 'image',
+      url,
+      thumbnail: thumbnail && isHttpUrl(thumbnail) ? thumbnail : url,
+      youtube_id: null,
+      label: label || 'Content sample',
+    });
+  }
+
+  return { items, error: null };
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { CONTENT_TYPES, money } from '@/lib/utils';
 import { useGeo } from './geo-provider';
@@ -8,9 +8,9 @@ import { useGeo } from './geo-provider';
 /**
  * Requirement #3 — US brands book and pay here.
  *
- * Card fields are collected in a provider-agnostic shape. With the mock
- * provider nothing leaves the server; when Stripe is switched on, replace the
- * `card` block with Stripe Elements — everything else stays.
+ * Payment is confirmed through the provider modal below. Stripe Checkout/
+ * Elements or PayPal Buttons can be mounted there later without changing the
+ * campaign and billing form.
  */
 
 interface CreatorSummary {
@@ -33,15 +33,20 @@ export function CheckoutForm({
 }: {
   creator: CreatorSummary;
   defaults: { brandName: string; brandEmail: string };
-  payment: { provider: string; isLive: boolean; feePercent: number; taxPercent: number };
+  payment: { feePercent: number; taxPercent: number };
   country: string | null;
 }) {
   const router = useRouter();
   const { openRestricted } = useGeo();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [quantity, setQuantity] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal'>('stripe');
+
+  const paymentMethodLabel = paymentMethod === 'stripe' ? 'Stripe' : 'PayPal';
 
   const price = useMemo(() => {
     const subtotal = creator.unitPrice * quantity;
@@ -50,8 +55,59 @@ export function CheckoutForm({
     return { subtotal, platformFee, tax, total: subtotal + platformFee + tax };
   }, [creator.unitPrice, quantity, payment.feePercent, payment.taxPercent]);
 
+  useEffect(() => {
+    if (!paymentModalOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !submitting) setPaymentModalOpen(false);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [paymentModalOpen, submitting]);
+
+  function closePaymentModal() {
+    if (submitting) return;
+    setPaymentModalOpen(false);
+    setError(null);
+  }
+
+  function openPaymentModal() {
+    setError(null);
+    setPaymentMethod('stripe');
+    setPaymentModalOpen(true);
+  }
+
+  function confirmPayment() {
+    const form = formRef.current;
+    if (!form) return;
+
+    // Let the user fix missing campaign/billing/payment fields before the
+    // modal starts processing the booking.
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      setPaymentModalOpen(false);
+      return;
+    }
+
+    form.requestSubmit();
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // Pressing Enter in the checkout form should follow the same confirmation
+    // step as clicking the Pay button.
+    if (!paymentModalOpen) {
+      setPaymentModalOpen(true);
+      return;
+    }
+
     setSubmitting(true);
     setError(null);
 
@@ -66,7 +122,7 @@ export function CheckoutForm({
       brandEmail: String(form.get('brandEmail') ?? ''),
       billingCompany: String(form.get('billingCompany') ?? ''),
       billingAddress: String(form.get('billingAddress') ?? ''),
-      paymentToken: String(form.get('cardNumber') ?? '').replace(/\s/g, ''),
+      paymentMethod,
     };
 
     try {
@@ -99,7 +155,7 @@ export function CheckoutForm({
   }
 
   return (
-    <form className="book-grid" onSubmit={onSubmit}>
+    <form ref={formRef} className="book-grid" onSubmit={onSubmit}>
       <div>
         <div className="form-box mb-16">
           <div className="form-title">1. Campaign details</div>
@@ -177,49 +233,6 @@ export function CheckoutForm({
           </div>
         </div>
 
-        <div className="form-box">
-          <div className="form-title">
-            3. Payment
-            <span className={`pay-badge ${payment.isLive ? '' : 'test'}`} style={{ float: 'right' }}>
-              {payment.isLive ? `${payment.provider} · live` : `${payment.provider} · test mode`}
-            </span>
-          </div>
-
-          {!payment.isLive && (
-            <div className="alert alert-warn">
-              <strong>Test mode.</strong> No payment provider is connected yet, so no card is
-              charged and nothing is sent to a payment network. The booking, invoice and creator
-              notification are all created for real. Any card number works; one ending in{' '}
-              <code>0000</code> simulates a decline.
-            </div>
-          )}
-
-          <div className="fg">
-            <label htmlFor="cardName">Name on card *</label>
-            <input id="cardName" name="cardName" required placeholder="JANE DOE" />
-          </div>
-          <div className="fg">
-            <label htmlFor="cardNumber">Card number *</label>
-            <input
-              id="cardNumber"
-              name="cardNumber"
-              required
-              inputMode="numeric"
-              placeholder="4242 4242 4242 4242"
-              defaultValue={payment.isLive ? '' : '4242 4242 4242 4242'}
-            />
-          </div>
-          <div className="fg2">
-            <div className="fg">
-              <label htmlFor="cardExp">Expiry *</label>
-              <input id="cardExp" name="cardExp" required placeholder="12/28" defaultValue={payment.isLive ? '' : '12/28'} />
-            </div>
-            <div className="fg">
-              <label htmlFor="cardCvc">CVC *</label>
-              <input id="cardCvc" name="cardCvc" required placeholder="123" defaultValue={payment.isLive ? '' : '123'} />
-            </div>
-          </div>
-        </div>
       </div>
 
       <aside className="summary-card">
@@ -261,7 +274,13 @@ export function CheckoutForm({
 
         {error && <div className="alert alert-error" style={{ marginTop: 14 }}>{error}</div>}
 
-        <button className="submit-btn" type="submit" disabled={submitting} style={{ marginTop: 14 }}>
+        <button
+          className="submit-btn"
+          type="button"
+          disabled={submitting}
+          style={{ marginTop: 14 }}
+          onClick={openPaymentModal}
+        >
           {submitting ? <><span className="spinner" /> Processing…</> : `Pay ${money(price.total)} →`}
         </button>
 
@@ -271,6 +290,106 @@ export function CheckoutForm({
           {country && <> Billing region: {country}.</>}
         </p>
       </aside>
+
+      {paymentModalOpen && (
+        <div
+          className="modal-wrap open"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="booking-payment-title"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closePaymentModal();
+          }}
+        >
+          <div className="modal-box payment-confirmation-modal">
+            <div className="modal-head">
+              <div>
+                <div className="payment-modal-kicker">Secure checkout</div>
+                <div className="modal-title" id="booking-payment-title">Confirm payment</div>
+              </div>
+              <button
+                className="modal-close"
+                type="button"
+                onClick={closePaymentModal}
+                disabled={submitting}
+                aria-label="Close payment confirmation"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <p className="payment-modal-intro">
+                Review the booking details below. After payment is completed, the booking will be
+                confirmed and an invoice will be generated automatically.
+              </p>
+
+              <div className="payment-modal-summary">
+                <div>
+                  <span>Creator</span>
+                  <strong>{creator.name}</strong>
+                </div>
+                <div>
+                  <span>Deliverables</span>
+                  <strong>{quantity} × {creator.rateLabel}</strong>
+                </div>
+                <div>
+                  <span>Payment method</span>
+                  <strong>{paymentMethodLabel}</strong>
+                </div>
+                <div className="payment-modal-total">
+                  <span>Total</span>
+                  <strong>{money(price.total)}</strong>
+                </div>
+              </div>
+
+              <div className="payment-modal-label">Choose a payment service</div>
+              <div className="payment-modal-options">
+                <button
+                  className={`payment-modal-option${paymentMethod === 'stripe' ? ' selected' : ''}`}
+                  type="button"
+                  onClick={() => setPaymentMethod('stripe')}
+                >
+                  <span className="payment-modal-provider-mark stripe">S</span>
+                  <span>
+                    <strong>Stripe</strong>
+                    <small>Card, Apple Pay and supported wallets</small>
+                  </span>
+                  <span className="payment-modal-check">{paymentMethod === 'stripe' ? '✓' : ''}</span>
+                </button>
+                <button
+                  className={`payment-modal-option${paymentMethod === 'paypal' ? ' selected' : ''}`}
+                  type="button"
+                  onClick={() => setPaymentMethod('paypal')}
+                >
+                  <span className="payment-modal-provider-mark paypal">P</span>
+                  <span>
+                    <strong>PayPal</strong>
+                    <small>Pay securely with your PayPal account</small>
+                  </span>
+                  <span className="payment-modal-check">{paymentMethod === 'paypal' ? '✓' : ''}</span>
+                </button>
+              </div>
+
+              <div className="payment-modal-note">
+                Your selected payment service will process the booking. After successful payment,
+                BookingModel will create the invoice and show it on the confirmation page.
+              </div>
+
+              {error && <div className="alert alert-error" role="alert">{error}</div>}
+            </div>
+
+            <div className="modal-foot payment-modal-foot">
+              <button className="btn-ghost" type="button" onClick={closePaymentModal} disabled={submitting}>
+                Cancel
+              </button>
+              <button className="btn-solid payment-modal-confirm" type="button" onClick={confirmPayment} disabled={submitting}>
+                {submitting ? <><span className="spinner" /> Processing…</> : `Pay ${money(price.total)} →`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

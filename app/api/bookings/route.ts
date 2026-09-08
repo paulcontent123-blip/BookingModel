@@ -17,6 +17,7 @@ const schema = z.object({
   brandEmail: z.string().email(),
   billingCompany: z.string().max(160).nullish(),
   billingAddress: z.string().max(400).nullish(),
+  paymentMethod: z.enum(['stripe', 'paypal']).default('stripe'),
   paymentToken: z.string().max(40).nullish(),
 });
 
@@ -62,6 +63,7 @@ export async function POST(req: Request) {
     originCountry: geo.country,
     // Fee tier is resolved from the session, never from the request body.
     brandPlan: user?.plan ?? null,
+    paymentMethod: input.paymentMethod,
     paymentToken: input.paymentToken ?? null,
     billing: {
       company: input.billingCompany ?? null,

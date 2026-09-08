@@ -89,10 +89,17 @@ Bấm **Preview** để xem nội dung HTML thật của email.
 
 1. `?geo=US` → vào một creator → **Book this creator**
 2. Điền form: loại content, số video, ngày giao, brief, thông tin billing
-3. Phần thanh toán hiện badge **"mock · test mode"** và điền sẵn thẻ test
-4. Bấm **Pay $XXX** → chuyển tới trang **Payment successful**
+3. Bấm **Pay $XXX** → modal xác nhận hiện ra, chọn **Stripe** hoặc **PayPal**
+4. Xác nhận thanh toán → chuyển tới trang **Payment successful**
 5. Bấm **View invoice** → hoá đơn đầy đủ với con dấu **PAID**, bấm
    **Print / Save as PDF** để in
+6. Kiểm tra email creator trong `/admin/emails`: email có thông tin brand và nút
+   **Accept booking / Decline booking**. Bấm Accept để kiểm tra brand nhận email
+   creator đã đồng ý; bấm Decline để kiểm tra booking chuyển cancelled, invoice
+   chuyển refunded và admin thấy trạng thái refund.
+7. Để test timeout nhanh ở local, sửa `creator_response_expires_at` của deal trong
+   `.data/db.json` về thời điểm quá khứ rồi bấm **Run 48-hour timeout check** tại
+   `/admin/deals`.
 
 Kiểm tra bằng curl:
 

@@ -95,6 +95,11 @@ export const config = {
     },
   },
 
+  cron: {
+    /** Used by the scheduled endpoint that expires unanswered creator invites. */
+    secret: env('CRON_SECRET'),
+  },
+
   email: {
     resendKey: env('RESEND_API_KEY'),
     from: env('EMAIL_FROM', 'BookingModel <no-reply@bookingmodel.com>'),

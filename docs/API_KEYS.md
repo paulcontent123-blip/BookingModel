@@ -17,6 +17,7 @@ Kiểm tra trạng thái mọi key bất cứ lúc nào tại **`/admin/settings
 | **Supabase** | `NEXT_PUBLIC_SUPABASE_URL`<br>`NEXT_PUBLIC_SUPABASE_ANON_KEY`<br>`SUPABASE_SERVICE_ROLE_KEY` | Cho production | Dùng file `./.data/db.json` |
 | **Resend** (email) | `RESEND_API_KEY` | Cho production | Ghi ra console + `/admin/emails` |
 | **Stripe** (thanh toán) | `STRIPE_SECRET_KEY`<br>`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`<br>`STRIPE_WEBHOOK_SECRET` | Khi chốt cổng thanh toán | Dùng mock provider (không tính tiền thật) |
+| **Creator timeout worker** | `CRON_SECRET` | Khi deploy Vercel | Admin có thể chạy thủ công |
 | **Cloudinary** (ảnh) | `CLOUDINARY_CLOUD_NAME`<br>`CLOUDINARY_API_KEY`<br>`CLOUDINARY_API_SECRET` | Khi upload/re-host ảnh | Ảnh external hiện tại vẫn hiển thị; upload mới sẽ yêu cầu key |
 | **ipinfo.io** (geo) | `IPINFO_TOKEN` | Không | Dùng header của Vercel/Cloudflare (miễn phí) |
 | **Auth** | `AUTH_SECRET` | **Có** | Dùng giá trị dev — **phải đổi trước khi lên production** |
@@ -45,7 +46,8 @@ Xem hướng dẫn chi tiết tại [`SUPABASE_SETUP.md`](./SUPABASE_SETUP.md).
 
 ## 3. Resend (gửi email)
 
-Email là phần cốt lõi của yêu cầu #2 (báo lead) và #5 (báo creator khi được book).
+Email là phần cốt lõi của yêu cầu #2 (báo lead), #5 (báo creator khi được book)
+và luồng creator **Đồng ý / Từ chối** sau khi brand thanh toán.
 
 1. Đăng ký tại <https://resend.com> (free tier: 3.000 email/tháng, 100/ngày)
 2. **API Keys** → **Create API Key** → quyền `Sending access` → copy `re_...`
@@ -63,6 +65,31 @@ Email là phần cốt lõi của yêu cầu #2 (báo lead) và #5 (báo creator
 
 **Cách kiểm tra:** đặt một booking thử → vào `/admin/emails`, cột `Provider` phải
 là `resend` và `Status` là `sent` (thay vì `console` / `logged`).
+
+### Email creator trong luồng booking
+
+Sau khi brand thanh toán, email gửi tới `creators.contact_email` gồm brief,
+thông tin brand, email/địa chỉ billing, thời hạn 48 giờ và hai nút **Accept
+booking / Decline booking**. Người nhận không cần tài khoản creator; mỗi nút
+dùng một token một lần, token chỉ lưu dưới dạng SHA-256 trong database.
+
+Nếu creator từ chối hoặc không phản hồi sau 48 giờ, hệ thống đóng booking, gửi
+email cho brand và admin, đồng thời gọi refund trên payment provider. Nếu refund
+thất bại, booking xuất hiện ở **Admin → Booking Deals** với `refund failed` để
+admin bấm **Retry**.
+
+Để chạy tự động trên Vercel, tạo một secret ngẫu nhiên và điền:
+
+```env
+CRON_SECRET=<chuỗi-ngẫu-nhiên-dài>
+```
+
+Endpoint `/api/cron/creator-booking-timeouts` chạy mỗi giờ qua `vercel.json`.
+Khi chạy local, admin có thể bấm **Run 48-hour timeout check** ở `/admin/deals`.
+
+> `RESEND_API_KEY` là key gửi email, không phải key của Gmail. Người nhận creator
+> lấy từ dữ liệu creator; người gửi được xác định bằng `EMAIL_FROM`. Muốn gửi từ
+> tên miền riêng, phải verify DNS domain trong Resend trước.
 
 ---
 
@@ -85,8 +112,30 @@ bước confirm bằng Stripe.js, rồi tạo `/api/webhooks/stripe` để nhậ
 `payment_intent.succeeded` và gọi phần tạo deal/invoice/email. Vị trí cần sửa được
 đánh dấu rõ trong `lib/payments/index.ts` và `lib/services/booking.ts`.
 
+Stripe Secret key cũng được dùng để refund PaymentIntent khi creator từ chối hoặc
+hết hạn. Key thường **không** đủ để tự chuyển tiền cho creator: payout thật cần
+Stripe Connect, tài khoản connected của từng creator và flow onboarding/payout
+riêng. Hiện app ghi nhận `payout_status=pending` để admin xử lý an toàn, không tự
+giả lập việc chuyển tiền.
+
 > Nếu chọn cổng khác (PayPal, Authorize.net, Adyen…), chỉ cần viết thêm một object
 > `PaymentProvider` trong `lib/payments/index.ts` — phần còn lại của app không đổi.
+
+### PayPal
+
+Modal checkout đã có lựa chọn PayPal, nhưng adapter PayPal thật chưa được bật;
+lựa chọn này hiện dùng fallback local để không làm hỏng luồng demo. Khi muốn dùng
+PayPal thật:
+
+1. Tạo tài khoản business tại <https://developer.paypal.com/dashboard/>.
+2. Chọn **My Apps & Credentials** → **Sandbox** → **Create App**.
+3. Lấy **Client ID** và **Secret**, sau đó tạo webhook cho payment/refund events.
+4. Bổ sung adapter PayPal server-side và lưu key chỉ trong biến môi trường; không
+   đưa Secret vào client. Payout cho creator cần thêm quyền **Payouts** và tài
+   khoản người nhận riêng.
+
+Không nên điền key PayPal vào các biến Stripe; hai dịch vụ dùng credential và
+webhook khác nhau.
 
 ---
 

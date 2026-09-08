@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { LeadForm, type FieldDef } from '@/components/lead-form';
 import { PLATFORMS } from '@/lib/utils';
+import { db } from '@/lib/db';
 
 export const metadata: Metadata = {
   title: 'Apply as a Creator',
@@ -68,33 +69,43 @@ export default async function ApplyPage({
   searchParams: Promise<{ campaign?: string }>;
 }) {
   const { campaign } = await searchParams;
+  const campaignRecord = campaign ? await db.get('campaigns', campaign) : null;
+  const openCampaign = campaignRecord &&
+    campaignRecord.status === 'active' &&
+    campaignRecord.spots_filled < campaignRecord.spots_total
+    ? campaignRecord
+    : null;
 
   return (
     <section className="sec" style={{ maxWidth: 760 }}>
       <div className="sec-eye">Creators</div>
-      <h1 className="sec-h">Apply to the <strong>BookingModel roster</strong></h1>
+      <h1 className="sec-h">
+        {openCampaign ? <>Apply to <strong>{openCampaign.title}</strong></> : <>Apply to the <strong>BookingModel roster</strong></>}
+      </h1>
       <p className="sec-p">
-        We are not an open sign-up platform — every profile is vetted by hand. Submit your details
-        and our team decides within 24 to 48 hours. There is no fee to apply.
+        {openCampaign
+          ? 'Share your creator details for this campaign. The brand sees your basic profile first and contact details remain private.'
+          : 'We are not an open sign-up platform — every profile is vetted by hand. Submit your details and our team decides within 24 to 48 hours. There is no fee to apply.'}
       </p>
 
-      {campaign && (
+      {openCampaign && (
         <div className="alert alert-info">
-          Applying with a specific campaign in mind. Mention it in the notes below and we will match
-          you to it during review.
+          Applying to <strong>{openCampaign.title}</strong> for {openCampaign.brand_name}.
+          Your application will be shown to that brand without exposing your contact details.
         </div>
       )}
 
       <LeadForm
         action="/api/applicants"
         fields={fields}
-        submitLabel="Submit application →"
+        submitLabel={openCampaign ? 'Apply to this campaign →' : 'Submit application →'}
+        hidden={{ campaign_id: openCampaign?.id }}
         successTitle="Application received"
         successBody={
           <>
             <strong>Thank you.</strong> We emailed you a confirmation. Our team reviews every
-            profile manually and replies within 24 to 48 hours. If approved, your profile goes live
-            on the marketplace and brands can book you directly.
+            profile manually and replies within 24 to 48 hours. If this was a campaign application,
+            the brand can review your basic profile without seeing your contact details.
           </>
         }
       >

@@ -6,14 +6,25 @@ import { requireAdmin } from '@/lib/auth';
 import {
   applicantDecisionEmail,
   brandPlanChangedEmail,
-  creatorBookedEmail,
   sendEmail,
 } from '@/lib/email';
 import { isPlan, planName } from '@/lib/plans';
-import type { ApplicantStatus, BookingRequestStatus, Creator, DealStatus } from '@/lib/types';
-import { validateCreatorInput } from '@/lib/creator-validation';
+import type { ApplicantStatus, BookingRequestStatus, Creator } from '@/lib/types';
+import { parsePortfolioInput, validateCreatorInput } from '@/lib/creator-validation';
 import { CloudinaryError, deleteCloudinaryImage } from '@/lib/cloudinary';
-import { normalizeHandle, parseAudience, parseRateRange, tierFor } from '@/lib/utils';
+import {
+  accentBgFor,
+  defaultAvatarUrl,
+  normalizeHandle,
+  parseAudience,
+  parseRateRange,
+  tierFor,
+} from '@/lib/utils';
+import {
+  expirePendingCreatorBookings,
+  retryBookingRefund,
+  sendCreatorBookingInvite,
+} from '@/lib/services/creator-booking';
 
 /**
  * Server actions behind the admin UI. Every one re-checks the admin role —
@@ -37,6 +48,7 @@ function creatorValidationError(formData: FormData): string | null {
     rate: String(formData.get('rate') ?? ''),
     contactEmail: String(formData.get('contact_email') ?? ''),
     photoUrl: String(formData.get('photo_url') ?? ''),
+    avatarUrl: String(formData.get('avatar_url') ?? ''),
     videoUrl: String(formData.get('video_url') ?? ''),
     status: String(formData.get('status') ?? 'active'),
   });
@@ -53,6 +65,9 @@ export async function createCreatorAction(formData: FormData): Promise<ActionRes
 
   const validationError = creatorValidationError(formData);
   if (validationError) return { ok: false, message: validationError };
+
+  const portfolioInput = parsePortfolioInput(String(formData.get('portfolio') ?? ''));
+  if (portfolioInput.error) return { ok: false, message: portfolioInput.error };
 
   const handle = normalizeHandle(handleRaw);
 
@@ -88,8 +103,10 @@ export async function createCreatorAction(formData: FormData): Promise<ActionRes
       bd_notes: String(formData.get('bd_notes') ?? '').trim() || null,
       bio: String(formData.get('bio') ?? '').trim() || null,
       photo_url: String(formData.get('photo_url') ?? '').trim() || null,
-      avatar_url: null,
-      accent_bg: '#F2F2F2',
+      // Seeded creators all carry a portrait and their own pastel tone; fall
+      // back to a generated pair so a hand-added creator looks the same.
+      avatar_url: String(formData.get('avatar_url') ?? '').trim() || defaultAvatarUrl(handle),
+      accent_bg: accentBgFor(handle),
       emoji: String(formData.get('emoji') ?? '').trim() || '👤',
       status: (String(formData.get('status') ?? 'active') as Creator['status']) || 'active',
       source: 'manual',
@@ -98,18 +115,24 @@ export async function createCreatorAction(formData: FormData): Promise<ActionRes
       updated_at: now,
     });
 
+    // The gallery arrives from the form already uploaded. `video_url` is the
+    // older single-video field and still works when no gallery was posted.
     const videoUrl = String(formData.get('video_url') ?? '').trim();
-    if (videoUrl) {
-      const { extractYouTubeId } = await import('@/lib/utils');
-      const youtubeId = extractYouTubeId(videoUrl);
+    const portfolioItems = portfolioInput.items.length
+      ? portfolioInput.items
+      : parsePortfolioInput(
+          JSON.stringify(videoUrl ? [{ type: 'video', url: videoUrl }] : []),
+        ).items;
+
+    for (const [index, item] of portfolioItems.entries()) {
       await db.insert('creator_portfolio', {
         creator_id: creator.id,
-        type: 'video',
-        url: videoUrl,
-        thumbnail: youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : null,
-        youtube_id: youtubeId,
-        label: 'Portfolio video',
-        sort_order: 0,
+        type: item.type,
+        url: item.url,
+        thumbnail: item.thumbnail,
+        youtube_id: item.youtube_id,
+        label: item.label,
+        sort_order: index,
         created_at: now,
       });
     }
@@ -158,6 +181,7 @@ export async function deleteCreatorAction(id: string): Promise<ActionResult> {
     // Cloudinary rejects the deletion, keep the creator so the admin can retry
     // instead of silently leaving an orphaned image behind.
     await deleteCloudinaryImage(creator.photo_url);
+    await deleteCloudinaryImage(creator.avatar_url);
 
     // Mirror Supabase foreign-key behavior in the local JSON store and avoid
     // leaving orphaned portfolio/reveal/saved-creator rows behind.
@@ -168,6 +192,18 @@ export async function deleteCreatorAction(id: string): Promise<ActionResult> {
       db.list('applicants', { where: { creator_id: id } }),
       db.list('booking_requests', { where: { creator_id: id } }),
     ]);
+
+    // Portfolio images are hosted the same way as the cover photo, so they are
+    // cleaned up too. A failure here only leaves an orphan, so it is logged
+    // rather than aborting a delete the admin already confirmed.
+    for (const row of portfolio) {
+      if (row.type !== 'image') continue;
+      try {
+        await deleteCloudinaryImage(row.url);
+      } catch (error) {
+        console.error('[admin/delete-creator] portfolio image cleanup', error);
+      }
+    }
 
     for (const row of portfolio) await db.remove('creator_portfolio', row.id);
     for (const row of savedCreators) await db.remove('saved_creators', row.id);
@@ -201,7 +237,15 @@ export async function updateCreatorAction(id: string, formData: FormData): Promi
   const validationError = creatorValidationError(formData);
   if (validationError) return { ok: false, message: validationError };
 
+  // Only callers that actually post the gallery may rewrite it.
+  const syncPortfolio = formData.has('portfolio');
+  const portfolioInput = parsePortfolioInput(String(formData.get('portfolio') ?? ''));
+  if (syncPortfolio && portfolioInput.error) return { ok: false, message: portfolioInput.error };
+
   try {
+  const existing = await db.get('creators', id);
+  if (!existing) return { ok: false, message: 'Creator not found.' };
+
   const audience = String(formData.get('audience') ?? '').trim() || null;
   const rate = parseRateRange(String(formData.get('rate') ?? ''));
   const audienceCount = parseAudience(audience);
@@ -224,11 +268,51 @@ export async function updateCreatorAction(id: string, formData: FormData): Promi
     bd_notes: String(formData.get('bd_notes') ?? '').trim() || null,
     bio: String(formData.get('bio') ?? '').trim() || null,
     photo_url: String(formData.get('photo_url') ?? '').trim() || null,
+    avatar_url:
+      String(formData.get('avatar_url') ?? '').trim() || defaultAvatarUrl(existing.handle),
+    // Creators added before the palette existed all share the flat grey; give
+    // them a tone, but never overwrite one that was set deliberately.
+    accent_bg:
+      !existing.accent_bg || existing.accent_bg === '#F2F2F2'
+        ? accentBgFor(existing.handle)
+        : existing.accent_bg,
     status: String(formData.get('status') ?? 'active') as Creator['status'],
     updated_at: new Date().toISOString(),
   });
 
   if (!updated) return { ok: false, message: 'Creator not found.' };
+
+  if (syncPortfolio) {
+    const current = await db.list('creator_portfolio', { where: { creator_id: id } });
+    const keptUrls = new Set(portfolioInput.items.map((item) => item.url));
+
+    // Drop the hosted file for images the admin removed. A Cloudinary failure
+    // must not block the save, so the orphan is only logged.
+    for (const row of current) {
+      if (row.type !== 'image' || keptUrls.has(row.url)) continue;
+      try {
+        await deleteCloudinaryImage(row.url);
+      } catch (error) {
+        console.error('[admin/update-creator] portfolio image cleanup', error);
+      }
+    }
+
+    for (const row of current) await db.remove('creator_portfolio', row.id);
+
+    const now = new Date().toISOString();
+    for (const [index, item] of portfolioInput.items.entries()) {
+      await db.insert('creator_portfolio', {
+        creator_id: id,
+        type: item.type,
+        url: item.url,
+        thumbnail: item.thumbnail,
+        youtube_id: item.youtube_id,
+        label: item.label,
+        sort_order: index,
+        created_at: now,
+      });
+    }
+  }
 
   revalidatePath('/admin/creators');
   revalidatePath(`/creators/${id}`);
@@ -287,8 +371,8 @@ export async function decideApplicantAction(
         bd_notes: applicant.notes,
         bio: applicant.notes,
         photo_url: applicant.photo_url,
-        avatar_url: null,
-        accent_bg: '#F2F2F2',
+        avatar_url: defaultAvatarUrl(handle),
+        accent_bg: accentBgFor(handle),
         emoji: '👤',
         status: 'active',
         source: 'self_apply',
@@ -327,8 +411,11 @@ export async function decideApplicantAction(
   });
 
   revalidatePath('/admin/applicants');
+  revalidatePath('/admin/campaign-applicants');
   revalidatePath('/admin/creators');
   revalidatePath('/marketplace');
+  revalidatePath('/dashboard/campaign-applicants');
+  revalidatePath('/dashboard/creator-applications');
 
   return {
     ok: true,
@@ -340,18 +427,6 @@ export async function decideApplicantAction(
 }
 
 // ── Deals ──────────────────────────────────────────────────────────────────
-
-export async function updateDealStatusAction(
-  id: string,
-  status: DealStatus,
-): Promise<ActionResult> {
-  await requireAdmin();
-  const updated = await db.update('deals', id, { status, updated_at: new Date().toISOString() });
-  if (!updated) return { ok: false, message: 'Deal not found.' };
-
-  revalidatePath('/admin/deals');
-  return { ok: true, message: `${updated.deal_ref} → ${status.replace(/_/g, ' ')}.` };
-}
 
 /** Re-sends the brief to a creator when the first notification failed. */
 export async function resendCreatorNotificationAction(dealId: string): Promise<ActionResult> {
@@ -366,12 +441,31 @@ export async function resendCreatorNotificationAction(dealId: string): Promise<A
     return { ok: false, message: `${creator.name} has no contact email on file. Add one first.` };
   }
 
-  const result = await sendEmail(creatorBookedEmail(deal, creator), { type: 'deal', id: deal.id });
-  if (!result.ok) return { ok: false, message: result.error ?? 'Send failed.' };
-
-  await db.update('deals', dealId, { creator_notified_at: new Date().toISOString() });
+  const result = await sendCreatorBookingInvite(dealId);
+  if (!result.ok) return { ok: false, message: result.message };
   revalidatePath('/admin/deals');
   return { ok: true, message: `Brief re-sent to ${creator.contact_email}.` };
+}
+
+/** Retries a provider refund after the automatic refund failed. */
+export async function retryBookingRefundAction(dealId: string): Promise<ActionResult> {
+  await requireAdmin();
+  const result = await retryBookingRefund(dealId);
+  revalidatePath('/admin/deals');
+  revalidatePath('/dashboard/bookings');
+  return result;
+}
+
+/** Local/admin fallback for the scheduled 48-hour timeout worker. */
+export async function processCreatorBookingTimeoutsAction(): Promise<ActionResult> {
+  await requireAdmin();
+  const result = await expirePendingCreatorBookings();
+  revalidatePath('/admin/deals');
+  revalidatePath('/dashboard/bookings');
+  return {
+    ok: true,
+    message: `Checked ${result.processed} expired invite(s): ${result.refunded} refunded, ${result.needsReview} needing review.`,
+  };
 }
 
 // ── Regional booking requests (requirement #2 follow-up) ───────────────────

@@ -101,6 +101,11 @@ export type DealStatus =
 
 export type PaymentStatus = 'unpaid' | 'paid' | 'refunded' | 'failed';
 
+/** Response state for the creator invite sent after a brand pays. */
+export type CreatorResponseStatus = 'pending' | 'accepted' | 'declined' | 'expired';
+export type RefundStatus = 'not_required' | 'pending' | 'refunded' | 'failed';
+export type PayoutStatus = 'not_due' | 'pending' | 'paid' | 'failed';
+
 export interface Deal {
   id: string;
   deal_ref: string; // BM-2026-0001
@@ -129,6 +134,16 @@ export interface Deal {
   notes: string | null;
   origin_country: string | null;
   creator_notified_at: string | null;
+  /** Optional so legacy JSON rows remain readable before the migration runs. */
+  creator_response_status?: CreatorResponseStatus;
+  creator_response_token_hash?: string | null;
+  creator_response_expires_at?: string | null;
+  creator_responded_at?: string | null;
+  refund_status?: RefundStatus;
+  refund_reason?: string | null;
+  refunded_at?: string | null;
+  payout_status?: PayoutStatus;
+  payout_ref?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -160,6 +175,8 @@ export type ApplicantStatus = 'pending' | 'approved' | 'rejected';
 
 export interface Applicant {
   id: string;
+  /** Null for the public "Apply as a Creator" roster form. */
+  campaign_id: string | null;
   name: string;
   handle: string | null;
   platform: string | null;
@@ -286,7 +303,9 @@ export interface SavedCreator {
 export interface ContactReveal {
   id: string;
   user_id: string;
-  creator_id: string;
+  /** Exactly one of creator_id or applicant_id is set. */
+  creator_id: string | null;
+  applicant_id?: string | null;
   /** UTC calendar day, so the daily quota counts distinct creators per day. */
   reveal_date: string;
   created_at: string;

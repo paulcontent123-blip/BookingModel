@@ -65,8 +65,28 @@ export default async function CreatorPage({ params }: { params: Promise<{ id: st
             </span>
           </div>
 
-          <h1 className="sec-h" style={{ marginBottom: 4 }}>{creator.name}</h1>
-          <p style={{ color: 'var(--blue)', fontWeight: 600, marginBottom: 12 }}>{creator.handle}</p>
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 12 }}>
+            {creator.avatar_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={creator.avatar_url}
+                alt=""
+                style={{
+                  width: 64,
+                  height: 64,
+                  flexShrink: 0,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '1px solid var(--border)',
+                  background: creator.accent_bg ?? 'var(--bg2)',
+                }}
+              />
+            )}
+            <div>
+              <h1 className="sec-h" style={{ marginBottom: 4 }}>{creator.name}</h1>
+              <p style={{ color: 'var(--blue)', fontWeight: 600 }}>{creator.handle}</p>
+            </div>
+          </div>
 
           <div className="row gap-8 mb-16" style={{ flexWrap: 'wrap' }}>
             <span className="chip">{creator.niche}</span>

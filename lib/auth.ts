@@ -271,13 +271,23 @@ async function listRevealsToday(userId: string) {
 /** Distinct creators this account has revealed today. */
 export async function dailyRevealCount(userId: string): Promise<number> {
   const rows = await listRevealsToday(userId);
-  return new Set(rows.map((row) => row.creator_id)).size;
+  return new Set(
+    rows
+      .map((row) => row.creator_id ?? row.applicant_id ?? null)
+      .filter((id): id is string => Boolean(id)),
+  ).size;
 }
 
 /** Creator ids already unlocked today — these cost no further quota. */
 export async function revealedCreatorIdsToday(userId: string): Promise<Set<string>> {
   const rows = await listRevealsToday(userId);
-  return new Set(rows.map((row) => row.creator_id));
+  return new Set(rows.map((row) => row.creator_id).filter((id): id is string => Boolean(id)));
+}
+
+/** Applicant ids this account has unlocked today. */
+export async function revealedApplicantIdsToday(userId: string): Promise<Set<string>> {
+  const rows = await listRevealsToday(userId);
+  return new Set(rows.map((row) => row.applicant_id).filter((id): id is string => Boolean(id)));
 }
 
 export interface RevealQuota {
@@ -347,6 +357,30 @@ export async function revealCreatorContact(
   user: SessionUser | null,
   creatorId: string,
 ): Promise<RevealOutcome> {
+  return revealContactTarget(user, { creatorId });
+}
+
+/** Unlocks a public creator application using the same daily reveal pool. */
+export async function revealApplicantContact(
+  user: SessionUser | null,
+  applicantId: string,
+): Promise<RevealOutcome> {
+  return revealContactTarget(user, { applicantId });
+}
+
+async function revealContactTarget(
+  user: SessionUser | null,
+  target: { creatorId?: string; applicantId?: string },
+): Promise<RevealOutcome> {
+  const targetId = target.creatorId ?? target.applicantId;
+  if (!targetId) {
+    return {
+      ok: false,
+      reason: 'quota_exhausted',
+      quota: await revealQuota(user),
+    };
+  }
+
   const quota = await revealQuota(user);
   if (!user) return { ok: false, reason: 'not_signed_in', quota };
 
@@ -359,18 +393,22 @@ export async function revealCreatorContact(
     return { ok: false, reason: 'plan_locked', quota };
   }
 
-  const revealed = await revealedCreatorIdsToday(user.id);
-  if (revealed.has(creatorId)) {
+  const reveals = await listRevealsToday(user.id);
+  const alreadyRevealed = reveals.some((row) =>
+    target.creatorId ? row.creator_id === target.creatorId : row.applicant_id === target.applicantId,
+  );
+  if (alreadyRevealed) {
     return { ok: true, alreadyRevealed: true, quota };
   }
 
-  if (revealed.size >= dailyRevealLimit(user.plan)) {
+  if (quota.used >= dailyRevealLimit(user.plan)) {
     return { ok: false, reason: 'quota_exhausted', quota };
   }
 
   await db.insert('contact_reveals', {
     user_id: user.id,
-    creator_id: creatorId,
+    creator_id: target.creatorId ?? null,
+    applicant_id: target.applicantId ?? null,
     created_at: new Date().toISOString(),
   });
 

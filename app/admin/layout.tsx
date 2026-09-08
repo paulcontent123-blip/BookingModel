@@ -15,8 +15,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (usingLocalStore()) await seedIfEmpty();
   const user = await requireAdmin();
 
-  const [applicants, requests, partnerships, upgrades] = await Promise.all([
-    db.count('applicants', { status: 'pending' }),
+  const [allApplicants, requests, partnerships, upgrades] = await Promise.all([
+    db.list('applicants', { where: { status: 'pending' } }),
     db.count('booking_requests', { status: 'new' }),
     db.count('partnership_requests', { status: 'new' }),
     db.count('upgrade_requests', { status: 'pending' }),
@@ -62,7 +62,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
         <div id="body">
           <AdminSidebar
-            badges={{ applicants, requests, partnerships, upgrades }}
+            badges={{
+              applicants: allApplicants.filter((applicant) => !applicant.campaign_id).length,
+              campaignApplicants: allApplicants.filter((applicant) => Boolean(applicant.campaign_id)).length,
+              requests,
+              partnerships,
+              upgrades,
+            }}
           />
           <div id="main">{children}</div>
         </div>

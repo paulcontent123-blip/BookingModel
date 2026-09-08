@@ -5,7 +5,6 @@ import { db } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { resolveGeo } from '@/lib/guard';
 import { config } from '@/lib/config';
-import { paymentProvider } from '@/lib/payments';
 import { planFeePercent } from '@/lib/plans';
 import { countryName, restrictionMessage } from '@/lib/geo';
 import { rateLabel, unitPriceFor } from '@/lib/utils';
@@ -48,8 +47,6 @@ export default async function BookPage({ params }: { params: Promise<{ creatorId
     );
   }
 
-  const provider = paymentProvider();
-
   return (
     <section className="sec">
       <Link href={`/creators/${creator.id}`} className="sol-back">← Back to profile</Link>
@@ -76,8 +73,6 @@ export default async function BookPage({ params }: { params: Promise<{ creatorId
           brandEmail: user?.email ?? '',
         }}
         payment={{
-          provider: provider.name,
-          isLive: provider.isLive,
           // Fee tier comes from the signed-in plan, never from the browser.
           feePercent: planFeePercent(user?.plan),
           taxPercent: config.payments.taxPercent,

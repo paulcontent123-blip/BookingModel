@@ -8,6 +8,7 @@ import { normalizeHandle } from '@/lib/utils';
 export const runtime = 'nodejs';
 
 const schema = z.object({
+  campaign_id: z.string().uuid().optional(),
   name: z.string().min(1).max(160),
   handle: z.string().min(1).max(80),
   platform: z.string().min(1).max(40),
@@ -37,7 +38,21 @@ export async function POST(req: Request) {
   const geo = await resolveGeo();
   const data = parsed.data;
 
+  let campaignId: string | null = null;
+  if (data.campaign_id) {
+    const campaign = await db.get('campaigns', data.campaign_id);
+    const spotsAvailable = campaign && campaign.spots_filled < campaign.spots_total;
+    if (!campaign || campaign.status !== 'active' || !spotsAvailable) {
+      return NextResponse.json(
+        { error: 'This campaign is no longer accepting applications.' },
+        { status: 400 },
+      );
+    }
+    campaignId = campaign.id;
+  }
+
   const applicant = await db.insert('applicants', {
+    campaign_id: campaignId,
     name: data.name,
     handle: normalizeHandle(data.handle),
     platform: data.platform,

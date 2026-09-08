@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import { config } from '@/lib/config';
 import { feePercentLabel, formatDate, money } from '@/lib/utils';
 
-export const metadata: Metadata = { title: 'Booking confirmed' };
+export const metadata: Metadata = { title: 'Payment received' };
 
 export default async function BookingSuccessPage({
   params,
@@ -20,15 +20,16 @@ export default async function BookingSuccessPage({
     db.get('creators', deal.creator_id),
     db.findOne('invoices', { deal_id: deal.id }),
   ]);
+  const creatorResponse = deal.creator_response_status ?? 'accepted';
 
   return (
     <section className="sec" style={{ maxWidth: 720 }}>
       <div className="success-hero">
         <div className="success-mark">✓</div>
-        <h1 className="sec-h" style={{ marginBottom: 6 }}>Payment successful</h1>
-        <p className="sec-p" style={{ margin: '0 auto' }}>
-          Booking <strong>{deal.deal_ref}</strong> is confirmed.
-          {creator && <> We have emailed the brief to <strong>{creator.name}</strong>.</>}
+         <h1 className="sec-h" style={{ marginBottom: 6 }}>Payment successful</h1>
+         <p className="sec-p" style={{ margin: '0 auto' }}>
+           Payment for booking <strong>{deal.deal_ref}</strong> was received.
+           {creator && <> We have emailed the brief to <strong>{creator.name}</strong> for confirmation.</>}
         </p>
       </div>
 
@@ -44,6 +45,13 @@ export default async function BookingSuccessPage({
           ['Total paid', money(deal.total_usd)],
           ['Payment method', `${deal.payment_provider} · ${deal.payment_ref}`],
           ['Status', deal.status.replace(/_/g, ' ')],
+          ['Creator response', creatorResponse.replace(/_/g, ' ')],
+          ...(creatorResponse === 'pending' && deal.creator_response_expires_at
+            ? [['Response deadline', formatDate(deal.creator_response_expires_at)]]
+            : []),
+          ...(deal.refund_status && deal.refund_status !== 'not_required'
+            ? [['Refund', deal.refund_status.replace(/_/g, ' ')]]
+            : []),
         ].map(([label, value]) => (
           <div className="summary-line" key={label}>
             <span>{label}</span>
@@ -55,10 +63,19 @@ export default async function BookingSuccessPage({
       <div className="alert alert-ok">
         <strong>What happens next</strong>
         <br />
-        1. {creator?.name ?? 'The creator'} confirms within 48 hours.<br />
-        2. Content is produced and submitted for your review.<br />
-        3. You approve or request revisions — unlimited until you are satisfied.<br />
-        4. Final files are delivered with full commercial usage rights.
+        {creatorResponse === 'pending' ? (
+          <>1. {creator?.name ?? 'The creator'} reviews and responds within 48 hours.<br />
+          2. If accepted, the campaign moves to production.<br />
+          3. You approve or request revisions — unlimited until you are satisfied.<br />
+          4. Final files are delivered with full commercial usage rights.</>
+        ) : creatorResponse === 'accepted' ? (
+          <>1. {creator?.name ?? 'The creator'} accepted the booking.<br />
+          2. Content is produced and submitted for your review.<br />
+          3. You approve or request revisions — unlimited until you are satisfied.<br />
+          4. Final files are delivered with full commercial usage rights.</>
+        ) : (
+          <>The creator did not accept this booking. The payment is being returned to the original payment method.</>
+        )}
         {deal.creator_notified_at ? (
           <><br /><span className="small">Creator notified at {formatDate(deal.creator_notified_at)}.</span></>
         ) : (

@@ -66,26 +66,37 @@ export interface Message {
 // ---------------------------------------------------------------------------
 // Requirement #5 — notify the creator when a brand books them
 // ---------------------------------------------------------------------------
-export function creatorBookedEmail(deal: Deal, creator: Creator): Message {
+export function creatorBookedEmail(
+  deal: Deal,
+  creator: Creator,
+  invoice: Invoice,
+  links: { acceptUrl: string; declineUrl: string },
+): Message {
+  const acceptButton = `<a href="${esc(links.acceptUrl)}" style="display:inline-block;background:#00875A;color:#FFFFFF;text-decoration:none;font-weight:700;font-size:14px;padding:12px 20px;border-radius:4px;margin-right:8px;">Accept booking</a>`;
+  const declineButton = `<a href="${esc(links.declineUrl)}" style="display:inline-block;background:#FFFFFF;color:#C62828;text-decoration:none;font-weight:700;font-size:14px;padding:11px 20px;border:1px solid #C62828;border-radius:4px;">Decline booking</a>`;
   return {
     to: creator.contact_email ?? config.email.adminEmail,
     template: 'creator_booked',
-    subject: `New booking ${deal.deal_ref} — ${deal.brand_name ?? 'A brand'} booked you on BookingModel`,
+    subject: `Action required — booking ${deal.deal_ref} from ${deal.brand_name ?? 'a brand'}`,
     html: shell({
       preheader: `${deal.brand_name ?? 'A brand'} booked you for ${deal.quantity}x ${deal.content_type ?? 'content'}.`,
-      heading: `Hi ${esc(creator.name.split(' ')[0])} — you have a new booking`,
-      body: `<p><strong>${esc(deal.brand_name ?? 'A brand')}</strong> has booked you through BookingModel. Payment for this deal has been received, so you can start as soon as you have reviewed the brief.</p>
+      heading: `Hi ${esc(creator.name.split(' ')[0])} — please review this booking`,
+      body: `<p><strong>${esc(deal.brand_name ?? 'A brand')}</strong> has paid for a booking with you through BookingModel. Review the campaign information below and choose whether you can take the booking.</p>
       ${table([
         ['Booking reference', esc(deal.deal_ref)],
         ['Brand', esc(deal.brand_name)],
+        ['Brand email', esc(deal.brand_email)],
+        ['Billing company', esc(invoice.bill_to_company)],
+        ['Brand address', esc(invoice.bill_to_address)],
         ['Deliverables', `${deal.quantity}x ${esc(deal.content_type)}`],
         ['Your rate', money(deal.subtotal_usd)],
         ['Due date', formatDate(deal.due_date)],
       ])}
       <p style="margin:0 0 6px;font-weight:700;">Campaign brief</p>
       <p style="margin:0;padding:12px 14px;background:#F8F8F8;border-left:3px solid #0057FF;white-space:pre-wrap;">${esc(deal.brief ?? 'The brand will share the full brief shortly.')}</p>
-      <p>Please confirm within 48 hours. If anything in the brief does not work for you, reply to this email and our team will renegotiate on your behalf.</p>`,
-      cta: { label: 'View booking details', url: `${config.site.url}/bookings/${deal.deal_ref}` },
+      <p style="margin:18px 0 10px;font-weight:700;">Respond within 48 hours</p>
+      <p style="margin:0 0 16px;">If you accept, the brand will receive a confirmation and the booking will move to the creator payout queue. If you decline or do not respond before the deadline, the brand will be notified and the payment will be refunded.</p>
+      <p style="margin:0;">${acceptButton}${declineButton}</p>`,
     }),
   };
 }
@@ -97,11 +108,11 @@ export function bookingConfirmedEmail(deal: Deal, creator: Creator, invoice: Inv
   return {
     to: deal.brand_email ?? config.email.adminEmail,
     template: 'booking_confirmed',
-    subject: `Payment received — booking ${deal.deal_ref} confirmed (invoice ${invoice.invoice_no})`,
+    subject: `Payment received — creator confirmation pending (invoice ${invoice.invoice_no})`,
     html: shell({
-      preheader: `Your booking with ${creator.name} is confirmed. Invoice ${invoice.invoice_no}.`,
-      heading: 'Payment received — your booking is confirmed',
-      body: `<p>Thank you. Your payment has been processed and <strong>${esc(creator.name)}</strong> has been notified about your campaign.</p>
+      preheader: `Payment received for ${deal.deal_ref}. Waiting for ${creator.name} to respond.`,
+      heading: 'Payment received — creator confirmation pending',
+      body: `<p>Thank you. Your payment has been processed and <strong>${esc(creator.name)}</strong> has received the campaign brief and contact details.</p>
       ${table([
         ['Booking reference', esc(deal.deal_ref)],
         ['Invoice', esc(invoice.invoice_no)],
@@ -111,8 +122,96 @@ export function bookingConfirmedEmail(deal: Deal, creator: Creator, invoice: Inv
         [`Platform fee (${feePercentLabel(deal.platform_fee_percent)}%)`, money(deal.platform_fee_usd)],
         ['Total paid', `<span style="color:#00875A;">${money(deal.total_usd)}</span>`],
       ])}
-      <p>The creator confirms within 48 hours and content is typically delivered within 7 days. You can track every status change from your dashboard.</p>`,
+      <p>The creator has 48 hours to accept. If they decline or do not respond in time, the booking will be cancelled and the payment will be refunded. You can track every status change from your dashboard.</p>`,
       cta: { label: 'View invoice', url: `${config.site.url}/invoices/${invoice.invoice_no}` },
+    }),
+  };
+}
+
+export function creatorAcceptedEmail(deal: Deal, creator: Creator): Message {
+  return {
+    to: deal.brand_email ?? config.email.adminEmail,
+    template: 'creator_accepted',
+    subject: `Creator accepted booking ${deal.deal_ref} — ${creator.name}`,
+    html: shell({
+      preheader: `${creator.name} accepted your booking ${deal.deal_ref}.`,
+      heading: 'Your creator accepted the booking',
+      body: `<p><strong>${esc(creator.name)}</strong> accepted your booking. The VEA team can now coordinate the brief and release the creator payout according to your agreement.</p>
+      ${table([
+        ['Booking reference', esc(deal.deal_ref)],
+        ['Creator', `${esc(creator.name)} (${esc(creator.handle)})`],
+        ['Contact email', esc(creator.contact_email)],
+        ['Contact note', esc(creator.contact_hint)],
+        ['Platform', esc(creator.platform)],
+        ['Channel URL', creator.channel_url ? `<a href="${esc(creator.channel_url)}" style="color:#0057FF;">${esc(creator.channel_url)}</a>` : '—'],
+        ['Deliverables', `${deal.quantity}x ${esc(deal.content_type)}`],
+        ['Due date', formatDate(deal.due_date)],
+        ['Amount', money(deal.subtotal_usd)],
+      ])}
+      <p>The booking is now in the creator payout queue. Our team will update you when the next payment milestone is recorded.</p>`,
+      cta: { label: 'Open dashboard', url: `${config.site.url}/dashboard/bookings` },
+    }),
+  };
+}
+
+export function bookingRefundedEmail(
+  deal: Deal,
+  creator: Creator,
+  invoice: Invoice,
+  reason: 'declined' | 'expired',
+  refundOk: boolean,
+): Message {
+  const declined = reason === 'declined';
+  const headline = declined ? 'The creator declined your booking' : 'The booking expired without a response';
+  const refundText = refundOk
+    ? `The payment of <strong>${money(deal.total_usd)}</strong> has been sent for refund to the original payment method.`
+    : `The automatic refund could not be completed yet. Our admin team has been notified and will review the refund for <strong>${money(deal.total_usd)}</strong>.`;
+  return {
+    to: deal.brand_email ?? config.email.adminEmail,
+    template: declined ? 'booking_declined' : 'booking_expired',
+    subject: `${headline} — ${deal.deal_ref}`,
+    html: shell({
+      preheader: `${headline}. Booking ${deal.deal_ref}.`,
+      heading: headline,
+      body: `<p>Unfortunately, <strong>${esc(creator.name)}</strong> will not be moving forward with booking <strong>${esc(deal.deal_ref)}</strong>.</p>
+      ${table([
+        ['Booking reference', esc(deal.deal_ref)],
+        ['Invoice', esc(invoice.invoice_no)],
+        ['Creator', `${esc(creator.name)} (${esc(creator.handle)})`],
+        ['Booking total', money(deal.total_usd)],
+      ])}
+      <p>${refundText}</p>
+      <p>You can contact our team if you would like help choosing another creator.</p>`,
+      cta: { label: 'View dashboard', url: `${config.site.url}/dashboard/bookings` },
+    }),
+  };
+}
+
+export function adminCreatorResponseEmail(
+  deal: Deal,
+  creator: Creator,
+  response: 'accepted' | 'declined' | 'expired',
+  refundOk?: boolean,
+): Message {
+  const label = response === 'accepted' ? 'accepted' : response === 'declined' ? 'declined' : 'timed out';
+  return {
+    to: config.email.adminEmail,
+    template: 'admin_creator_response',
+    subject: `[Booking] ${deal.deal_ref} — ${creator.name} ${label}`,
+    html: shell({
+      preheader: `Creator response for ${deal.deal_ref}: ${label}.`,
+      heading: `Creator response: ${label}`,
+      body: `<p><strong>${esc(creator.name)}</strong> ${label} booking <strong>${esc(deal.deal_ref)}</strong>.</p>
+      ${table([
+        ['Booking reference', esc(deal.deal_ref)],
+        ['Brand', `${esc(deal.brand_name)} (${esc(deal.brand_email)})`],
+        ['Creator', `${esc(creator.name)} (${esc(creator.contact_email)})`],
+        ['Total', money(deal.total_usd)],
+        ['Refund', response === 'accepted' ? 'Not required' : refundOk ? 'Completed' : 'Needs admin review'],
+        ['Payout', response === 'accepted' ? 'Pending creator payout' : 'Not due'],
+      ])}
+      ${!refundOk && response !== 'accepted' ? '<p style="color:#C62828;font-weight:700;">Automatic refund failed. Please retry or process it in the payment provider dashboard.</p>' : ''}`,
+      cta: { label: 'Open booking deals', url: `${config.site.url}/admin/deals` },
     }),
   };
 }
@@ -206,14 +305,17 @@ export function leadAcknowledgementEmail(request: BookingRequest): Message {
 // Applicants / partnership / contact
 // ---------------------------------------------------------------------------
 export function applicantReceivedEmail(applicant: Applicant): Message {
+  const campaignApplication = Boolean(applicant.campaign_id);
   return {
     to: applicant.email,
     template: 'applicant_received',
-    subject: 'Application received — BookingModel creator roster',
+    subject: campaignApplication
+      ? 'Application received — BookingModel campaign'
+      : 'Application received — BookingModel creator roster',
     html: shell({
       preheader: 'We received your creator application.',
       heading: 'Application received',
-      body: `<p>Hi ${esc(applicant.name.split(' ')[0])}, thanks for applying to the BookingModel creator roster.</p>
+      body: `<p>Hi ${esc(applicant.name.split(' ')[0])}, thanks for applying${campaignApplication ? ' to a BookingModel campaign' : ' to the BookingModel creator roster'}.</p>
       <p>Our team reviews every profile manually — we are not an open sign-up platform. Expect a decision within 24 to 48 hours.</p>
       ${table([
         ['Name', esc(applicant.name)],
@@ -227,10 +329,11 @@ export function applicantReceivedEmail(applicant: Applicant): Message {
 }
 
 export function adminNewApplicantEmail(applicant: Applicant): Message {
+  const campaignApplication = Boolean(applicant.campaign_id);
   return {
     to: config.email.adminEmail,
     template: 'admin_new_applicant',
-    subject: `[Applicant] ${applicant.name} — ${applicant.platform} ${applicant.audience ?? ''}`,
+    subject: `[${campaignApplication ? 'Campaign applicant' : 'Applicant'}] ${applicant.name} — ${applicant.platform} ${applicant.audience ?? ''}`,
     html: shell({
       preheader: 'New creator application awaiting review.',
       heading: 'New creator application',
@@ -245,7 +348,10 @@ export function adminNewApplicantEmail(applicant: Applicant): Message {
         ['Email', esc(applicant.email)],
         ['Country', esc(applicant.country)],
       ]),
-      cta: { label: 'Review applicant', url: `${config.site.url}/admin/applicants` },
+      cta: {
+        label: 'Review applicant',
+        url: `${config.site.url}${campaignApplication ? '/admin/campaign-applicants' : '/admin/applicants'}`,
+      },
     }),
   };
 }

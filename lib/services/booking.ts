@@ -1,18 +1,18 @@
 import 'server-only';
 import { db } from '@/lib/db';
 import { config } from '@/lib/config';
-import { paymentProvider, priceBooking } from '@/lib/payments';
+import { paymentProvider, priceBooking, type PaymentMethod } from '@/lib/payments';
 import {
   adminBookingRequestEmail,
   adminNewBookingEmail,
   bookingConfirmedEmail,
-  creatorBookedEmail,
   leadAcknowledgementEmail,
   sendAll,
 } from '@/lib/email';
 import type { BookingRequest, Creator, Deal, Invoice, Plan } from '@/lib/types';
 import { unitPriceFor } from '@/lib/utils';
 import { nextDealRef, nextInvoiceNo, nextRequestRef } from './refs';
+import { sendCreatorBookingInvite } from './creator-booking';
 
 /**
  * The booking pipeline.
@@ -42,6 +42,7 @@ export interface BookingInput {
    * platform fee tier, so it must never be taken from the request body.
    */
   brandPlan?: Plan | null;
+  paymentMethod?: PaymentMethod;
   paymentToken?: string | null;
   billing?: {
     company?: string | null;
@@ -83,7 +84,7 @@ export async function createPaidBooking(
   }
 
   const dealRef = await nextDealRef();
-  const provider = paymentProvider();
+  const provider = paymentProvider(input.paymentMethod);
 
   const charge = await provider.charge({
     amountUsd: price.total,
@@ -139,6 +140,15 @@ export async function createPaidBooking(
     notes: null,
     origin_country: input.originCountry ?? null,
     creator_notified_at: null,
+    creator_response_status: 'pending',
+    creator_response_token_hash: null,
+    creator_response_expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+    creator_responded_at: null,
+    refund_status: 'not_required',
+    refund_reason: null,
+    refunded_at: null,
+    payout_status: 'not_due',
+    payout_ref: null,
     created_at: now,
     updated_at: now,
   });
@@ -165,26 +175,21 @@ export async function createPaidBooking(
     created_at: now,
   });
 
-  // Requirement #5: the creator is notified by email. Requirement #3: the brand
-  // gets a payment confirmation with the invoice. Delivery never blocks the sale.
+  // The creator receives a one-time accept/decline link. The brand and admin
+  // receive their own notifications. Delivery never rolls back a paid deal.
+  const creatorInvite = await sendCreatorBookingInvite(deal.id);
   const results = await sendAll(
     [
-      creatorBookedEmail(deal, creator),
       bookingConfirmedEmail(deal, creator, invoice),
       adminNewBookingEmail(deal, creator),
     ],
     { type: 'deal', id: deal.id },
   );
-
-  const creatorEmailed = results[0]?.ok ?? false;
-  if (creatorEmailed) {
-    await db.update('deals', deal.id, { creator_notified_at: new Date().toISOString() });
-    deal.creator_notified_at = new Date().toISOString();
-  }
+  const refreshedDeal = await db.get('deals', deal.id);
 
   return {
     ok: true,
-    deal,
+    deal: refreshedDeal ?? deal,
     invoice,
     creator,
     payment: {
@@ -193,7 +198,7 @@ export async function createPaidBooking(
       last4: charge.last4 ?? null,
       brand: charge.brand ?? null,
     },
-    notifications: { creatorEmailed, brandEmailed: results[1]?.ok ?? false },
+    notifications: { creatorEmailed: creatorInvite.ok, brandEmailed: results[0]?.ok ?? false },
   };
 }
 

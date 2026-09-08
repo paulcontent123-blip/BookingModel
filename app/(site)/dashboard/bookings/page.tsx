@@ -18,7 +18,7 @@ function belongsToBrand(
 }
 
 function statusClass(status: string): string {
-  if (['active', 'paid', 'approved', 'published', 'completed'].includes(status)) return 'active';
+  if (['active', 'paid', 'accepted', 'approved', 'published', 'completed'].includes(status)) return 'active';
   if (['pending_payment', 'unpaid', 'brief_sent', 'negotiating', 'content_in_review'].includes(status)) return 'pending';
   if (['cancelled', 'failed', 'overdue'].includes(status)) return 'error';
   return 'draft';
@@ -102,7 +102,7 @@ export default async function BookingsPage() {
               <thead>
                 <tr>
                   <th>Reference</th><th>Creator</th><th>Deliverables</th><th>Total</th>
-                  <th>Payment</th><th>Status</th><th>Due</th><th />
+                  <th>Payment</th><th>Creator response</th><th>Status</th><th>Due</th><th />
                 </tr>
               </thead>
               <tbody>
@@ -117,6 +117,7 @@ export default async function BookingsPage() {
                         <td>{deal.deliverables ?? '—'}</td>
                         <td>{money(deal.total_usd)}</td>
                         <td><span className={`brand-dashboard-status ${statusClass(deal.payment_status)}`}>{deal.payment_status.replace(/_/g, ' ')}</span></td>
+                        <td><span className={`brand-dashboard-status ${statusClass(deal.creator_response_status ?? 'accepted')}`}>{(deal.creator_response_status ?? 'accepted').replace(/_/g, ' ')}</span></td>
                         <td><span className={`brand-dashboard-status ${statusClass(deal.status)}`}>{deal.status.replace(/_/g, ' ')}</span></td>
                         <td>{formatDate(deal.due_date)}</td>
                         <td>

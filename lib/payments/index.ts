@@ -40,6 +40,8 @@ export interface ChargeResult {
   brand?: string | null;
 }
 
+export type PaymentMethod = 'stripe' | 'paypal';
+
 export interface PaymentProvider {
   readonly name: string;
   readonly isLive: boolean;
@@ -178,10 +180,16 @@ const providers: Record<string, PaymentProvider> = {
   stripe: stripeProvider,
 };
 
-export function paymentProvider(): PaymentProvider {
-  const chosen = providers[config.payments.provider];
+export function paymentProvider(requestedMethod?: PaymentMethod): PaymentProvider {
+  // The checkout modal can already collect the brand's preferred service. The
+  // PayPal adapter will be added when its credentials are configured; until
+  // then PayPal deliberately falls back to the safe local provider.
+  const selectedProvider = requestedMethod ?? config.payments.provider;
+  if (selectedProvider === 'paypal') return mockProvider;
+
+  const chosen = providers[selectedProvider];
   if (!chosen) {
-    console.warn(`[payments] unknown provider "${config.payments.provider}", falling back to mock`);
+    console.warn(`[payments] unknown provider "${selectedProvider}", falling back to mock`);
     return mockProvider;
   }
   // Selected Stripe but the key is still a placeholder — stay usable.

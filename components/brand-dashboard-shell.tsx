@@ -10,6 +10,8 @@ const NAV = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/dashboard/creators', label: 'Browse Creators' },
   { href: '/dashboard/bookings', label: 'My Campaigns' },
+  { href: '/dashboard/campaign-applicants', label: 'Campaign Applicants' },
+  { href: '/dashboard/creator-applications', label: 'Creator Applications' },
   { href: '/dashboard/brief', label: 'New Campaign Brief' },
   { href: '/dashboard/plan', label: 'My Plan' },
   { href: '/dashboard/saved', label: 'Saved Creators' },

@@ -14,7 +14,13 @@ interface Item {
 export function AdminSidebar({
   badges,
 }: {
-  badges: { applicants: number; requests: number; partnerships: number; upgrades: number };
+  badges: {
+    applicants: number;
+    campaignApplicants: number;
+    requests: number;
+    partnerships: number;
+    upgrades: number;
+  };
 }) {
   const pathname = usePathname();
 
@@ -35,6 +41,13 @@ export function AdminSidebar({
           label: 'KOL/KOC Applicants',
           badge: badges.applicants,
           tone: 'amber',
+        },
+        {
+          href: '/admin/campaign-applicants',
+          icon: '🎯',
+          label: 'Campaign Applicants',
+          badge: badges.campaignApplicants,
+          tone: 'blue',
         },
       ],
     },

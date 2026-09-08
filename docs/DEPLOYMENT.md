@@ -4,6 +4,7 @@
 
 - [ ] Đã tạo Supabase và chạy `npm run db:push` ([hướng dẫn](./DATABASE.md))
 - [ ] Đã có `RESEND_API_KEY` và verify domain ([hướng dẫn](./API_KEYS.md))
+- [ ] Đã có `CRON_SECRET` để tự động xử lý booking creator không phản hồi sau 48 giờ
 - [ ] Đã quyết định cổng thanh toán (hoặc tạm giữ `mock` để demo)
 - [ ] `npm run build` chạy sạch ở máy local
 
@@ -94,6 +95,7 @@ yêu cầu quyền admin.
 - [ ] Vào site từ IP Việt Nam → banner hiện, modal liên hệ hoạt động, lead vào `/admin/booking-requests`
 - [ ] Email thật gửi được (`/admin/emails` hiện `provider: resend`, `status: sent`)
 - [ ] Hoá đơn in ra đúng
+- [ ] Creator nhận được email có nút Accept/Decline; timeout/refund hiển thị đúng ở `/admin/deals`
 - [ ] Sửa thông tin liên hệ thật trong `NEXT_PUBLIC_MANAGER_*` (hiện đang là số điện thoại mẫu)
 
 ### Nội dung

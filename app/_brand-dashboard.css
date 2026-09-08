@@ -1713,6 +1713,174 @@ body:has(.brand-dashboard-shell) .geo-debug {
   line-height: 1.4;
 }
 
+/* ── Creator applications ─────────────────────────────────────────────── */
+
+.brand-applicant-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.brand-applicant-card {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  background: var(--brand-white);
+}
+
+.brand-applicant-topline {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.brand-applicant-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--brand-bg);
+  color: var(--brand-muted);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.brand-applicant-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.brand-applicant-heading {
+  min-width: 0;
+  flex: 1;
+}
+
+.brand-applicant-heading strong,
+.brand-applicant-heading span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-applicant-heading strong {
+  color: var(--brand-ink);
+  font-size: 13.5px;
+}
+
+.brand-applicant-heading span {
+  margin-top: 2px;
+  color: var(--brand-blue);
+  font-size: 11px;
+}
+
+.brand-applicant-campaign {
+  min-height: 63px;
+  margin: 13px 0 12px;
+  padding: 9px 10px;
+  border-radius: 6px;
+  background: #F7F8FC;
+}
+
+.brand-applicant-campaign span,
+.brand-applicant-campaign strong,
+.brand-applicant-campaign small {
+  display: block;
+}
+
+.brand-applicant-campaign span,
+.brand-applicant-campaign small {
+  color: var(--brand-muted);
+  font-size: 10.5px;
+}
+
+.brand-applicant-campaign strong {
+  margin: 2px 0;
+  overflow: hidden;
+  color: var(--brand-ink);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-applicant-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.brand-applicant-details > div {
+  min-width: 0;
+  padding: 6px 7px;
+  border: 1px solid var(--brand-border);
+  border-radius: 5px;
+  background: var(--brand-bg);
+}
+
+.brand-applicant-details span,
+.brand-applicant-details strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-applicant-details span {
+  color: var(--brand-muted);
+  font-size: 9px;
+}
+
+.brand-applicant-details strong {
+  margin-top: 2px;
+  color: var(--brand-ink);
+  font-size: 11.5px;
+}
+
+.brand-applicant-notes {
+  margin: 0 0 10px;
+  color: var(--brand-muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.brand-applicant-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.brand-applicant-actions a {
+  color: var(--brand-blue);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.brand-applicant-actions a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1050px) {
+  .brand-applicant-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .brand-applicant-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Advanced filter inputs sit beside the search box for entitled plans. */
 .brand-marketplace-search input[type='number'] {
   width: 110px;

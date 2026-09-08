@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getAdminSessionUser } from '@/lib/auth';
 import {
+  accentBgFor,
+  defaultAvatarUrl,
   extractYouTubeId,
   normalizeHandle,
   parseAudience,
@@ -113,8 +115,8 @@ export async function POST(req: Request) {
       bd_notes: (row.notes ?? '').trim() || null,
       bio: (row.notes ?? '').trim() || null,
       photo_url: (row.photo_url ?? '').trim() || null,
-      avatar_url: null,
-      accent_bg: '#F2F2F2',
+      avatar_url: defaultAvatarUrl(handle),
+      accent_bg: accentBgFor(handle),
       emoji: '👤',
       status: 'active',
       source: 'csv_import',

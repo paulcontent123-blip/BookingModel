@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
-import { requireUser, revealCreatorContact } from '@/lib/auth';
+import { requireUser, revealApplicantContact, revealCreatorContact } from '@/lib/auth';
 import { lowestPlanWith, planName, revealLimitLabel } from '@/lib/plans';
 
 export interface RevealActionResult {
@@ -54,5 +54,61 @@ export async function revealContactAction(formData: FormData): Promise<RevealAct
     message: outcome.alreadyRevealed
       ? 'Already unlocked today — no reveal used.'
       : `Contact unlocked for ${creator.name}.`,
+  };
+}
+
+/**
+ * Unlocks the contact details submitted through either public application form.
+ * Campaign applications are scoped to the brand that owns the campaign;
+ * roster applications are visible to every signed-in brand.
+ */
+export async function revealApplicantContactAction(formData: FormData): Promise<RevealActionResult> {
+  const user = await requireUser('/login?next=/dashboard/creator-applications');
+  const applicantId = String(formData.get('applicant_id') ?? '').trim();
+  if (!applicantId) return { ok: false, message: 'Missing creator application.' };
+
+  const applicant = await db.get('applicants', applicantId);
+  if (!applicant || applicant.status === 'rejected') {
+    return { ok: false, message: 'That creator application is no longer available.' };
+  }
+
+  if (applicant.campaign_id) {
+    const campaign = await db.get('campaigns', applicant.campaign_id);
+    const ownsCampaign = campaign && (
+      campaign.brand_id === user.id ||
+      (campaign.brand_id == null && Boolean(user.company_name) && campaign.brand_name === user.company_name)
+    );
+    if (!ownsCampaign) {
+      return { ok: false, message: 'You can only reveal applicants to your own campaigns.' };
+    }
+  }
+
+  const outcome = await revealApplicantContact(user, applicant.id);
+  if (!outcome.ok) {
+    if (outcome.reason === 'plan_locked') {
+      const needed = lowestPlanWith('contact_reveals');
+      return {
+        ok: false,
+        message: `Contact details start on the ${planName(needed ?? 'standard')} plan.`,
+      };
+    }
+    if (outcome.reason === 'quota_exhausted') {
+      return {
+        ok: false,
+        message: `You have used all ${revealLimitLabel(user.plan)} reveals for today. The quota resets at midnight UTC.`,
+      };
+    }
+    return { ok: false, message: 'Please sign in again.' };
+  }
+
+  revalidatePath('/dashboard/campaign-applicants');
+  revalidatePath('/dashboard/creator-applications');
+  revalidatePath('/dashboard');
+
+  return {
+    ok: true,
+    message: outcome.alreadyRevealed
+      ? 'Already unlocked today — no reveal used.'
+      : `Contact unlocked for ${applicant.name}.`,
   };
 }

@@ -157,3 +157,28 @@ export function feePercentLabel(percent: number | null | undefined): string {
   if (!Number.isFinite(n)) return '0';
   return String(Number(n.toFixed(2)));
 }
+
+/**
+ * Pastel background used when a creator has no photo yet. Seeded creators each
+ * carry their own tone, so manually added creators pick one deterministically
+ * from the handle instead of all landing on the same grey.
+ */
+export const ACCENT_PALETTE = [
+  '#F2EEE8', '#EAF1F7', '#F3EDF7', '#EDF5EE',
+  '#FBF0E8', '#EEF0F8', '#F7EFEF', '#E9F3F3',
+] as const;
+
+export function accentBgFor(seed: string): string {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  return ACCENT_PALETTE[hash % ACCENT_PALETTE.length]!;
+}
+
+/**
+ * Same generated avatar the seeded roster uses, so a hand-added creator has a
+ * portrait next to the name instead of an empty circle.
+ */
+export function defaultAvatarUrl(seed: string): string {
+  const cleaned = slugify(seed.replace(/^@/, '')) || 'creator';
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(cleaned)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+}

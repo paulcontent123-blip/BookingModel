@@ -14,6 +14,14 @@ const TONE: Record<string, string> = {
   paid: 'green',
   refunded: 'gray',
   failed: 'red',
+  // creator response / refund / payout
+  accepted: 'green',
+  declined: 'red',
+  expired: 'red',
+  not_required: 'gray',
+  not_due: 'gray',
+  processing: 'amber',
+  payout_pending: 'amber',
   // applicant / request status
   pending: 'amber',
   rejected: 'red',
