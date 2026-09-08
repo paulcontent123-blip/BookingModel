@@ -53,3 +53,6 @@ desktop.ini
 *.swo
 *~
 .idea/
+
+# Local AI/editor tooling
+.claude/
