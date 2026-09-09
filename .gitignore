@@ -18,6 +18,7 @@ dist/
 
 # Local application data
 .data/
+tmp/
 
 # TypeScript generated files
 *.tsbuildinfo
