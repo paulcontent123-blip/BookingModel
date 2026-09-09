@@ -32,30 +32,31 @@ export function GeoBar() {
   );
 }
 
-/** Dev-only country switcher so the gate can be demoed without a VPN. */
-export function GeoDebugPanel() {
-  const { geo, debug } = useGeo();
-  if (!debug) return null;
+/** Optional GEO test switcher, controlled by Admin → Settings. */
+export function GeoStatusPanel({ visible }: { visible: boolean }) {
+  const { geo } = useGeo();
+  if (!visible) return null;
 
   const countries = ['US', 'CA', 'VN', 'TH', 'SG', 'PH', 'ID', 'MY', 'GB', 'AU'];
 
   return (
-    <div className="geo-debug" title="NEXT_PUBLIC_GEO_DEBUG=true — disable this in production">
+    <div className="geo-debug" title="GEO test mode — choose a country to test the payment gate">
       <span className={`dot ${geo.canTransact ? 'ok' : 'no'}`} />
       <span>GEO</span>
       <select
+        aria-label="Test GEO country"
         value={geo.country ?? ''}
-        onChange={(e) => {
-          const v = e.target.value;
+        onChange={(event) => {
+          const value = event.currentTarget.value;
           const url = new URL(window.location.href);
-          url.searchParams.set('geo', v || 'reset');
-          window.location.href = url.toString();
+          url.searchParams.set('geo', value || 'reset');
+          window.location.assign(url.toString());
         }}
       >
-        <option value="">unknown</option>
-        {countries.map((c) => (
-          <option key={c} value={c}>
-            {c} — {countryName(c)}
+        <option value="">{countryFlag(null)} Unknown / auto-detect</option>
+        {countries.map((code) => (
+          <option key={code} value={code}>
+            {countryFlag(code)} {code} — {countryName(code)}
           </option>
         ))}
       </select>

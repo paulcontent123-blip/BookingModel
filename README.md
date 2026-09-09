@@ -59,9 +59,10 @@ Mở <http://localhost:3000>. Lần chạy đầu tiên tự nạp 40 creator, 6
    lưu bảng `booking_requests` → gửi email cho `SALES_EMAIL` và email xác nhận
    cho người gửi. Admin xử lý tại `/admin/booking-requests`.
 
-**Test không cần VPN:** thêm `?geo=VN` (hoặc `?geo=US`, `?geo=SG`…) vào bất kỳ URL
-nào, hoặc dùng bộ chuyển quốc gia ở góc dưới trái màn hình. Chỉ hoạt động khi
-`NEXT_PUBLIC_GEO_DEBUG=true` — **phải tắt trên production**.
+Khu vực của khách truy cập luôn được tự nhận diện từ header địa lý của nền tảng
+hoặc IP fallback. Admin có thể bật/tắt **GEO test switcher** tại **Admin → Settings**:
+khi bật, dropdown chọn quốc gia xuất hiện để kiểm thử deployment; khi tắt, mọi override
+test bị bỏ qua và hệ thống chỉ dùng vị trí tự nhận diện.
 
 ```bash
 # Kiểm tra bằng curl

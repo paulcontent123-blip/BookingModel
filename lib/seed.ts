@@ -236,6 +236,7 @@ export async function runSeed(): Promise<{ seeded: boolean; counts: Record<strin
       [`contact_limit_${plan}`, revealLimitLabel(plan)],
     ]),
     ['payment_allowed_countries', config.geo.allowedCountries.join(',')],
+    ['geo_status_panel_visible', 'false'],
   ];
   for (const [key, value] of settings) {
     const exists = await db.findOne('settings', { key });

@@ -23,7 +23,8 @@ Hoặc kết nối GitHub repo trong Vercel dashboard để auto-deploy mỗi l�
 
 **Quan trọng:** deploy trên Vercel để cơ chế chặn IP hoạt động miễn phí — Vercel
 tự gửi header `x-vercel-ip-country` cho mọi request. Nếu tự host trên VPS, phải
-đặt Cloudflare phía trước (dùng `cf-ipcountry`) hoặc điền `IPINFO_TOKEN`.
+đặt Cloudflare phía trước (dùng `cf-ipcountry`), điền `IPINFO_TOKEN`, hoặc bật
+provider `ipapi` làm fallback không cần token.
 
 ---
 
@@ -35,16 +36,12 @@ nhưng **sửa các giá trị sau**:
 ```env
 NEXT_PUBLIC_SITE_URL=https://bookingmodel.com
 AUTH_SECRET=<chuỗi 96 ký tự mới, sinh bằng lệnh dưới>
-NEXT_PUBLIC_GEO_DEBUG=false
 GEO_UNKNOWN_POLICY=block
 ```
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ```
-
-> ⚠️ **`NEXT_PUBLIC_GEO_DEBUG` phải là `false`.** Nếu để `true`, bất kỳ ai cũng
-> thêm `?geo=US` vào URL là qua mặt được toàn bộ cơ chế chặn IP.
 
 > ⚠️ **`GEO_UNKNOWN_POLICY=block`** — trên production, request không xác định được
 > quốc gia (proxy lạ, VPN che header) sẽ bị coi là không được thanh toán, thay vì
@@ -83,7 +80,6 @@ yêu cầu quyền admin.
 
 ### Bảo mật
 - [ ] `AUTH_SECRET` là chuỗi ngẫu nhiên mới, không phải giá trị trong `.env.example`
-- [ ] `NEXT_PUBLIC_GEO_DEBUG=false`
 - [ ] `GEO_UNKNOWN_POLICY=block`
 - [ ] Đã đổi mật khẩu 4 tài khoản demo, hoặc xoá hẳn 3 tài khoản brand demo
 - [ ] `SUPABASE_SERVICE_ROLE_KEY` chỉ nằm trong env của Vercel, không có trong git
@@ -93,6 +89,7 @@ yêu cầu quyền admin.
 ### Chức năng
 - [ ] Vào site từ IP Mỹ (hoặc VPN Mỹ) → booking + thanh toán chạy được
 - [ ] Vào site từ IP Việt Nam → banner hiện, modal liên hệ hoạt động, lead vào `/admin/booking-requests`
+- [ ] Admin → Settings → GEO test switcher: bật để kiểm thử `US`/`VN`, sau đó tắt trước khi go-live; khi tắt, khu vực tự nhận diện từ IP
 - [ ] Email thật gửi được (`/admin/emails` hiện `provider: resend`, `status: sent`)
 - [ ] Hoá đơn in ra đúng
 - [ ] Creator nhận được email có nút Accept/Decline; timeout/refund hiển thị đúng ở `/admin/deals`

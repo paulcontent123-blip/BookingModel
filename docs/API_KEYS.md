@@ -181,7 +181,7 @@ Chỉ cần khi self-host (VPS, Docker) không có CDN phía trước:
 
 1. <https://ipinfo.io/signup> (free: 50.000 request/tháng)
 2. Copy token → `IPINFO_TOKEN`
-3. Giữ `GEO_PROVIDERS=vercel,cloudflare,ipinfo`
+3. Giữ `GEO_PROVIDERS=vercel,cloudflare,ipinfo,ipapi`
 
 ---
 
@@ -200,9 +200,6 @@ Hoặc dán qua giao diện: **Project → Settings → Environment Variables**.
 ```env
 NEXT_PUBLIC_SITE_URL=https://bookingmodel.com
 AUTH_SECRET=<chuỗi ngẫu nhiên mới>
-NEXT_PUBLIC_GEO_DEBUG=false     # tắt bộ chuyển quốc gia giả lập
 GEO_UNKNOWN_POLICY=block        # không cho IP không xác định thanh toán
+GEO_PROVIDERS=vercel,cloudflare,ipinfo,ipapi
 ```
-
-`NEXT_PUBLIC_GEO_DEBUG=true` cho phép bất kỳ ai thêm `?geo=US` để giả lập vị trí —
-tiện lúc dev, nhưng để bật trên production là **thủng hoàn toàn** cơ chế chặn IP.

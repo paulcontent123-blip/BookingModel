@@ -75,10 +75,8 @@ export const config = {
       p.toLowerCase(),
     ),
     ipinfoToken: env('IPINFO_TOKEN'),
-    debug: env('NEXT_PUBLIC_GEO_DEBUG', 'false') === 'true',
     headerName: 'x-bm-country',
     sourceHeaderName: 'x-bm-country-source',
-    overrideCookie: 'bm_geo_override',
   },
 
   payments: {

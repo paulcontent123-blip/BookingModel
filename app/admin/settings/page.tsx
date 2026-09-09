@@ -4,13 +4,17 @@ import { countryName } from '@/lib/geo';
 import { paymentProvider } from '@/lib/payments';
 import { PLAN_FEATURE_LABELS, PLAN_ORDER, PLANS, revealLimitLabel } from '@/lib/plans';
 import { SeedButton } from '@/components/admin/seed-button';
+import { ActionButton } from '@/components/admin/action-button';
+import { setGeoStatusPanelVisibilityAction } from '@/lib/services/admin-actions';
+import { isGeoStatusPanelVisible } from '@/lib/platform-settings';
 
 export const metadata = { title: 'Settings & Keys' };
 
 export default async function SettingsPage() {
-  const [settings, creatorCount] = await Promise.all([
+  const [settings, creatorCount, geoStatusPanelVisible] = await Promise.all([
     db.list('settings', { orderBy: 'key' }),
     db.count('creators'),
+    isGeoStatusPanelVisible(),
   ]);
   const integrations = integrationStatus();
   const provider = paymentProvider();
@@ -107,15 +111,25 @@ export default async function SettingsPage() {
               </td>
             </tr>
             <tr>
-              <td style={{ fontWeight: 700 }}>Debug country switcher</td>
+              <td style={{ fontWeight: 700 }}>GEO test switcher</td>
               <td>
-                {config.geo.debug ? (
-                  <span className="badge badge-red">ENABLED — disable in production</span>
+                {geoStatusPanelVisible ? (
+                  <span className="badge badge-green">ENABLED</span>
                 ) : (
-                  <span className="badge badge-green">disabled</span>
+                  <span className="badge badge-blue">DISABLED</span>
                 )}
+                <span style={{ marginLeft: 8 }}>
+                  <ActionButton
+                    action={setGeoStatusPanelVisibilityAction.bind(null, !geoStatusPanelVisible)}
+                    label={geoStatusPanelVisible ? 'Disable GEO test' : 'Enable GEO test'}
+                    pendingLabel="Saving…"
+                    className="btn btn-ghost btn-xs"
+                  />
+                </span>
                 <div style={{ fontSize: 11.5, color: 'var(--muted2)', marginTop: 5 }}>
-                  <code>NEXT_PUBLIC_GEO_DEBUG</code>
+                  Enabled: the public GEO dropdown can simulate countries for deployment testing.
+                  Disabled: the dropdown is hidden and all test overrides are ignored; the site uses
+                  automatic IP detection.
                 </div>
               </td>
             </tr>

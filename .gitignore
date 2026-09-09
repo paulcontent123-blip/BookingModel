@@ -9,6 +9,9 @@ build/
 dist/
 .vercel/
 
+# Local deployment archives
+*.zip
+
 # Environment files
 # Keep example files; never commit real credentials or local overrides.
 .env

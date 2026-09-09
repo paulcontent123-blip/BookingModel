@@ -22,7 +22,6 @@ export interface RestrictedPrefill {
 interface GeoContextValue {
   geo: GeoInfo;
   manager: ManagerContact;
-  debug: boolean;
   /** Opens the "leave your details" modal (requirement #2). */
   openRestricted: (prefill?: RestrictedPrefill) => void;
   closeRestricted: () => void;
@@ -35,12 +34,10 @@ const GeoContext = createContext<GeoContextValue | null>(null);
 export function GeoProvider({
   geo,
   manager,
-  debug,
   children,
 }: {
   geo: GeoInfo;
   manager: ManagerContact;
-  debug: boolean;
   children: ReactNode;
 }) {
   const [restrictedOpen, setRestrictedOpen] = useState(false);
@@ -51,7 +48,6 @@ export function GeoProvider({
       value={{
         geo,
         manager,
-        debug,
         restrictedOpen,
         prefill,
         openRestricted: (p = {}) => {

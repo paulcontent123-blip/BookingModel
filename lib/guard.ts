@@ -1,7 +1,15 @@
 import 'server-only';
 import { headers } from 'next/headers';
 import { config } from './config';
-import { clientIp, evaluateCountry, lookupCountryByIp, type GeoInfo } from './geo';
+import {
+  clientIp,
+  evaluateCountry,
+  GEO_OVERRIDE_HEADER,
+  GEO_OVERRIDE_SOURCE_HEADER,
+  lookupCountryByIp,
+  type GeoInfo,
+} from './geo';
+import { isGeoStatusPanelVisible } from './platform-settings';
 
 /**
  * Server-side enforcement of the US-only booking rule.
@@ -16,6 +24,17 @@ export const GEO_ERROR_CODE = 'GEO_RESTRICTED';
 
 export async function resolveGeo(): Promise<GeoInfo> {
   const h = await headers();
+
+  // The optional public selector is a test aid, not a production bypass. The
+  // value is accepted only while the admin-controlled GEO test mode is on.
+  const testCountry = h.get(GEO_OVERRIDE_HEADER);
+  if (testCountry && /^[A-Za-z]{2}$/.test(testCountry) && await isGeoStatusPanelVisible()) {
+    const info = evaluateCountry(testCountry);
+    return {
+      ...info,
+      source: h.get(GEO_OVERRIDE_SOURCE_HEADER) ?? 'debug',
+    };
+  }
 
   const fromMiddleware = h.get(config.geo.headerName);
   const source = h.get(config.geo.sourceHeaderName) ?? 'unknown';

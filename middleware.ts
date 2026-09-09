@@ -1,14 +1,20 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { config as appConfig } from '@/lib/config';
+import {
+  GEO_OVERRIDE_COOKIE,
+  GEO_OVERRIDE_HEADER,
+  GEO_OVERRIDE_SOURCE_HEADER,
+} from '@/lib/geo';
 
 /**
  * Resolves the visitor's country once per request and forwards it to every
  * server component / route handler through `x-bm-country`.
  *
  * Order of precedence:
- *   1. ?geo=VN or the bm_geo_override cookie   (only when NEXT_PUBLIC_GEO_DEBUG=true)
+ *   1. optional GEO test query/cookie (validated again server-side)
  *   2. x-vercel-ip-country / cf-ipcountry      (free, no API key)
- *   3. nothing -> the route falls back to GEO_UNKNOWN_POLICY
+ *   3. proxy country headers when available
+ *   4. nothing -> the route falls back to GEO_UNKNOWN_POLICY
  *
  * The IP-lookup fallback (ipinfo) runs in the route handlers, not here, to keep
  * the middleware on the edge fast.
@@ -17,20 +23,7 @@ import { config as appConfig } from '@/lib/config';
  * spoofed header cannot buy anything — the same check runs again server-side.
  */
 
-const COOKIE = 'bm_geo_override';
-
 function resolveCountry(req: NextRequest): { country: string | null; source: string } {
-  if (appConfig.geo.debug) {
-    const param = req.nextUrl.searchParams.get('geo');
-    if (param && /^[A-Za-z]{2}$/.test(param)) {
-      return { country: param.toUpperCase(), source: 'debug-param' };
-    }
-    const cookie = req.cookies.get(COOKIE)?.value;
-    if (cookie && /^[A-Za-z]{2}$/.test(cookie)) {
-      return { country: cookie.toUpperCase(), source: 'debug-cookie' };
-    }
-  }
-
   for (const provider of appConfig.geo.providers) {
     if (provider === 'vercel') {
       const c = req.headers.get('x-vercel-ip-country');
@@ -51,29 +44,42 @@ function resolveCountry(req: NextRequest): { country: string | null; source: str
 }
 
 export function middleware(req: NextRequest) {
+  const testParam = req.nextUrl.searchParams.get('geo');
+  const resetTestCountry = testParam === 'reset' || testParam === 'clear';
+  const cookieCountry = req.cookies.get(GEO_OVERRIDE_COOKIE)?.value ?? null;
+  const testCountry = !resetTestCountry && testParam && /^[A-Za-z]{2}$/.test(testParam)
+    ? testParam.toUpperCase()
+    : !resetTestCountry && cookieCountry && /^[A-Za-z]{2}$/.test(cookieCountry)
+      ? cookieCountry.toUpperCase()
+      : null;
+
   const { country, source } = resolveCountry(req);
 
   const headers = new Headers(req.headers);
   // Strip anything a client might have injected before we set our own value.
   headers.delete(appConfig.geo.headerName);
   headers.delete(appConfig.geo.sourceHeaderName);
+  headers.delete(GEO_OVERRIDE_HEADER);
+  headers.delete(GEO_OVERRIDE_SOURCE_HEADER);
   if (country) headers.set(appConfig.geo.headerName, country);
   headers.set(appConfig.geo.sourceHeaderName, source);
+  if (testCountry) {
+    headers.set(GEO_OVERRIDE_HEADER, testCountry);
+    headers.set(GEO_OVERRIDE_SOURCE_HEADER, testParam ? 'debug-param' : 'debug-cookie');
+  }
 
   const res = NextResponse.next({ request: { headers } });
 
-  // Persist a debug override so it survives client-side navigation.
-  if (appConfig.geo.debug) {
-    const param = req.nextUrl.searchParams.get('geo');
-    if (param && /^[A-Za-z]{2}$/.test(param)) {
-      res.cookies.set(COOKIE, param.toUpperCase(), {
-        path: '/',
-        maxAge: 60 * 60 * 8,
-        sameSite: 'lax',
-      });
-    } else if (param === 'reset' || param === 'clear') {
-      res.cookies.delete(COOKIE);
-    }
+  // The server validates the admin setting before honoring this cookie. The
+  // cookie only makes the selected test country survive navigation.
+  if (testParam && /^[A-Za-z]{2}$/.test(testParam)) {
+    res.cookies.set(GEO_OVERRIDE_COOKIE, testParam.toUpperCase(), {
+      path: '/',
+      maxAge: 60 * 60 * 8,
+      sameSite: 'lax',
+    });
+  } else if (resetTestCountry) {
+    res.cookies.delete(GEO_OVERRIDE_COOKIE);
   }
 
   return res;

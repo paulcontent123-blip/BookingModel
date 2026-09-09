@@ -8,17 +8,19 @@ Chạy `npm run dev` rồi làm theo từng mục. Không cần API key nào.
 
 ### Test trên giao diện
 
-1. Mở <http://localhost:3000/?geo=US> → **không** có banner vàng, nút trên trang
+1. Gửi request với country header `US` → **không** có banner vàng, nút trên trang
    creator ghi **"Book this creator"**
-2. Mở <http://localhost:3000/?geo=VN> → banner vàng xuất hiện ở đầu trang, nút
+2. Gửi request với country header `VN` → banner vàng xuất hiện ở đầu trang, nút
    đổi thành **"Request this creator"**
-3. Vẫn ở chế độ `?geo=VN`, vào `/marketplace` → **vẫn xem được toàn bộ 40 creator
+3. Vẫn ở country `VN`, vào `/marketplace` → **vẫn xem được toàn bộ 40 creator
    và mọi mức giá**. Đây là điều kiện của yêu cầu: xem được, không thanh toán được.
-4. Thử vào thẳng `/book/<id>` khi đang ở `?geo=VN` → trang không render form
+4. Thử vào thẳng `/book/<id>` khi đang ở country `VN` → trang không render form
    thanh toán, mà hiện trang "Booking assistance" + tự mở modal.
 
-Bộ chuyển quốc gia ở góc dưới trái cho phép đổi nhanh (VN, TH, SG, PH, ID, MY,
-GB, AU, US, CA).
+Để kiểm thử nhanh mà không cần VPN, admin vào **Admin → Settings** và bật **GEO test
+switcher**. Khi bật, dropdown GEO ở góc dưới cho phép chọn `US`, `CA`, `VN`...;
+khi tắt, dropdown biến mất và mọi `?geo=...`/cookie test đều bị backend bỏ qua.
+Ở production nên tắt switcher sau khi kiểm tra xong.
 
 ### Test chặn ở tầng server (quan trọng nhất)
 
@@ -52,7 +54,7 @@ Thử luôn các nước SEA khác: `TH`, `ID`, `PH`, `MY`, `SG` — đều ph�
 
 ### Trên giao diện
 
-1. `?geo=VN` → bấm **"Request a booking"** ở banner (hoặc nút trên trang creator)
+1. Country `VN` → bấm **"Request a booking"** ở banner (hoặc nút trên trang creator)
 2. Modal hiện ra với:
    - Thông tin liên hệ thật của account manager (tên, email, phone, WhatsApp/Zalo, giờ làm việc)
    - Form: họ tên, email, phone, công ty, kênh liên hệ ưu tiên, ngân sách, loại
@@ -87,7 +89,7 @@ Bấm **Preview** để xem nội dung HTML thật của email.
 
 ## Yêu cầu #3 — Thị trường Mỹ: booking + thanh toán + hoá đơn
 
-1. `?geo=US` → vào một creator → **Book this creator**
+1. Country `US` → vào một creator → **Book this creator**
 2. Điền form: loại content, số video, ngày giao, brief, thông tin billing
 3. Bấm **Pay $XXX** → modal xác nhận hiện ra, chọn **Stripe** hoặc **PayPal**
 4. Xác nhận thanh toán → chuyển tới trang **Payment successful**
@@ -158,8 +160,8 @@ thanh toán mà chưa báo được creator.
 ## Checklist đầy đủ
 
 ```
-□ ?geo=US  → không banner, nút "Book this creator"
-□ ?geo=VN  → có banner, nút "Request this creator", vẫn xem được giá
+□ Country US  → không banner, nút "Book this creator"
+□ Country VN  → có banner, nút "Request this creator", vẫn xem được giá
 □ curl POST /api/bookings với VN → 403 GEO_RESTRICTED
 □ curl POST /api/bookings với US → 201 + deal_ref + invoice_no
 □ Thẻ ...0000 → 402, không tạo deal

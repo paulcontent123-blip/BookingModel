@@ -17,7 +17,7 @@ import { config } from './config';
 export interface GeoInfo {
   /** ISO-3166 alpha-2, uppercase. `null` when it could not be determined. */
   country: string | null;
-  /** Where the value came from: vercel | cloudflare | ipinfo | override | unknown */
+  /** Where the value came from: vercel | cloudflare | ipinfo | debug | unknown */
   source: string;
   /** May this visitor create a booking and pay? */
   canTransact: boolean;
@@ -26,6 +26,11 @@ export interface GeoInfo {
   /** True when we had to fall back to GEO_UNKNOWN_POLICY. */
   isUnknown: boolean;
 }
+
+/** Internal request markers used by the optional admin-controlled GEO test mode. */
+export const GEO_OVERRIDE_HEADER = 'x-bm-geo-override';
+export const GEO_OVERRIDE_SOURCE_HEADER = 'x-bm-geo-override-source';
+export const GEO_OVERRIDE_COOKIE = 'bm_geo_override';
 
 const COUNTRY_NAMES: Record<string, string> = {
   US: 'United States', CA: 'Canada', VN: 'Vietnam', TH: 'Thailand',
@@ -121,6 +126,11 @@ export async function lookupCountryByIp(ip: string | null): Promise<{ country: s
 
   const token = config.geo.ipinfoToken;
   const useIpinfo = config.geo.providers.includes('ipinfo') && token && !/placeholder/i.test(token);
+  // Self-hosted deployments such as cPanel do not provide Vercel/Cloudflare
+  // country headers. If IPinfo is listed but has no real token, fall back to
+  // the tokenless provider so the visitor still gets an automatic country.
+  const useIpapi = config.geo.providers.includes('ipapi') ||
+    (config.geo.providers.includes('ipinfo') && !useIpinfo);
 
   try {
     if (useIpinfo) {
@@ -131,7 +141,7 @@ export async function lookupCountryByIp(ip: string | null): Promise<{ country: s
         const data = (await res.json()) as { country?: string };
         if (data.country) return { country: data.country.toUpperCase(), source: 'ipinfo' };
       }
-    } else if (config.geo.providers.includes('ipapi')) {
+    } else if (useIpapi) {
       const res = await fetch(`https://ipapi.co/${ip}/country/`, { next: { revalidate: 86400 } });
       if (res.ok) {
         const code = (await res.text()).trim();

@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
+import { GEO_STATUS_PANEL_SETTING_KEY } from '@/lib/platform-settings';
 import {
   applicantDecisionEmail,
   brandPlanChangedEmail,
@@ -34,6 +35,32 @@ import {
 export interface ActionResult {
   ok: boolean;
   message: string;
+}
+
+/** Toggle the public GEO test switcher used when checking a deployment. */
+export async function setGeoStatusPanelVisibilityAction(visible: boolean): Promise<ActionResult> {
+  await requireAdmin();
+
+  const value = visible === true ? 'true' : 'false';
+  const now = new Date().toISOString();
+  const existing = await db.findOne('settings', { key: GEO_STATUS_PANEL_SETTING_KEY });
+
+  if (existing) {
+    await db.update('settings', existing.id, { value, updated_at: now });
+  } else {
+    await db.insert('settings', {
+      key: GEO_STATUS_PANEL_SETTING_KEY,
+      value,
+      updated_at: now,
+    });
+  }
+
+  revalidatePath('/', 'layout');
+  revalidatePath('/admin/settings');
+  return {
+    ok: true,
+    message: visible ? 'The GEO test switcher is now enabled.' : 'The GEO test switcher is now disabled.',
+  };
 }
 
 function creatorValidationError(formData: FormData): string | null {
