@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { SessionUser } from '@/lib/auth';
 import { SiteNav } from '@/components/site-nav';
 import { brandInitials } from '@/lib/brand-profile';
@@ -31,19 +31,41 @@ export function BrandDashboardShell({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div className="brand-dashboard-shell">
+    <div className={`brand-dashboard-shell${sidebarOpen ? ' sidebar-open' : ''}`}>
       <SiteNav user={user} />
 
       <div className="brand-dashboard-body">
-        <aside className="brand-dashboard-sidebar">
+        <div className="brand-dashboard-mobilebar">
+          <button
+            type="button"
+            className="brand-dashboard-sidebar-toggle"
+            aria-controls="brand-dashboard-sidebar"
+            aria-expanded={sidebarOpen}
+            onClick={() => setSidebarOpen((open) => !open)}
+          >
+            <span aria-hidden="true">☰</span> Menu
+          </button>
+        </div>
+        <button
+          type="button"
+          className="brand-dashboard-sidebar-backdrop"
+          aria-label="Close dashboard navigation"
+          onClick={closeSidebar}
+        />
+
+        <aside className="brand-dashboard-sidebar" id="brand-dashboard-sidebar">
           <div className="brand-dashboard-sidebar-label">Workspace</div>
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={`brand-dashboard-nav-item${isActive(pathname, item.href) ? ' active' : ''}`}
+              onClick={closeSidebar}
             >
               {item.label}
             </Link>
@@ -67,6 +89,7 @@ export function BrandDashboardShell({
           <Link
             href="/dashboard/account"
             className={`brand-dashboard-nav-item${isActive(pathname, '/dashboard/account') ? ' active' : ''}`}
+            onClick={closeSidebar}
           >
             Account
           </Link>

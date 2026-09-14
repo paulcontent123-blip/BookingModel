@@ -311,3 +311,64 @@
 .bm-admin .plan-price span{font-size:14px;font-weight:500;color:var(--muted)}
 .bm-admin .plan-feature{font-size:12.5px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:7px}
 .bm-admin .plan-feature::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0}
+
+/* ── Responsive admin shell ───────────────────────────────────────────────
+   The desktop sidebar becomes an off-canvas menu on smaller screens while
+   cards, forms and dense data grids collapse without widening the viewport. */
+.bm-admin .admin-menu-toggle,
+.bm-admin .admin-menu-button { display:none; }
+
+@media (max-width:1100px){
+  .bm-admin #main{padding-left:24px;padding-right:24px}
+  .bm-admin .stat-grid,.bm-admin .qa-grid,.bm-admin .plan-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width:800px){
+  .bm-admin #topbar{height:auto;min-height:56px;padding:10px 14px;gap:10px;flex-wrap:wrap}
+  .bm-admin .admin-menu-toggle{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+  .bm-admin .admin-menu-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;padding:7px 9px;border:1px solid rgba(255,255,255,.25);border-radius:5px;background:transparent;color:#fff;cursor:pointer;font:600 12px var(--mont)}
+  .bm-admin .tb-logo{min-width:0;flex:1 1 auto}
+  .bm-admin .tb-logo>span:first-of-type{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bm-admin .tb-view{order:3;flex:1 1 100%;min-width:0;margin-left:0;padding-left:0;border-left:0;overflow-x:auto;white-space:nowrap}
+  .bm-admin .tb-user{min-width:0;margin-left:auto;gap:6px}
+  .bm-admin .tb-uname{display:none}
+
+  .bm-admin #body{position:relative;overflow:hidden}
+  .bm-admin #body::before{content:"";display:none;position:absolute;inset:0;background:rgba(13,13,13,.35);z-index:10}
+  .bm-admin #sidebar{position:absolute;inset:0 auto 0 0;width:min(280px,86vw);z-index:20;transform:translateX(-105%);box-shadow:8px 0 24px rgba(0,0,0,.18);transition:transform .2s ease}
+  .bm-admin:has(#admin-menu-toggle:checked) #sidebar{transform:translateX(0)}
+  .bm-admin:has(#admin-menu-toggle:checked) #body::before{display:block}
+  .bm-admin #main{width:100%;padding:20px 16px}
+
+  .bm-admin .creator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bm-admin .fg-row,.bm-admin .brief-grid{grid-template-columns:1fr}
+  .bm-admin .brand-profile-layout{max-width:none}
+  .bm-admin .brand-profile-card{padding:18px}
+  .bm-admin .deal-detail-layout{grid-template-columns:1fr}
+  .bm-admin .deal-actions-card{position:static}
+  .bm-admin .filter-bar input{max-width:none;flex:1 1 220px}
+}
+
+@media (max-width:600px){
+  .bm-admin #topbar{padding:9px 10px}
+  .bm-admin .tb-view{display:none}
+  .bm-admin .tb-logo{font-size:14px;gap:6px}
+  .bm-admin .tb-logo-mark{width:28px;height:28px}
+  .bm-admin .tb-badge{font-size:8px;padding:2px 5px}
+  .bm-admin .tb-act{padding:5px 8px;font-size:11px}
+  .bm-admin #main{padding:16px 10px}
+  .bm-admin .pg-title{font-size:20px}
+  .bm-admin .pg-sub{font-size:12px;margin-bottom:16px}
+  .bm-admin .stat-grid,.bm-admin .qa-grid,.bm-admin .plan-grid,.bm-admin .creator-grid,.bm-admin .deal-status-grid{grid-template-columns:1fr}
+  .bm-admin .card,.bm-admin .stat-card{padding:16px}
+  .bm-admin .tbl-head{padding:12px 14px}
+  .bm-admin th,.bm-admin td{padding:9px 10px}
+  .bm-admin .app-card{grid-template-columns:44px minmax(0,1fr);gap:10px;padding:13px}
+  .bm-admin .rte-surface{min-height:300px;padding:14px}
+  .bm-admin .rte-bar{padding:7px;gap:4px}
+  .bm-admin .rte-btn{padding:5px 7px}
+  .bm-admin .modal-ov{padding:10px}
+  .bm-admin .modal-hd,.bm-admin .modal-body{padding:15px}
+  .bm-admin .modal-footer{padding:12px 15px;flex-wrap:wrap}
+  .bm-admin #toast{left:10px;right:10px;bottom:10px;justify-content:center;white-space:normal;text-align:center}
+}

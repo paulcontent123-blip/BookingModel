@@ -112,6 +112,11 @@ export function AdminSidebar({
   const isOn = (href: string) =>
     href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
 
+  const closeMobileMenu = () => {
+    const toggle = document.getElementById('admin-menu-toggle');
+    if (toggle instanceof HTMLInputElement) toggle.checked = false;
+  };
+
   return (
     <div id="sidebar">
       {sections.map((section) => (
@@ -122,6 +127,7 @@ export function AdminSidebar({
               key={item.href}
               href={item.href}
               className={`sb-item${isOn(item.href) ? ' on' : ''}`}
+              onClick={closeMobileMenu}
             >
               <span className="sb-ico">{item.icon}</span>
               <span>{item.label}</span>

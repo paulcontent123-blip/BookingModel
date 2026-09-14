@@ -31,6 +31,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="bm-admin" style={{ height: '100vh' }}>
       <div id="app" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div id="topbar">
+          <input
+            id="admin-menu-toggle"
+            className="admin-menu-toggle"
+            type="checkbox"
+            aria-label="Toggle admin navigation"
+          />
+          <label className="admin-menu-button" htmlFor="admin-menu-toggle">
+            <span aria-hidden="true">☰</span>
+            <span>Menu</span>
+          </label>
           <Link href="/admin" className="tb-logo">
             <BrandLogoMark className="tb-logo-mark" />
             <span>Booking<em>Model</em></span>

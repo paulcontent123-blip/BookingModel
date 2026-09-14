@@ -20,10 +20,16 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
   const pathname = usePathname();
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [closeUntilMouseLeaves, setCloseUntilMouseLeaves] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const on = (href: string) => (pathname.startsWith(href) ? 'nl on' : 'nl');
 
-  function closeSolutionsAfterSelection() {
+  function closeMobileMenu() {
+    setMobileOpen(false);
     setSolutionsOpen(false);
+  }
+
+  function closeSolutionsAfterSelection() {
+    closeMobileMenu();
     // The cursor is still over the parent after a submenu click. Suppress the
     // CSS hover state until it leaves so the dropdown does not stay visible on
     // the newly loaded page.
@@ -31,17 +37,30 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
   }
 
   return (
-    <nav className="site-nav">
-      <Link href="/" className="logo">
+    <nav className={`site-nav${mobileOpen ? ' mobile-open' : ''}`}>
+      <Link href="/" className="logo" onClick={closeMobileMenu}>
         <BrandLogoMark className="logo-mark" />
         <div className="logo-text">
           Booking<em>Model</em>
         </div>
       </Link>
 
-      <div className="nav-c">
-        <Link href="/" className={pathname === '/' ? 'nl on' : 'nl'}>Home</Link>
-        <Link href="/marketplace" className={on('/marketplace')}>Marketplace</Link>
+      <button
+        type="button"
+        className="nav-mobile-toggle"
+        aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={mobileOpen}
+        aria-controls="site-navigation"
+        onClick={() => setMobileOpen((open) => !open)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <div className="nav-c" id="site-navigation">
+        <Link href="/" className={pathname === '/' ? 'nl on' : 'nl'} onClick={closeMobileMenu}>Home</Link>
+        <Link href="/marketplace" className={on('/marketplace')} onClick={closeMobileMenu}>Marketplace</Link>
 
         <div
           className={`nav-drop${solutionsOpen ? ' open' : ''}${closeUntilMouseLeaves ? ' suppressed' : ''}`}
@@ -53,9 +72,9 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
             setSolutionsOpen(false);
           }}
         >
-          <Link
-            href="/solutions"
-            className={`${on('/solutions')} nl-arr`}
+        <Link
+          href="/solutions"
+          className={`${on('/solutions')} nl-arr`}
             aria-haspopup="menu"
             aria-expanded={solutionsOpen && !closeUntilMouseLeaves}
             onClick={closeSolutionsAfterSelection}
@@ -80,25 +99,26 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
           </div>
         </div>
 
-        <Link href="/campaigns" className={on('/campaigns')}>Open Campaigns</Link>
+        <Link href="/campaigns" className={on('/campaigns')} onClick={closeMobileMenu}>Open Campaigns</Link>
         <Link
           href="/news"
           className={pathname.startsWith('/news') || pathname.startsWith('/showcase') ? 'nl on' : 'nl'}
+          onClick={closeMobileMenu}
         >
           News &amp; Showcase
         </Link>
-        <Link href="/partnership" className={on('/partnership')}>Partnership</Link>
-        <Link href="/contact" className={on('/contact')}>Contact</Link>
+        <Link href="/partnership" className={on('/partnership')} onClick={closeMobileMenu}>Partnership</Link>
+        <Link href="/contact" className={on('/contact')} onClick={closeMobileMenu}>Contact</Link>
       </div>
 
       <div className="nav-r">
         {user ? (
           <>
             {user.role === 'admin' && (
-              <Link href="/admin" className="btn-ghost">Admin</Link>
+              <Link href="/admin" className="btn-ghost" onClick={closeMobileMenu}>Admin</Link>
             )}
-            <Link href="/dashboard" className="btn-ghost">Dashboard</Link>
-            <Link href="/dashboard/account" className="nav-account-link" aria-label="Open account">
+            <Link href="/dashboard" className="btn-ghost" onClick={closeMobileMenu}>Dashboard</Link>
+            <Link href="/dashboard/account" className="nav-account-link" aria-label="Open account" onClick={closeMobileMenu}>
               {user.avatar_url ? (
                 <img className="nav-account-avatar" src={user.avatar_url} alt="" />
               ) : (
@@ -107,12 +127,12 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
                 </span>
               )}
             </Link>
-            <Link href="/contact" className="btn-blue">Request Campaign</Link>
+            <Link href="/contact" className="btn-blue" onClick={closeMobileMenu}>Request Campaign</Link>
           </>
         ) : (
           <>
-            <Link href="/login" className="btn-ghost">Brand Login</Link>
-            <Link href="/contact" className="btn-blue">Request Campaign</Link>
+            <Link href="/login" className="btn-ghost" onClick={closeMobileMenu}>Brand Login</Link>
+            <Link href="/contact" className="btn-blue" onClick={closeMobileMenu}>Request Campaign</Link>
           </>
         )}
       </div>
