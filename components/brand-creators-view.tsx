@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { db } from '@/lib/db';
+import { listCreatorsFromDatabase } from '@/lib/creator-data';
 import { requireUser, revealedCreatorIdsToday, revealQuota } from '@/lib/auth';
 import {
   lowestPlanWith,
@@ -9,6 +9,8 @@ import {
   upgradeTargets,
 } from '@/lib/plans';
 import { rateLabel } from '@/lib/utils';
+import { creatorImageSources } from '@/lib/media';
+import { CreatorImage } from '@/components/creator-image';
 import { RevealContactButton } from '@/components/reveal-contact-button';
 
 export interface BrandCreatorSearchParams {
@@ -41,7 +43,7 @@ export async function BrandCreatorsView({
   const user = await requireUser();
 
   const [all, quota, revealedToday] = await Promise.all([
-    db.list('creators', { where: { status: 'active' }, orderBy: 'legacy_id' }),
+    listCreatorsFromDatabase({ activeOnly: true }),
     revealQuota(user),
     revealedCreatorIdsToday(user.id),
   ]);
@@ -159,6 +161,7 @@ export async function BrandCreatorsView({
         {visibleCreators.map((creator) => {
           const niche = creator.niche?.split('/')[0]?.trim() || 'General';
           const profileUrl = creator.channel_url || `/creators/${creator.id}`;
+          const imageSources = creatorImageSources(creator);
           // Unlimited plans and staff see every contact; metered plans see only
           // the creators they have actually spent a reveal on today.
           const unlocked = quota.unlimited || revealedToday.has(creator.id);
@@ -166,12 +169,11 @@ export async function BrandCreatorsView({
           return (
             <article className="brand-creator-card" key={creator.id}>
               <div className="brand-creator-photo" style={{ background: creator.accent_bg ?? '#F2F2F2' }}>
-                {creator.photo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={creator.photo_url} alt={creator.name} loading="lazy" />
-                ) : (
-                  <div className="brand-creator-fallback">{creator.emoji ?? '👤'}</div>
-                )}
+                <CreatorImage
+                  sources={imageSources}
+                  alt={creator.name}
+                  fallback={<div className="brand-creator-fallback">{creator.emoji ?? '👤'}</div>}
+                />
                 <div className="brand-creator-photo-overlay" />
                 <span className="brand-creator-platform">{creator.platform}</span>
                 <span className="brand-creator-availability">Available</span>

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import type { SessionUser } from '@/lib/auth';
 import { SiteNav } from '@/components/site-nav';
+import { brandInitials } from '@/lib/brand-profile';
 
 const NAV = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -50,11 +51,24 @@ export function BrandDashboardShell({
 
           <div className="brand-dashboard-sidebar-divider" />
           <div className="brand-dashboard-sidebar-label">Account</div>
+          <div className="brand-dashboard-account-summary">
+            <div className="brand-dashboard-account-avatar">
+              {user.avatar_url ? (
+                <img src={user.avatar_url} alt="" />
+              ) : (
+                brandInitials(user.company_name ?? user.full_name ?? user.email)
+              )}
+            </div>
+            <div>
+              <strong>{user.company_name ?? user.full_name ?? 'Brand account'}</strong>
+              <span>{user.email}</span>
+            </div>
+          </div>
           <Link
-            href="/dashboard/settings"
-            className={`brand-dashboard-nav-item${isActive(pathname, '/dashboard/settings') ? ' active' : ''}`}
+            href="/dashboard/account"
+            className={`brand-dashboard-nav-item${isActive(pathname, '/dashboard/account') ? ' active' : ''}`}
           >
-            Settings
+            Account
           </Link>
 
           <div className="brand-dashboard-sidebar-bottom">

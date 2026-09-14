@@ -1,10 +1,27 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { db } from '@/lib/db';
+import { listCreatorsFromDatabase } from '@/lib/creator-data';
 import { config } from '@/lib/config';
 import { CreatorStripCard } from '@/components/creator-card';
 import { FaqList } from '@/components/faq-list';
 import brandsData from '@/data/brands.json';
-import newsData from '@/data/news.json';
+import { listNewsForIndex } from '@/lib/services/content';
+import { formatPublishDate, newsCardBg } from '@/lib/content';
+
+export const metadata: Metadata = {
+  title: {
+    absolute: 'BookingModel - Influencer Marketing Platform for US Brands',
+  },
+  description:
+    'BookingModel helps US brands discover and book creators for campaigns, UGC, and influencer collaborations through one easy-to-use platform.',
+  openGraph: {
+    title: 'BookingModel - Influencer Marketing Platform for US Brands',
+    description:
+      'BookingModel helps US brands discover and book creators for campaigns, UGC, and influencer collaborations through one easy-to-use platform.',
+    type: 'website',
+  },
+};
 
 const TICKER = [
   '140,000+ Vetted Creators',
@@ -54,14 +71,14 @@ const FAQ = [
 ];
 
 export default async function HomePage() {
-  const [creators, campaigns] = await Promise.all([
-    db.list('creators', { where: { status: 'active' }, limit: 40 }),
+  const [creators, campaigns, news] = await Promise.all([
+    listCreatorsFromDatabase({ activeOnly: true, limit: 40 }),
     db.list('campaigns', { where: { status: 'active' }, limit: 3 }),
+    listNewsForIndex(),
   ]);
 
   const strip1 = creators.slice(0, 12);
   const strip2 = creators.slice(12, 24);
-  const news = newsData as { ico: string; bg: string; cat: string; title: string; date: string; summary: string }[];
   const brands = brandsData as string[];
 
   return (
@@ -189,7 +206,7 @@ export default async function HomePage() {
           {campaigns.map((c) => (
             <Link href="/campaigns" className="camp-card" key={c.id}>
               <div className="camp-img" style={{ background: c.accent_bg ?? 'var(--bg2)' }}>
-                {c.emoji ?? '🎬'}
+                {c.cover_url && <img className="camp-cover" src={c.cover_url} alt={c.title} />}
                 <span className="camp-badge cb-open">Open</span>
               </div>
               <div className="camp-body">
@@ -227,23 +244,41 @@ export default async function HomePage() {
         </div>
 
         <div className="news-grid">
-          <Link href="/news" className="news-main">
-            <div className="nm-img" style={{ background: news[0]!.bg }}>{news[0]!.ico}</div>
-            <div className="nm-body">
-              <div className="nm-cat">{news[0]!.cat}</div>
-              <div className="nm-title">{news[0]!.title}</div>
-              <div className="nm-date">{news[0]!.date}</div>
-              <span className="nm-read">Read case study →</span>
-            </div>
-          </Link>
+          {news[0] && (
+            <Link href={`/news/${news[0].slug}`} className="news-main">
+              <div className="nm-img" style={{ background: newsCardBg(news[0]) }}>
+                {news[0].cover_url ? (
+                  <img className="news-cover" src={news[0].cover_url} alt={news[0].title} />
+                ) : (
+                  (news[0].emoji ?? '📰')
+                )}
+              </div>
+              <div className="nm-body">
+                <div className="nm-cat">{news[0].category}</div>
+                <div className="nm-title">{news[0].title}</div>
+                <div className="nm-date">
+                  {formatPublishDate(news[0].published_at ?? news[0].created_at)}
+                </div>
+                <span className="nm-read">Read case study →</span>
+              </div>
+            </Link>
+          )}
           <div className="news-side">
-            {news.slice(1, 5).map((n, i) => (
-              <Link href="/news" className="ns-card" key={i}>
-                <div className="ns-img" style={{ background: n.bg }}>{n.ico}</div>
+            {news.slice(1, 5).map((n) => (
+              <Link href={`/news/${n.slug}`} className="ns-card" key={n.id}>
+                <div className="ns-img" style={{ background: newsCardBg(n) }}>
+                  {n.cover_url ? (
+                    <img className="news-cover" src={n.cover_url} alt={n.title} loading="lazy" />
+                  ) : (
+                    (n.emoji ?? '📰')
+                  )}
+                </div>
                 <div className="ns-body">
-                  <div className="ns-cat">{n.cat}</div>
+                  <div className="ns-cat">{n.category}</div>
                   <div className="ns-title">{n.title}</div>
-                  <div className="ns-date">{n.date}</div>
+                  <div className="ns-date">
+                    {formatPublishDate(n.published_at ?? n.created_at)}
+                  </div>
                 </div>
               </Link>
             ))}

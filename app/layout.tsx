@@ -14,6 +14,11 @@ export const metadata: Metadata = {
     description: '140,000+ vetted creators. UGC videos from $59. Built for US DTC brands.',
     type: 'website',
   },
+  icons: {
+    icon: '/logo-booking-model.png',
+    shortcut: '/logo-booking-model.png',
+    apple: '/logo-booking-model.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

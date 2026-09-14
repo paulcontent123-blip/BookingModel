@@ -7,13 +7,13 @@ import { adminPartnershipEmail, sendEmail } from '@/lib/email';
 export const runtime = 'nodejs';
 
 const schema = z.object({
-  name: z.string().max(160).optional(),
-  company: z.string().max(160).optional(),
-  email: z.string().email(),
-  phone: z.string().max(60).optional(),
-  type: z.string().max(80).optional(),
-  budget: z.string().max(80).optional(),
-  description: z.string().max(4000).optional(),
+  name: z.string().trim().min(1, 'Your name is required.').max(160),
+  company: z.string().trim().max(160).optional(),
+  email: z.string().trim().email('Enter a valid email address.'),
+  phone: z.string().trim().max(60).optional(),
+  type: z.string().trim().min(1, 'Choose a partnership type.').max(80),
+  budget: z.string().trim().max(80).optional(),
+  description: z.string().trim().min(1, 'Tell us about the partnership.').max(4000),
 });
 
 /** POST /api/partnership — public "Partnership & Collaboration" form. */
@@ -21,7 +21,10 @@ export async function POST(req: Request) {
   const raw = await req.json().catch(() => null);
   const parsed = schema.safeParse(raw);
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Enter a valid email address.' }, { status: 400 });
+    return NextResponse.json(
+      { error: parsed.error.issues[0]?.message ?? 'Please complete the form.' },
+      { status: 400 },
+    );
   }
 
   const geo = await resolveGeo();

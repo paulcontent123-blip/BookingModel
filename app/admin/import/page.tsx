@@ -5,18 +5,24 @@ import { ImportPanel } from '@/components/admin/import-panel';
 export const metadata = { title: 'Import / Excel Sync' };
 
 const COLUMNS: [string, string, string][] = [
+  ['legacy_id', 'optional', 'STT / source row number'],
   ['name', 'required', 'Creator display name'],
-  ['handle', 'required', '@handle — the unique key used to skip duplicates'],
+  ['handle', 'required', 'Handle / Username — duplicate key within each platform'],
   ['platform', 'required', 'TikTok | YouTube | Instagram | Facebook'],
-  ['channel_url', 'optional', 'Full profile URL'],
-  ['audience', 'optional', '82K or 82000'],
+  ['channel_url', 'optional', 'Profile URL'],
+  ['audience', 'optional', 'Followers / Subs, for example 82K or 82000'],
+  ['niche', 'optional', 'Creator content niche'],
+  ['avg_views_likes', 'optional', 'Avg Views / Likes, for example 2800'],
   ['er', 'optional', '6.2% or 6.2'],
+  ['tier', 'optional', 'Source tier such as Micro, Macro or Mega'],
+  ['location', 'optional', 'Location (US), for example Miami, FL'],
+  ['notes', 'optional', 'Internal BD notes'],
+  ['avatar_filename', 'optional', 'Original avatar filename; Excel hyperlinks are imported as image URLs'],
   ['rate', 'optional', '$150-350'],
-  ['niche', 'optional', 'Healthy Meal Prep / Budget'],
   ['category', 'optional', 'Food & Beverage, Beauty & Skincare, …'],
   ['contact', 'optional', 'Email or contact hint — an email in this field is auto-extracted'],
-  ['notes', 'optional', 'Internal BD notes'],
-  ['photo_url', 'optional', 'Direct image URL (Unsplash, Cloudinary, any CDN)'],
+  ['photo_url', 'optional', 'Direct image URL; an Avatar hyperlink from Excel is copied here automatically'],
+  ['avatar_url', 'optional', 'Direct avatar image URL; Google Drive share links are converted automatically'],
   ['video_url', 'optional', 'YouTube URL — added to the portfolio with its thumbnail'],
 ];
 
@@ -29,15 +35,16 @@ export default async function ImportPage() {
 
   const sample = [
     COLUMNS.map(([c]) => c).join(','),
-    'Olivia Tiedemann,@oliviatiedemann,TikTok,https://tiktok.com/@oliviatiedemann,82K,6.2%,$150-350,Healthy Meal Prep,Food & Beverage,olivia@gmail.com,Very responsive,https://images.unsplash.com/photo-1494790108377-be9c29b29330,',
+    ',Olivia Tiedemann,@oliviatiedemann,TikTok,https://tiktok.com/@oliviatiedemann,82K,Healthy Meal Prep,2800,6.2%,Micro,"Miami, FL",Very responsive,olivia.jpg,$150-350,Food & Beverage,olivia@gmail.com,https://images.unsplash.com/photo-1494790108377-be9c29b29330,,',
   ].join('\n');
 
   return (
     <>
       <h1 className="pg-title">Import / Excel Sync</h1>
       <p className="pg-sub">
-        Bulk-load creators from a spreadsheet. Rows whose handle already exists are skipped, so you
-        can re-upload the same file safely.
+        Bulk-load creators from CSV or Excel. Rows whose platform and handle already exist are
+        skipped, while existing external avatar links are re-hosted to Cloudinary. The official
+        US creator workbook can be uploaded without remapping its headers.
       </p>
 
       <ImportPanel />
@@ -59,8 +66,15 @@ export default async function ImportPage() {
           </tbody>
         </table>
         <p style={{ fontSize: 12, color: 'var(--muted2)', marginTop: 12 }}>
-          Header names are matched case-insensitively and spaces become underscores, so
-          &ldquo;Channel URL&rdquo; maps to <code>channel_url</code>. Unknown columns are ignored.
+          Header names are matched case-insensitively. The official
+          <code>BookingModel_US_20_Creator.xlsx</code> headers such as <code>Handle / Username</code>,
+          <code>Followers / Subs</code>, <code>ER (%)</code> and <code>Location (US)</code> are mapped
+          automatically. Unknown columns are ignored.
+          Excel hyperlinks in the <code>Avatar</code> column are also read and converted into image
+          URLs, including links to Google Drive. On Apply, those image links are downloaded to the
+          server, uploaded to Cloudinary and the resulting Cloudinary URL is saved in the creator
+          record. Configure all three Cloudinary environment variables before importing rows with
+          image links.
         </p>
         <details style={{ marginTop: 12 }}>
           <summary style={{ cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>

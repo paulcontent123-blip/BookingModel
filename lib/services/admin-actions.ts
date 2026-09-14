@@ -10,11 +10,18 @@ import {
   sendEmail,
 } from '@/lib/email';
 import { isPlan, planName } from '@/lib/plans';
-import type { ApplicantStatus, BookingRequestStatus, Creator } from '@/lib/types';
+import type {
+  ApplicantStatus,
+  BookingRequestStatus,
+  Campaign,
+  Creator,
+  PartnershipStatus,
+} from '@/lib/types';
 import { parsePortfolioInput, validateCreatorInput } from '@/lib/creator-validation';
 import { CloudinaryError, deleteCloudinaryImage } from '@/lib/cloudinary';
 import {
   accentBgFor,
+  creatorIdentityKey,
   defaultAvatarUrl,
   normalizeHandle,
   parseAudience,
@@ -36,6 +43,13 @@ export interface ActionResult {
   ok: boolean;
   message: string;
 }
+
+const PARTNERSHIP_STATUSES: PartnershipStatus[] = [
+  'new',
+  'in_discussion',
+  'converted',
+  'closed',
+];
 
 /** Toggle the public GEO test switcher used when checking a deployment. */
 export async function setGeoStatusPanelVisibilityAction(visible: boolean): Promise<ActionResult> {
@@ -100,8 +114,10 @@ export async function createCreatorAction(formData: FormData): Promise<ActionRes
 
   try {
     const creators = await db.list('creators', { limit: 10000 });
-    const duplicate = creators.find((creator) => creator.handle.toLowerCase() === handle.toLowerCase());
-    if (duplicate) return { ok: false, message: `${handle} is already in the database.` };
+    const duplicate = creators.find(
+      (creator) => creatorIdentityKey(creator.platform, creator.handle) === creatorIdentityKey(platform, handle),
+    );
+    if (duplicate) return { ok: false, message: `${handle} on ${platform} is already in the database.` };
 
     const audience = String(formData.get('audience') ?? '').trim() || null;
     const rate = parseRateRange(String(formData.get('rate') ?? ''));
@@ -121,6 +137,8 @@ export async function createCreatorAction(formData: FormData): Promise<ActionRes
       tier: tierFor(audienceCount),
       audience,
       audience_count: audienceCount,
+      avg_views_likes: parseAudience(String(formData.get('avg_views_likes') ?? '')),
+      location: String(formData.get('location') ?? '').trim() || null,
       er: String(formData.get('er') ?? '').trim() || null,
       rate_min: rate.min,
       rate_max: rate.max,
@@ -285,6 +303,8 @@ export async function updateCreatorAction(id: string, formData: FormData): Promi
     category: String(formData.get('category') ?? '').trim() || null,
     audience,
     audience_count: audienceCount,
+    avg_views_likes: parseAudience(String(formData.get('avg_views_likes') ?? '')),
+    location: String(formData.get('location') ?? '').trim() || null,
     tier: tierFor(audienceCount),
     er: String(formData.get('er') ?? '').trim() || null,
     rate_min: rate.min,
@@ -370,7 +390,10 @@ export async function decideApplicantAction(
 
   if (decision === 'approved' && !creatorId) {
     const handle = normalizeHandle(applicant.handle ?? applicant.name);
-    const existing = await db.findOne('creators', { handle });
+    const existing = await db.findOne('creators', {
+      handle,
+      platform: applicant.platform ?? 'TikTok',
+    });
     if (existing) {
       creatorId = existing.id;
     } else {
@@ -389,6 +412,8 @@ export async function decideApplicantAction(
         tier: tierFor(audienceCount),
         audience: applicant.audience,
         audience_count: audienceCount,
+        avg_views_likes: null,
+        location: applicant.country,
         er: applicant.er,
         rate_min: rate.min,
         rate_max: rate.max,
@@ -517,9 +542,13 @@ export async function updateBookingRequestAction(
 
 export async function updatePartnershipStatusAction(
   id: string,
-  status: 'new' | 'in_discussion' | 'converted' | 'closed',
+  status: PartnershipStatus,
 ): Promise<ActionResult> {
   await requireAdmin();
+  if (!PARTNERSHIP_STATUSES.includes(status)) {
+    return { ok: false, message: 'Invalid partnership status.' };
+  }
+
   const updated = await db.update('partnership_requests', id, { status });
   if (!updated) return { ok: false, message: 'Request not found.' };
 
@@ -529,38 +558,190 @@ export async function updatePartnershipStatusAction(
 
 // ── Campaigns ──────────────────────────────────────────────────────────────
 
-export async function createCampaignAction(formData: FormData): Promise<ActionResult> {
-  await requireAdmin();
+const CAMPAIGN_STATUSES: Campaign['status'][] = ['draft', 'active', 'paused', 'completed'];
 
+function campaignStatusFrom(formData: FormData, fallback: Campaign['status']): Campaign['status'] {
+  const value = String(formData.get('status') ?? '').trim() as Campaign['status'];
+  return CAMPAIGN_STATUSES.includes(value) ? value : fallback;
+}
+
+function campaignFieldsFrom(
+  formData: FormData,
+  existing?: Campaign,
+):
+  | {
+      brand_name: string;
+      title: string;
+      category: string | null;
+      content_type: string | null;
+      platform: string | null;
+      spots_total: number;
+      budget_usd: number | null;
+      rate_label: string | null;
+      brief_text: string | null;
+      cover_url: string | null;
+    }
+  | string {
   const title = String(formData.get('title') ?? '').trim();
   const brand = String(formData.get('brand_name') ?? '').trim();
-  if (!title || !brand) return { ok: false, message: 'Brand and title are required.' };
+  if (!title || !brand) return 'Brand and title are required.';
 
-  const publish = formData.get('publish') === 'on';
-  const now = new Date().toISOString();
+  const spotsValue = String(formData.get('spots_total') ?? '').trim();
+  const spotsTotal = spotsValue
+    ? Number(spotsValue)
+    : (existing?.spots_total ?? 5);
+  if (!Number.isInteger(spotsTotal) || spotsTotal < 1 || spotsTotal > 200) {
+    return 'Spots must be a whole number between 1 and 200.';
+  }
+  if (existing && spotsTotal < existing.spots_filled) {
+    return `Spots cannot be lower than the ${existing.spots_filled} spots already filled.`;
+  }
 
-  await db.insert('campaigns', {
-    brand_id: null,
+  const budgetValue = String(formData.get('budget_usd') ?? '').trim();
+  const budget = budgetValue ? Number(budgetValue) : null;
+  if (budget != null && (!Number.isInteger(budget) || budget < 0)) {
+    return 'Budget must be a non-negative whole number.';
+  }
+
+  // The edit form posts this hidden field even when the image is being kept.
+  // If an older caller omits it, preserve the current image instead of
+  // accidentally clearing it.
+  const coverUrl = formData.has('cover_url')
+    ? String(formData.get('cover_url') ?? '').trim()
+    : (existing?.cover_url ?? '');
+  if (coverUrl && !/^https:\/\//i.test(coverUrl)) {
+    return 'The campaign image must be an https URL.';
+  }
+
+  return {
     brand_name: brand,
     title,
     category: String(formData.get('category') ?? '').trim() || null,
     content_type: String(formData.get('content_type') ?? '').trim() || null,
     platform: String(formData.get('platform') ?? '').trim() || null,
-    spots_total: Number(formData.get('spots_total') ?? 5) || 5,
-    spots_filled: 0,
-    budget_usd: Number(formData.get('budget_usd') ?? 0) || null,
+    spots_total: spotsTotal,
+    budget_usd: budget,
     rate_label: String(formData.get('rate_label') ?? '').trim() || null,
     brief_text: String(formData.get('brief_text') ?? '').trim() || null,
-    emoji: String(formData.get('emoji') ?? '🎬').trim() || '🎬',
+    cover_url: coverUrl || null,
+  };
+}
+
+export async function createCampaignAction(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+
+  const fields = campaignFieldsFrom(formData);
+  if (typeof fields === 'string') return { ok: false, message: fields };
+
+  const status = campaignStatusFrom(formData, formData.get('publish') === 'on' ? 'active' : 'draft');
+  const now = new Date().toISOString();
+
+  await db.insert('campaigns', {
+    brand_id: null,
+    ...fields,
+    spots_filled: 0,
+    emoji: null,
     accent_bg: '#F2F2F2',
-    status: publish ? 'active' : 'draft',
-    published_at: publish ? now : null,
+    status,
+    published_at: status === 'active' ? now : null,
     created_at: now,
   });
 
   revalidatePath('/admin/campaigns');
   revalidatePath('/campaigns');
-  return { ok: true, message: publish ? 'Campaign published.' : 'Campaign saved as draft.' };
+  return { ok: true, message: status === 'active' ? 'Campaign published.' : 'Campaign saved as draft.' };
+}
+
+export async function updateCampaignAction(id: string, formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+
+  const existing = await db.get('campaigns', id);
+  if (!existing) return { ok: false, message: 'Campaign not found.' };
+
+  const fields = campaignFieldsFrom(formData, existing);
+  if (typeof fields === 'string') return { ok: false, message: fields };
+
+  const status = campaignStatusFrom(formData, existing.status);
+  const now = new Date().toISOString();
+
+  // Keep the database update usable even if a stale/externally hosted image
+  // cannot be removed from Cloudinary. The old asset may be orphaned, but the
+  // edit itself should not be lost.
+  if (existing.cover_url && existing.cover_url !== fields.cover_url) {
+    try {
+      await deleteCloudinaryImage(existing.cover_url);
+    } catch (error) {
+      console.error('[admin/update-campaign] old cover cleanup', error);
+    }
+  }
+
+  try {
+    const updated = await db.update('campaigns', id, {
+      ...fields,
+      status,
+      published_at: status === 'active' ? (existing.published_at ?? now) : existing.published_at,
+    });
+    if (!updated) return { ok: false, message: 'Campaign not found.' };
+
+    revalidatePath('/admin/campaigns');
+    revalidatePath('/campaigns');
+    return { ok: true, message: 'Campaign updated.' };
+  } catch (error) {
+    console.error('[admin/update-campaign]', error);
+    return {
+      ok: false,
+      message: 'Campaign could not be updated. The database rejected the data or is unavailable.',
+    };
+  }
+}
+
+export async function deleteCampaignAction(id: string): Promise<ActionResult> {
+  await requireAdmin();
+
+  try {
+    const campaign = await db.get('campaigns', id);
+    if (!campaign) return { ok: false, message: 'Campaign not found.' };
+
+    const dealCount = await db.count('deals', { campaign_id: id });
+    if (dealCount > 0) {
+      return {
+        ok: false,
+        message: `${campaign.title} cannot be deleted because ${dealCount} booking(s) are linked to it. Pause or complete the campaign instead.`,
+      };
+    }
+
+    // Supabase uses ON DELETE SET NULL for these relations. Mirror that
+    // behavior in the local JSON store so applicants and leads are preserved.
+    const [applicants, bookingRequests] = await Promise.all([
+      db.list('applicants', { where: { campaign_id: id } }),
+      db.list('booking_requests', { where: { campaign_id: id } }),
+    ]);
+
+    await deleteCloudinaryImage(campaign.cover_url);
+    for (const applicant of applicants) {
+      await db.update('applicants', applicant.id, { campaign_id: null });
+    }
+    for (const request of bookingRequests) {
+      await db.update('booking_requests', request.id, { campaign_id: null });
+    }
+    await db.remove('campaigns', id);
+
+    revalidatePath('/admin/campaigns');
+    revalidatePath('/campaigns');
+    return { ok: true, message: `${campaign.title} was deleted.` };
+  } catch (error) {
+    console.error('[admin/delete-campaign]', error);
+    if (error instanceof CloudinaryError) {
+      return {
+        ok: false,
+        message: `Campaign was not deleted because its image could not be removed: ${error.message}`,
+      };
+    }
+    return {
+      ok: false,
+      message: 'Campaign could not be deleted. Please try again or set it to paused.',
+    };
+  }
 }
 
 export async function updateCampaignStatusAction(

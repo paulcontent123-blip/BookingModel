@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase } from '@/lib/creator-data';
 import { formatDate, formatDateTime, money } from '@/lib/utils';
 import { StatusBadge } from '@/components/status-badge';
 import { ActionButton } from '@/components/admin/action-button';
@@ -52,7 +53,7 @@ export default async function DealDetailPage({
   if (!deal) notFound();
 
   const [creator, invoice] = await Promise.all([
-    db.get('creators', deal.creator_id),
+    getCreatorFromDatabase(deal.creator_id),
     db.findOne('invoices', { deal_id: deal.id }),
   ]);
 

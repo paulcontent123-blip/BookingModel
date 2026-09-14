@@ -2,9 +2,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase } from '@/lib/creator-data';
 import { config } from '@/lib/config';
 import { feePercentLabel, formatDate, money } from '@/lib/utils';
 import { PrintButton } from '@/components/print-button';
+import { BrandLogoMark } from '@/components/brand-logo-mark';
 
 export async function generateMetadata({
   params,
@@ -21,7 +23,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ no: st
   if (!invoice) notFound();
 
   const deal = await db.get('deals', invoice.deal_id);
-  const creator = deal ? await db.get('creators', deal.creator_id) : null;
+  const creator = deal ? await getCreatorFromDatabase(deal.creator_id) : null;
 
   return (
     <section className="sec" style={{ maxWidth: 900 }}>
@@ -51,8 +53,11 @@ export default async function InvoicePage({ params }: { params: Promise<{ no: st
             )}
           </div>
           <div className="invoice-meta">
-            <div style={{ fontFamily: 'var(--mont)', fontWeight: 800, fontSize: 16, color: 'var(--ink)' }}>
-              BookingModel<span style={{ color: 'var(--blue)' }}>.com</span>
+            <div className="invoice-brand">
+              <BrandLogoMark className="invoice-logo-mark" />
+              <span className="invoice-brand-name">
+                BookingModel<span>.com</span>
+              </span>
             </div>
             VEA Group · VEA Tech
             <br />

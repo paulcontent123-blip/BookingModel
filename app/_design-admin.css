@@ -36,9 +36,10 @@
 .bm-admin #app.show{display:flex}
 .bm-admin /* ── TOPBAR ── */
 #topbar{height:56px;background:var(--ink);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08)}
-.bm-admin .tb-logo{font-size:16px;font-weight:800;color:#fff;white-space:nowrap}
+.bm-admin .tb-logo{display:inline-flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:#fff;white-space:nowrap}
+.bm-admin .tb-logo-mark{width:30px;height:30px;background:#fff;border-radius:4px}
 .bm-admin .tb-logo em{color:var(--blue)}
-.bm-admin .tb-badge{background:var(--blue);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.3px;vertical-align:middle;margin-left:5px}
+.bm-admin .tb-badge{background:var(--blue);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.3px;vertical-align:middle}
 .bm-admin .tb-view{display:flex;align-items:center;gap:6px;margin-left:16px;border-left:1px solid rgba(255,255,255,.12);padding-left:16px}
 .bm-admin .tb-view span{font-size:11px;color:rgba(255,255,255,.45)}
 .bm-admin .view-btn{padding:5px 12px;border-radius:5px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);font-family:var(--mont);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s}
@@ -148,6 +149,43 @@
 .bm-admin .fg input,.bm-admin .fg select,.bm-admin .fg textarea{padding:8px 11px;border:1.5px solid var(--border);border-radius:6px;font-size:13.5px;font-family:var(--mont);outline:none;transition:border .15s;background:var(--white)}
 .bm-admin .fg input:focus,.bm-admin .fg select:focus,.bm-admin .fg textarea:focus{border-color:var(--blue)}
 .bm-admin .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bm-admin .admin-campaign-cell{display:flex;align-items:center;gap:10px;min-width:220px}
+.bm-admin .admin-campaign-thumb{width:56px;height:38px;flex-shrink:0;display:block;object-fit:cover;border-radius:5px;border:1px solid var(--border)}
+.bm-admin .admin-campaign-thumb-empty{background:var(--bg2)}
+.bm-admin .campaign-cover-preview{display:flex;align-items:center;gap:12px;margin:-3px 0 13px;padding:10px;border:1px solid var(--border);border-radius:6px;background:var(--bg)}
+.bm-admin .campaign-cover-preview img{width:132px;height:74px;display:block;object-fit:cover;border-radius:6px}
+.bm-admin .news-toc-toggle{display:flex;align-items:flex-start;gap:9px;margin:2px 0 16px;font-size:13px;color:var(--ink);cursor:pointer}
+.bm-admin .news-toc-toggle input{margin-top:3px;accent-color:var(--blue)}
+.bm-admin .news-toc-toggle strong,.bm-admin .news-toc-toggle small{display:block}
+.bm-admin .news-toc-toggle small{margin-top:2px;color:var(--muted2);font-size:11px;line-height:1.45}
+.bm-admin .rte{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)}
+.bm-admin .rte-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:8px 10px;background:#F4F0E5;border-bottom:1px solid var(--border)}
+.bm-admin .rte-bar-sub{background:var(--white);padding:6px 10px}
+.bm-admin .rte-bar-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted2);margin-right:2px}
+.bm-admin .rte-btn{padding:5px 9px;border:1px solid var(--border2);border-radius:5px;background:var(--white);color:var(--ink);font-family:var(--mont);font-size:11.5px;font-weight:600;line-height:1.25;cursor:pointer;transition:all .15s}
+.bm-admin .rte-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+.bm-admin .rte-btn:disabled{opacity:.55;cursor:wait}
+.bm-admin .rte-surface{min-height:420px;padding:18px 20px;outline:none;overflow-wrap:anywhere;background:var(--white)}
+.bm-admin .rte-surface:focus{box-shadow:inset 0 0 0 2px rgba(26,86,219,.18)}
+.bm-admin .rte-surface:empty:before{content:'Write the article body here…';color:var(--muted2);pointer-events:none}
+.bm-admin .rte-surface img{display:block;max-width:100%;height:auto;border-radius:6px;margin:10px 0}
+.bm-admin .rte-surface table{width:100%;border-collapse:collapse;margin:14px 0}
+.bm-admin .rte-surface th,.bm-admin .rte-surface td{padding:8px 10px;border:1px solid var(--border2);min-width:90px;vertical-align:top}
+.bm-admin .rte-surface th{background:#F4F0E5;color:var(--ink)}
+.bm-admin .rte-inline-heading{font-family:var(--mont);font-weight:800;line-height:1.2;color:var(--ink)}
+.bm-admin .rte-inline-heading-1{font-size:2em}
+.bm-admin .rte-inline-heading-2{font-size:1.5em}
+.bm-admin .rte-inline-heading-3{font-size:1.2em}
+.bm-admin .news-toc-preview{margin:-3px 0 18px;padding:12px 14px;border:1px solid var(--border);border-radius:7px;background:var(--bg);transition:opacity .15s}
+.bm-admin .news-toc-preview.is-disabled{opacity:.55}
+.bm-admin .news-toc-preview-title{margin-bottom:7px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.bm-admin .news-toc-preview-empty{color:var(--muted2);font-size:11.5px;font-style:italic}
+.bm-admin .news-toc-preview-list{margin:0;padding-left:21px;list-style:none;color:var(--ink)}
+.bm-admin .news-toc-preview-list>li{margin:3px 0;font-size:12px;line-height:1.45}
+.bm-admin .news-toc-preview-list>li>b,.bm-admin .news-toc-preview-list b{color:var(--blue)}
+.bm-admin .news-toc-preview-list ul{margin:2px 0 4px;padding-left:18px;list-style:disc;color:var(--muted)}
+.bm-admin .news-toc-preview-list ul li{padding:1px 0}
+.bm-admin .news-toc-preview-list .is-orphan{margin-left:-21px}
 .bm-admin /* ── DEAL / APPLICANT CARDS ── */
 .deal-row td:first-child{font-family:monospace;color:var(--blue);font-weight:700}
 .bm-admin .app-card{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:15px 17px;display:grid;grid-template-columns:50px 1fr auto;gap:13px;align-items:start;margin-bottom:10px;box-shadow:var(--sh)}
@@ -163,6 +201,22 @@
 .bm-admin .filter-bar input{padding:7px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--mont);outline:none;flex:1;min-width:180px;max-width:280px}
 .bm-admin .filter-bar input:focus{border-color:var(--blue)}
 .bm-admin .filter-bar select{padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--mont);outline:none;background:var(--white)}
+.bm-admin .brand-table-wrap{overflow-x:auto}
+.bm-admin .brand-table{min-width:900px}
+.bm-admin .brand-table-brand{display:flex;align-items:center;gap:10px;min-width:220px}
+.bm-admin .brand-table-avatar{width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border-radius:9px;background:var(--blue-l);color:var(--blue);font-size:12px;font-weight:800}
+.bm-admin .brand-table-avatar img{width:100%;height:100%;object-fit:cover}
+.bm-admin .brand-table-brand strong,.bm-admin .brand-table-brand small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bm-admin .brand-table-brand strong{max-width:210px;font-size:13px}
+.bm-admin .brand-table-brand small{max-width:210px;margin-top:2px;color:var(--muted2);font-size:11px}
+.bm-admin .brand-table-meta{color:var(--muted);font-size:12px;line-height:1.45}
+.bm-admin .brand-table-meta a,.bm-admin .brand-table-link{color:var(--blue);font-weight:700}
+.bm-admin .brand-table-actions{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.bm-admin .brand-profile-layout{max-width:1040px;--brand-ink:var(--ink);--brand-muted:var(--muted);--brand-muted-light:var(--muted2);--brand-white:var(--white);--brand-bg:var(--bg);--brand-border:var(--border);--brand-blue:var(--blue);--brand-blue-light:var(--blue-l);--brand-green:var(--green);--brand-font:var(--mont)}
+.bm-admin .brand-profile-card{padding:22px 24px}
+.bm-admin .brand-profile-account{margin:-10px 0 16px;color:var(--muted);font-size:12px}
+.bm-admin .brand-profile-account a{color:var(--blue);font-weight:700}
+.bm-admin .brand-profile-back{display:inline-block;margin-bottom:14px;color:var(--blue);font-size:12px;font-weight:700}
 .bm-admin .pill-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .bm-admin .pill{padding:5px 13px;border:1.5px solid var(--border2);border-radius:20px;background:transparent;font-size:12.5px;color:var(--muted);cursor:pointer;font-family:var(--mont);font-weight:500;transition:all .15s}
 .bm-admin .pill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -209,6 +263,28 @@
   .bm-admin .deal-detail-header{flex-direction:column}
   .bm-admin .deal-detail-info-grid{grid-template-columns:1fr}
   .bm-admin .deal-status-grid{grid-template-columns:1fr 1fr}
+}
+/* ── PARTNERSHIP REQUEST CARDS ──────────────────────────────────────────── */
+.bm-admin .partnership-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:12px;box-shadow:var(--sh)}
+.bm-admin .partnership-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.bm-admin .partnership-card-title{font-size:16px;font-weight:800;color:var(--ink)}
+.bm-admin .partnership-card-contact{font-size:12.5px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
+.bm-admin .partnership-card-contact a{color:var(--blue)}
+.bm-admin .partnership-card-meta{font-size:11.5px;color:var(--muted2);margin-top:5px}
+.bm-admin .partnership-card-status{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.bm-admin .partnership-card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.bm-admin .partnership-field-label,.bm-admin .partnership-message-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2)}
+.bm-admin .partnership-field-value{font-size:13px;color:var(--ink);margin-top:3px;overflow-wrap:anywhere}
+.bm-admin .partnership-message{margin-top:14px;padding:10px 12px;background:var(--bg);border-left:3px solid var(--blue);border-radius:5px}
+.bm-admin .partnership-message p{font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:4px}
+.bm-admin .partnership-card-actions{margin-top:14px}
+@media (max-width: 800px){
+  .bm-admin .partnership-card-head{flex-direction:column}
+  .bm-admin .partnership-card-status{align-self:stretch}
+  .bm-admin .partnership-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 480px){
+  .bm-admin .partnership-card-grid{grid-template-columns:1fr}
 }
 .bm-admin /* ── BRIEF BUILDER ── */
 .brief-grid{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:start}

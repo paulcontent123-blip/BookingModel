@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BRAND_SHOWCASE_ENABLED } from '@/lib/features';
 
 interface Item {
   href: string;
@@ -28,6 +29,10 @@ export function AdminSidebar({
     {
       title: 'Overview',
       items: [{ href: '/admin', icon: '📊', label: 'Dashboard' }],
+    },
+    {
+      title: 'Brand database',
+      items: [{ href: '/admin/brands', icon: '🏢', label: 'All Brands' }],
     },
     {
       title: 'Creator database',
@@ -84,6 +89,15 @@ export function AdminSidebar({
           tone: 'green',
         },
         { href: '/admin/messages', icon: '✉️', label: 'Contact Messages' },
+      ],
+    },
+    {
+      title: 'Content',
+      items: [
+        { href: '/admin/news', icon: '📰', label: 'News Articles' },
+        ...(BRAND_SHOWCASE_ENABLED
+          ? [{ href: '/admin/showcase', icon: '🏆', label: 'Brand Showcase' }]
+          : []),
       ],
     },
     {

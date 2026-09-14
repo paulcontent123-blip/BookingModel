@@ -259,6 +259,10 @@ img { max-width: 100%; }
 .invoice-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 22px }
 .invoice-title { font-family: var(--mont); font-size: 26px; font-weight: 900; letter-spacing: -1px }
 .invoice-meta { text-align: right; font-size: 12.5px; color: var(--muted); line-height: 1.8 }
+.invoice-brand { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-bottom: 2px }
+.invoice-logo-mark { width: 34px; height: 34px; background: #fff; border-radius: 4px }
+.invoice-brand-name { font-family: var(--mont); font-weight: 800; font-size: 16px; color: var(--ink) }
+.invoice-brand-name span { color: var(--blue) }
 .invoice-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 26px }
 .invoice-party-label { font-family: var(--mont); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted2); margin-bottom: 6px }
 .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 20px }
@@ -304,7 +308,7 @@ img { max-width: 100%; }
 .pagination .disabled { opacity: .4; pointer-events: none }
 
 @media (max-width: 900px) {
-  nav { padding: 0 16px; overflow-x: auto }
+  .site-nav { padding: 0 16px; overflow-x: auto }
   .sec { padding: 40px 18px }
   .hero { padding: 44px 18px 34px }
   .hero-top { grid-template-columns: 1fr; gap: 28px }

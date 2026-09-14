@@ -1,5 +1,5 @@
 import { config, integrationStatus } from '@/lib/config';
-import { db, usingLocalStore } from '@/lib/db';
+import { db } from '@/lib/db';
 import { countryName } from '@/lib/geo';
 import { paymentProvider } from '@/lib/payments';
 import { PLAN_FEATURE_LABELS, PLAN_ORDER, PLANS, revealLimitLabel } from '@/lib/plans';
@@ -267,14 +267,6 @@ export default async function SettingsPage() {
         </div>
       )}
 
-      {usingLocalStore() && (
-        <div className="alert alert-warn" style={{ marginTop: 18 }}>
-          <strong>Running on the local JSON store</strong> (<code>./.data/db.json</code>). Fine for
-          development and demos, not for production — the file is per-machine and not concurrent-safe.
-          Follow <code>docs/SUPABASE_SETUP.md</code> to switch to PostgreSQL; no application code
-          changes.
-        </div>
-      )}
     </>
   );
 }

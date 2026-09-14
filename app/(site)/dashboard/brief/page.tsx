@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { db } from '@/lib/db';
+import { listCreatorsFromDatabase } from '@/lib/creator-data';
 import { requirePlanFeature } from '@/lib/auth';
 import { BrandBriefBuilder, type BrandBriefMatch } from '@/components/brand-brief-builder';
 import { saveBrandBriefAction } from '@/lib/services/brand-actions';
@@ -25,7 +25,7 @@ function parseEngagement(value: string | null): number | null {
 export default async function NewCampaignBriefPage() {
   // The brief builder is a paid entitlement (Standard and above).
   await requirePlanFeature('brief_builder');
-  const creators = await db.list('creators', { where: { status: 'active' }, orderBy: 'legacy_id', limit: 100 });
+  const creators = await listCreatorsFromDatabase({ activeOnly: true, limit: 100 });
   const matches: BrandBriefMatch[] = creators.map((creator) => ({
     id: creator.id,
     name: creator.name,

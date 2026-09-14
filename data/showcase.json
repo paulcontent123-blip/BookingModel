@@ -1,34 +1,82 @@
 [
   {
+    "slug": "luminaskin-tiktok-testimonial",
     "ico": "🧴",
     "bg": "#F2ECEE",
     "brand": "LuminaSkin",
     "title": "30-sec testimonial — TikTok campaign",
     "meta": "14 creators · 2.1M views",
-    "tag": "Case Study"
+    "tag": "Case Study",
+    "platform": "TikTok",
+    "summary": "A skincare launch carried entirely by first-person testimonials from creators with visible, unretouched skin.",
+    "challenge": "LuminaSkin was launching a niacinamide serum into a category where every competitor ad looked identical: soft lighting, a dropper, a glass surface. Their first round of studio creative could not be told apart from four other brands in the same feed, and click-through never cleared 0.7 percent.",
+    "approach": "We booked 14 creators across a deliberately wide age and skin-type range and asked for one thing: talk about the first two weeks honestly, on camera, with no filter and no ring light. Each creator delivered a 30-second testimonial plus one 15-second cutdown. Nothing was scripted beyond a single required claim and the legal do-not-say list.",
+    "outcome": "The unfiltered format did what the studio version could not — it looked like a person rather than a category. Two creators' videos carried the majority of the paid delivery and were still running four months later.",
+    "metrics": [
+      { "label": "Creators booked", "value": "14" },
+      { "label": "Organic views", "value": "2.1M" },
+      { "label": "Click-through rate", "value": "2.4% (from 0.7%)" },
+      { "label": "Assets delivered", "value": "28 videos" }
+    ]
   },
   {
+    "slug": "powerfit-pro-meta-unboxing",
     "ico": "🏋️",
     "bg": "#EEF2EE",
     "brand": "PowerFit Pro",
     "title": "Supplement unboxing — Meta Ads",
     "meta": "8 creators · $0.42 CPC",
-    "tag": "Showcase"
+    "tag": "Showcase",
+    "platform": "Meta",
+    "summary": "Sixteen cheap creative tests replaced one expensive agency concept that had been running for eleven months.",
+    "challenge": "PowerFit Pro's best Meta ad had been live for eleven months and frequency was above 4.0 in their core audience. Refreshing it through their agency took six weeks and cost more than the media budget it supported, so the brand kept running fatigued creative rather than pausing.",
+    "approach": "Eight creators produced two unboxing and first-impression videos each. Every one of the sixteen ran as its own ad set with no internal pre-selection — the account decided which creative was good, not the marketing team. Winners were scaled on day 7, losers cut on day 4.",
+    "outcome": "Cost per click settled at $0.42 against a $0.61 baseline and CPA fell 20 percent inside the first 30 days, with budget held flat. Two of sixteen videos produced most of the gain; finding them cost less than a single agency revision round.",
+    "metrics": [
+      { "label": "Creators booked", "value": "8" },
+      { "label": "Cost per click", "value": "$0.42 (from $0.61)" },
+      { "label": "CPA change", "value": "−20% in 30 days" },
+      { "label": "Turnaround", "value": "16 videos in 12 days" }
+    ]
   },
   {
+    "slug": "noodleco-tiktok-shop-recipe-series",
     "ico": "🍜",
     "bg": "#F2F0EC",
     "brand": "NoodleCo",
     "title": "Recipe series — TikTok Shop",
     "meta": "12 creators · 3.4x ROAS",
-    "tag": "Case Study"
+    "tag": "Case Study",
+    "platform": "TikTok Shop",
+    "summary": "Twelve micro-creators cooking in their own kitchens, with paid budget only ever placed behind creative that had already earned attention organically.",
+    "challenge": "NoodleCo's blended TikTok ROAS had been flat at 2.1x for two quarters. All of their creative was studio product photography, which performed adequately in the feed but never generated the organic reach that makes TikTok Shop economics work.",
+    "approach": "Twelve US micro-creators between 15,000 and 80,000 followers, all with TikTok Shop already enabled, produced two videos each. The brief specified only the constraints — real kitchen, under 30 seconds, price on screen — and left the cooking to them. All 24 videos posted organically first; the seven that cleared a 4 percent engagement rate in 48 hours were then promoted as Spark Ads under the creator's own handle.",
+    "outcome": "The campaign returned 3.4x ROAS against blended spend and 2.1M organic views over 30 days, with CPA down 38 percent on the previous quarter. NoodleCo now books eight creators monthly on a rolling basis.",
+    "metrics": [
+      { "label": "Creators booked", "value": "12" },
+      { "label": "ROAS", "value": "3.4x (from 2.1x)" },
+      { "label": "Organic views", "value": "2.1M" },
+      { "label": "CPA change", "value": "−38% vs. prior quarter" }
+    ]
   },
   {
+    "slug": "tempo-studio-activewear-lifestyle",
     "ico": "👗",
     "bg": "#F0ECF2",
     "brand": "Tempo Studio",
     "title": "Activewear lifestyle content",
     "meta": "6 creators · 800K reach",
-    "tag": "Showcase"
+    "tag": "Showcase",
+    "platform": "Instagram + TikTok",
+    "summary": "A seasonal activewear drop shot as real morning routines rather than gym sessions, built to be reused across a full quarter of paid and organic.",
+    "challenge": "Tempo Studio had strong product photography and nothing else. Every seasonal drop required a new shoot, and between drops their paid social ran the same four images until performance collapsed.",
+    "approach": "Six creators shot lifestyle content across a two-week window — morning routines, commutes, school runs — rather than gym footage, which the brand's audience data showed was not where the product was actually worn. Each creator delivered a mix of vertical video and stills, licensed for twelve months so the library could carry the full quarter.",
+    "outcome": "800K combined reach across Instagram and TikTok, and a content library that removed the need for a mid-quarter reshoot entirely. The stills alone replaced the brand's next scheduled studio day.",
+    "metrics": [
+      { "label": "Creators booked", "value": "6" },
+      { "label": "Combined reach", "value": "800K" },
+      { "label": "Assets delivered", "value": "18 videos + 40 stills" },
+      { "label": "Usage rights", "value": "12 months, paid and organic" }
+    ]
   }
 ]

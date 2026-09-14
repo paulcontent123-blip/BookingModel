@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import type { SessionUser } from '@/lib/auth';
+import { BrandLogoMark } from '@/components/brand-logo-mark';
+import { brandInitials } from '@/lib/brand-profile';
 
 const SOLUTIONS = [
   { slug: 'ugc', icon: '🎬', title: 'On-Demand UGC', sub: 'Videos & AI creation at scale' },
@@ -29,13 +31,9 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
   }
 
   return (
-    <nav>
+    <nav className="site-nav">
       <Link href="/" className="logo">
-        <div className="logo-mark">
-          <svg viewBox="0 0 20 20">
-            <path d="M10 2L3 5.5v5c0 4.2 3 7.8 7 8.8 4-1 7-4.6 7-8.8v-5L10 2z" />
-          </svg>
-        </div>
+        <BrandLogoMark className="logo-mark" />
         <div className="logo-text">
           Booking<em>Model</em>
         </div>
@@ -83,7 +81,12 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
         </div>
 
         <Link href="/campaigns" className={on('/campaigns')}>Open Campaigns</Link>
-        <Link href="/news" className={on('/news')}>News &amp; Showcase</Link>
+        <Link
+          href="/news"
+          className={pathname.startsWith('/news') || pathname.startsWith('/showcase') ? 'nl on' : 'nl'}
+        >
+          News &amp; Showcase
+        </Link>
         <Link href="/partnership" className={on('/partnership')}>Partnership</Link>
         <Link href="/contact" className={on('/contact')}>Contact</Link>
       </div>
@@ -95,6 +98,15 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
               <Link href="/admin" className="btn-ghost">Admin</Link>
             )}
             <Link href="/dashboard" className="btn-ghost">Dashboard</Link>
+            <Link href="/dashboard/account" className="nav-account-link" aria-label="Open account">
+              {user.avatar_url ? (
+                <img className="nav-account-avatar" src={user.avatar_url} alt="" />
+              ) : (
+                <span className="nav-account-avatar nav-account-avatar-fallback">
+                  {brandInitials(user.company_name ?? user.full_name ?? user.email)}
+                </span>
+              )}
+            </Link>
             <Link href="/contact" className="btn-blue">Request Campaign</Link>
           </>
         ) : (

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase } from '@/lib/creator-data';
 import { config } from '@/lib/config';
 import { feePercentLabel, formatDate, money } from '@/lib/utils';
 
@@ -17,7 +18,7 @@ export default async function BookingSuccessPage({
   if (!deal) notFound();
 
   const [creator, invoice] = await Promise.all([
-    db.get('creators', deal.creator_id),
+    getCreatorFromDatabase(deal.creator_id),
     db.findOne('invoices', { deal_id: deal.id }),
   ]);
   const creatorResponse = deal.creator_response_status ?? 'accepted';

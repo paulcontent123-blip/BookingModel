@@ -19,6 +19,40 @@ export interface User {
   created_at: string;
 }
 
+export type BrandStatus = 'active' | 'inactive' | 'pending';
+
+/**
+ * Public and operational profile for a brand account.
+ *
+ * A brand has one profile linked to its login user. Keeping these fields out
+ * of `users` leaves the auth table small while giving the admin team the
+ * business details they need to qualify and contact US brands.
+ */
+export interface Brand {
+  id: string;
+  user_id: string;
+  brand_name: string;
+  legal_name: string | null;
+  website: string | null;
+  industry: string | null;
+  description: string | null;
+  company_size: string | null;
+  country: string;
+  state: string | null;
+  city: string | null;
+  timezone: string | null;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  linkedin_url: string | null;
+  instagram_url: string | null;
+  tiktok_url: string | null;
+  avatar_url: string | null;
+  status: BrandStatus;
+  created_at: string;
+  updated_at: string;
+}
+
 export type CreatorStatus = 'pending' | 'active' | 'inactive' | 'rejected';
 export type CreatorSource = 'manual' | 'csv_import' | 'self_apply' | 'crawl';
 
@@ -35,6 +69,8 @@ export interface Creator {
   tier: string | null;
   audience: string | null;
   audience_count: number | null;
+  avg_views_likes: number | null;
+  location: string | null;
   er: string | null;
   rate_min: number | null; // USD, whole dollars
   rate_max: number | null;
@@ -45,6 +81,8 @@ export interface Creator {
   bio: string | null;
   photo_url: string | null;
   avatar_url: string | null;
+  /** Original avatar filename from an imported source workbook, when present. */
+  avatar_filename: string | null;
   accent_bg: string | null;
   emoji: string | null;
   status: CreatorStatus;
@@ -81,6 +119,8 @@ export interface Campaign {
   budget_usd: number | null;
   rate_label: string | null;
   brief_text: string | null;
+  cover_url: string | null;
+  /** Legacy field retained for existing rows; campaign UI uses cover_url. */
   emoji: string | null;
   accent_bg: string | null;
   status: CampaignStatus;
@@ -344,8 +384,66 @@ export interface Setting {
   updated_at: string;
 }
 
+export type ContentStatus = 'draft' | 'published';
+
+/** A News & Showcase article. Written in Admin, rendered at /news/[slug]. */
+export interface NewsPost {
+  id: string;
+  slug: string;
+  category: string;
+  title: string;
+  excerpt: string | null;
+  /** JSON block document; legacy plain text is still accepted when reading. */
+  body: string | null;
+  cover_url: string | null;
+  emoji: string | null;
+  accent_bg: string | null;
+  author: string | null;
+  seo_title: string | null;
+  seo_description: string | null;
+  /** The article pinned first in the uniform card list on /news. */
+  featured: boolean;
+  /** Optional for rows created before the contents setting existed. */
+  show_toc?: boolean;
+  status: ContentStatus;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ShowcaseMetric {
+  label: string;
+  value: string;
+}
+
+/** A delivered brand campaign, rendered at /showcase/[slug]. */
+export interface ShowcaseCase {
+  id: string;
+  slug: string;
+  brand: string;
+  title: string;
+  tag: string;
+  summary: string | null;
+  /** Short card line, e.g. '14 creators · 2.1M views'. */
+  meta: string | null;
+  challenge: string | null;
+  approach: string | null;
+  outcome: string | null;
+  metrics: ShowcaseMetric[];
+  platform: string | null;
+  cover_url: string | null;
+  emoji: string | null;
+  accent_bg: string | null;
+  sort_order: number;
+  status: ContentStatus;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Tables {
   users: User;
+  brands: Brand;
   creators: Creator;
   creator_portfolio: CreatorPortfolio;
   campaigns: Campaign;
@@ -361,6 +459,8 @@ export interface Tables {
   contact_reveals: ContactReveal;
   upgrade_requests: UpgradeRequest;
   settings: Setting;
+  news_posts: NewsPost;
+  showcase_cases: ShowcaseCase;
 }
 
 export type TableName = keyof Tables;

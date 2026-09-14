@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase } from '@/lib/creator-data';
 import { requireUser } from '@/lib/auth';
 import { formatDate, money } from '@/lib/utils';
 
@@ -72,7 +73,7 @@ export default async function BookingsPage() {
                 {campaigns.map((campaign) => (
                   <tr key={campaign.id}>
                     <td>
-                      <strong>{campaign.emoji} {campaign.title}</strong>
+                      <strong>{campaign.title}</strong>
                       <small>{campaign.category ?? 'General'} · {campaign.content_type ?? 'Campaign brief'}</small>
                     </td>
                     <td>{campaign.platform ?? '—'}</td>
@@ -108,7 +109,7 @@ export default async function BookingsPage() {
               <tbody>
                 {await Promise.all(
                   deals.map(async (deal) => {
-                    const creator = await db.get('creators', deal.creator_id);
+                    const creator = await getCreatorFromDatabase(deal.creator_id);
                     const invoice = invoiceFor.get(deal.id);
                     return (
                       <tr key={deal.id}>

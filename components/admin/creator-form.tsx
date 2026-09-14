@@ -304,7 +304,7 @@ export function CreatorForm({
             placeholder="@myhandle"
             defaultValue={creator?.handle}
             readOnly={!!creator}
-            title={creator ? 'The handle is the dedup key and cannot be changed.' : undefined}
+            title={creator ? 'The platform + handle identify this creator and the handle cannot be changed here.' : undefined}
           />
         </div>
       </div>
@@ -344,6 +344,23 @@ export function CreatorForm({
         <div className="fg">
           <label htmlFor="er">Engagement rate</label>
           <input id="er" name="er" placeholder="6.2%" defaultValue={creator?.er ?? ''} />
+        </div>
+      </div>
+
+      <div className="fg-row">
+        <div className="fg">
+          <label htmlFor="avg_views_likes">Average views / likes</label>
+          <input
+            id="avg_views_likes"
+            name="avg_views_likes"
+            inputMode="numeric"
+            placeholder="2800"
+            defaultValue={creator?.avg_views_likes ?? ''}
+          />
+        </div>
+        <div className="fg">
+          <label htmlFor="location">Location</label>
+          <input id="location" name="location" placeholder="Miami, FL" defaultValue={creator?.location ?? ''} />
         </div>
       </div>
 

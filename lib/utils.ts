@@ -81,6 +81,14 @@ export function normalizeHandle(handle: string): string {
   return h.startsWith('@') ? h : `@${h}`;
 }
 
+/**
+ * Creator usernames are only unique within a platform. The same person can
+ * legitimately have the same handle on Instagram and TikTok.
+ */
+export function creatorIdentityKey(platform: string, handle: string): string {
+  return `${platform.trim().toLowerCase()}::${normalizeHandle(handle).toLowerCase()}`;
+}
+
 export function extractYouTubeId(url: string | null | undefined): string | null {
   if (!url) return null;
   const m = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/);
@@ -135,7 +143,7 @@ export const CONTENT_TYPES = [
   'Photo Set',
 ] as const;
 
-export const TIERS = ['Nano', 'Micro', 'Mid', 'Macro'] as const;
+export const TIERS = ['Nano', 'Micro', 'Mid', 'Macro', 'Mega'] as const;
 
 export function platformClass(platform: string | null | undefined): string {
   switch ((platform ?? '').toLowerCase()) {

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { config } from '@/lib/config';
+import { BrandLogoMark } from '@/components/brand-logo-mark';
+import { BRAND_SHOWCASE_ENABLED } from '@/lib/features';
 
 export function SiteFooter() {
   return (
@@ -8,7 +10,8 @@ export function SiteFooter() {
         <div className="ft-grid">
           <div>
             <div className="ft-logo">
-              Booking<em>Model</em>
+              <BrandLogoMark className="ft-logo-mark" />
+              <span>Booking<em>Model</em></span>
             </div>
             <p className="ft-about">
               Creator marketing platform for North American brands. UGC, influencer campaigns,
@@ -38,6 +41,7 @@ export function SiteFooter() {
           <div className="ft-col">
             <h4>Company</h4>
             <Link href="/news">News &amp; Showcase</Link>
+            {BRAND_SHOWCASE_ENABLED && <Link href="/showcase">Case Studies</Link>}
             <Link href="/partnership">Partnership</Link>
             <Link href="/contact">Contact</Link>
           </div>

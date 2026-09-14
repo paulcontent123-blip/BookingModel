@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase, listCreatorsFromDatabase } from '@/lib/creator-data';
 import { config } from '@/lib/config';
 import { formatDateTime, money } from '@/lib/utils';
 import { StatusBadge } from '@/components/status-badge';
@@ -8,7 +9,7 @@ export const metadata = { title: 'Dashboard' };
 
 export default async function AdminDashboard() {
   const [creators, deals, requests, applicants, invoices, emails] = await Promise.all([
-    db.list('creators', { limit: 1000 }),
+    listCreatorsFromDatabase({ limit: 1000 }),
     db.list('deals', { orderBy: 'created_at', ascending: false, limit: 500 }),
     db.list('booking_requests', { orderBy: 'created_at', ascending: false, limit: 100 }),
     db.list('applicants', { orderBy: 'applied_at', ascending: false, limit: 100 }),
@@ -107,7 +108,7 @@ export default async function AdminDashboard() {
             <tbody>
               {await Promise.all(
                 deals.slice(0, 6).map(async (d) => {
-                  const creator = await db.get('creators', d.creator_id);
+                  const creator = await getCreatorFromDatabase(d.creator_id);
                   return (
                     <tr className="deal-row" key={d.id}>
                       <td>{d.deal_ref}</td>

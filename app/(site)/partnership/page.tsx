@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { LeadForm, type FieldDef } from '@/components/lead-form';
 
 export const metadata: Metadata = {
@@ -44,7 +45,17 @@ const fields: FieldDef[] = [
   },
 ];
 
-export default function PartnershipPage() {
+export default async function PartnershipPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>;
+}) {
+  const { type } = await searchParams;
+  const selectedType = TYPES.find((item) => item.title === type)?.title;
+  const formFields = fields.map((field) =>
+    field.name === 'type' ? { ...field, defaultValue: selectedType } : field,
+  );
+
   return (
     <section className="sec">
       <div className="sec-eye">Partnership &amp; Collaboration</div>
@@ -56,11 +67,16 @@ export default function PartnershipPage() {
 
       <div className="partner-grid">
         {TYPES.map((t) => (
-          <div className="pcard" key={t.title}>
+          <div className={`pcard${selectedType === t.title ? ' selected' : ''}`} key={t.title}>
             <div className="pcard-ico">{t.icon}</div>
             <div className="pcard-title">{t.title}</div>
             <div className="pcard-desc">{t.desc}</div>
-            <a href="#partnership-form" className="pcard-btn">{t.cta}</a>
+            <Link
+              href={`/partnership?type=${encodeURIComponent(t.title)}#partnership-form`}
+              className="pcard-btn"
+            >
+              {t.cta}
+            </Link>
           </div>
         ))}
       </div>
@@ -68,7 +84,7 @@ export default function PartnershipPage() {
       <div id="partnership-form" style={{ maxWidth: 620, marginTop: 44 }}>
         <LeadForm
           action="/api/partnership"
-          fields={fields}
+          fields={formFields}
           submitLabel="Send partnership request →"
           successTitle="Request received"
           successBody={

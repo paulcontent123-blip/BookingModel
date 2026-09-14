@@ -27,6 +27,7 @@ export interface SessionUser {
   plan: Plan;
   full_name: string | null;
   company_name: string | null;
+  avatar_url: string | null;
 }
 
 const secret = new TextEncoder().encode(config.auth.secret);
@@ -64,6 +65,7 @@ async function readSession(cookieName: string): Promise<SessionUser | null> {
       plan: (payload.plan as Plan) ?? 'free',
       full_name: (payload.full_name as string) ?? null,
       company_name: (payload.company_name as string) ?? null,
+      avatar_url: (payload.avatar_url as string) ?? null,
     };
   } catch {
     return null;
@@ -78,7 +80,31 @@ export function toSessionUser(user: User): SessionUser {
     plan: user.plan,
     full_name: user.full_name,
     company_name: user.company_name,
+    avatar_url: null,
   };
+}
+
+/**
+ * Enriches a signed-in brand session with the separate brand profile.
+ *
+ * The lookup is intentionally best-effort so an older install can still log
+ * in before the brands migration has been applied.
+ */
+async function withBrandProfile(user: User): Promise<SessionUser> {
+  const session = toSessionUser(user);
+  if (user.role !== 'brand' && user.role !== 'agency') return session;
+
+  try {
+    const brand = await db.findOne('brands', { user_id: user.id });
+    if (!brand) return session;
+    return {
+      ...session,
+      company_name: brand.brand_name || session.company_name,
+      avatar_url: brand.avatar_url,
+    };
+  } catch {
+    return session;
+  }
 }
 
 export async function createSession(user: User): Promise<void> {
@@ -116,7 +142,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   try {
     const current = await db.get('users', user.id);
     if (current) {
-      return current.role === 'admin' ? null : toSessionUser(current);
+      return current.role === 'admin' ? null : withBrandProfile(current);
     }
   } catch {
     // Fall back to the signed session if the database is temporarily unavailable.

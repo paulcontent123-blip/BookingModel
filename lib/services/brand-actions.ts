@@ -1,8 +1,11 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { requirePlanFeature } from '@/lib/auth';
+import { requireAdmin, requirePlanFeature, requireUser } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { CloudinaryError, deleteCloudinaryImage } from '@/lib/cloudinary';
+import { brandFieldsFrom } from '@/lib/brand-profile';
+import { ensureBrandProfile, getBrandById } from '@/lib/services/brand-profile';
 
 export interface BrandActionResult {
   ok: boolean;
@@ -11,6 +14,107 @@ export interface BrandActionResult {
 
 function text(formData: FormData, name: string): string {
   return String(formData.get(name) ?? '').trim();
+}
+
+async function removeOldAvatarSafely(previousUrl: string | null, nextUrl: string | null) {
+  if (!previousUrl || previousUrl === nextUrl) return;
+  try {
+    await deleteCloudinaryImage(previousUrl);
+  } catch (error) {
+    // Saving the new profile must not fail because a stale CDN asset could
+    // not be removed. The old URL is no longer referenced by the profile.
+    if (error instanceof CloudinaryError) {
+      console.warn('[brand profile] old avatar cleanup skipped:', error.message);
+    } else {
+      console.warn('[brand profile] old avatar cleanup failed:', error);
+    }
+  }
+}
+
+function profileValidation(formData: FormData, existing: Parameters<typeof brandFieldsFrom>[1]) {
+  const parsed = brandFieldsFrom(formData, existing);
+  if (!parsed.fields) return { fields: null, error: parsed.error } as const;
+  return { fields: parsed.fields, error: null } as const;
+}
+
+async function revalidateBrandProfilePages() {
+  revalidatePath('/dashboard/account');
+  revalidatePath('/dashboard/settings');
+  revalidatePath('/dashboard');
+  revalidatePath('/dashboard/bookings');
+  revalidatePath('/campaigns');
+  revalidatePath('/admin/brands');
+}
+
+/** Updates the currently signed-in brand's business profile and avatar. */
+export async function updateBrandProfileAction(formData: FormData): Promise<BrandActionResult> {
+  const user = await requireUser('/login?next=/dashboard/account');
+  const existing = await ensureBrandProfile({
+    id: user.id,
+    email: user.email,
+    full_name: user.full_name,
+    company_name: user.company_name,
+    country: null,
+  });
+  const parsed = profileValidation(formData, existing);
+  if (!parsed.fields) return { ok: false, message: parsed.error };
+  const fields = { ...parsed.fields, status: existing.status };
+
+  const now = new Date().toISOString();
+  try {
+    const updated = await db.update('brands', existing.id, {
+      ...fields,
+      updated_at: now,
+    });
+    if (!updated) return { ok: false, message: 'Brand profile was not found.' };
+
+    // Existing campaign ownership and legacy screens use users.company_name.
+    // Keep that compatibility field synchronized with the account profile.
+    await db.update('users', user.id, {
+      company_name: parsed.fields.brand_name,
+      country: fields.country,
+    });
+    await removeOldAvatarSafely(existing.avatar_url, fields.avatar_url);
+    await revalidateBrandProfilePages();
+    return { ok: true, message: 'Brand account updated successfully.' };
+  } catch (error) {
+    console.error('[brand profile] could not update account:', error);
+    return { ok: false, message: 'The brand account could not be updated. Please try again.' };
+  }
+}
+
+/** Admin version of the same profile update used by the brand table. */
+export async function updateBrandProfileAdminAction(
+  id: string,
+  formData: FormData,
+): Promise<BrandActionResult> {
+  await requireAdmin();
+  const existing = await getBrandById(id);
+  if (!existing) return { ok: false, message: 'Brand profile was not found.' };
+
+  const parsed = profileValidation(formData, existing);
+  if (!parsed.fields) return { ok: false, message: parsed.error };
+
+  const now = new Date().toISOString();
+  try {
+    const updated = await db.update('brands', existing.id, {
+      ...parsed.fields,
+      updated_at: now,
+    });
+    if (!updated) return { ok: false, message: 'Brand profile was not found.' };
+
+    await db.update('users', existing.user_id, {
+      company_name: parsed.fields.brand_name,
+      country: parsed.fields.country,
+    });
+    await removeOldAvatarSafely(existing.avatar_url, parsed.fields.avatar_url);
+    await revalidateBrandProfilePages();
+    revalidatePath(`/admin/brands/${id}`);
+    return { ok: true, message: 'Brand profile updated successfully.' };
+  } catch (error) {
+    console.error('[brand profile] admin update failed:', error);
+    return { ok: false, message: 'The brand profile could not be updated. Please try again.' };
+  }
 }
 
 /**

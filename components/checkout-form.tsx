@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { creatorImageSources } from '@/lib/media';
 import { CONTENT_TYPES, money } from '@/lib/utils';
 import { useGeo } from './geo-provider';
+import { CreatorImage } from './creator-image';
 
 /**
  * Requirement #3 — US brands book and pay here.
@@ -19,6 +21,7 @@ interface CreatorSummary {
   handle: string;
   platform: string;
   photo_url: string | null;
+  avatar_url: string | null;
   accent_bg: string | null;
   emoji: string | null;
   unitPrice: number;
@@ -39,6 +42,7 @@ export function CheckoutForm({
   const router = useRouter();
   const { openRestricted } = useGeo();
   const formRef = useRef<HTMLFormElement>(null);
+  const imageSources = creatorImageSources(creator);
 
   const [quantity, setQuantity] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -242,13 +246,16 @@ export function CheckoutForm({
           <div
             style={{
               width: 46, height: 46, borderRadius: 6, flexShrink: 0,
-              background: creator.photo_url
-                ? `#EEE url(${creator.photo_url}) center top / cover`
-                : (creator.accent_bg ?? 'var(--bg2)'),
+              background: imageSources.length > 0 ? '#EEE' : (creator.accent_bg ?? 'var(--bg2)'),
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
             }}
           >
-            {!creator.photo_url && creator.emoji}
+            <CreatorImage
+              sources={imageSources}
+              alt=""
+              style={{ width: '100%', height: '100%', borderRadius: 6, objectFit: 'cover' }}
+              fallback={<span>{creator.emoji}</span>}
+            />
           </div>
           <div>
             <div style={{ fontFamily: 'var(--mont)', fontWeight: 700, fontSize: 13.5 }}>{creator.name}</div>

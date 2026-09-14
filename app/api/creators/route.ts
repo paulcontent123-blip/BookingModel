@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { listCreatorsFromDatabase } from '@/lib/creator-data';
 import { publicCreatorShape } from '@/lib/creator-view';
 import { getSessionUser } from '@/lib/auth';
 import { planHasFeature } from '@/lib/plans';
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
   const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10) || 1);
   const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') ?? '20', 10) || 20));
 
-  const all = await db.list('creators', { where: { status: 'active' }, orderBy: 'legacy_id' });
+  const all = await listCreatorsFromDatabase({ activeOnly: true });
 
   const filtered = all.filter((c) => {
     if (platform && c.platform !== platform) return false;

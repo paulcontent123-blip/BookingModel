@@ -1,6 +1,8 @@
 import Link from 'next/link';
-import { db } from '@/lib/db';
+import { listCreatorsFromDatabase } from '@/lib/creator-data';
+import { creatorImageSources } from '@/lib/media';
 import { PLATFORMS, compactNumber, rateLabel } from '@/lib/utils';
+import { CreatorImage } from '@/components/creator-image';
 import { ActionButton, ActionSelect } from '@/components/admin/action-button';
 import { deleteCreatorAction, updateCreatorStatusAction } from '@/lib/services/admin-actions';
 import type { Creator } from '@/lib/types';
@@ -20,7 +22,7 @@ export default async function AdminCreatorsPage({
   }>;
 }) {
   const sp = await searchParams;
-  const all = await db.list('creators', { orderBy: 'legacy_id' });
+  const all = await listCreatorsFromDatabase();
   const q = (sp.q ?? '').trim().toLowerCase();
 
   const creators = all.filter((c) => {
@@ -96,12 +98,15 @@ export default async function AdminCreatorsPage({
                 <div
                   className="cc-photo"
                   style={{
-                    background: c.photo_url
-                      ? `#EEE url(${c.photo_url}) center top / cover`
-                      : (c.accent_bg ?? 'var(--bg)'),
+                    background: c.accent_bg ?? 'var(--bg)',
                   }}
                 >
-                  {!c.photo_url && <span className="cc-fallback">{c.emoji ?? '👤'}</span>}
+                  <CreatorImage
+                    sources={creatorImageSources(c)}
+                    alt=""
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                    fallback={<span className="cc-fallback">{c.emoji ?? '👤'}</span>}
+                  />
                   <div className="cc-photo-overlay" />
                   <span className="cc-platform">{c.platform}</span>
                   {c.status === 'active' ? (

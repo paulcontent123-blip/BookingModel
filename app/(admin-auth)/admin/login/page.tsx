@@ -4,6 +4,7 @@ import { AdminLoginForm } from '@/components/admin-login-form';
 import { getAdminSessionUser } from '@/lib/auth';
 import { config } from '@/lib/config';
 import { usingLocalStore } from '@/lib/db';
+import { BrandLogoMark } from '@/components/brand-logo-mark';
 
 export const metadata: Metadata = {
   title: 'Admin Login',
@@ -29,8 +30,9 @@ export default async function AdminLoginPage({
     <main className="admin-login-screen">
       <section className="admin-login-box" aria-label="Admin sign in">
         <div className="admin-login-logo">
-          Booking<em>Model</em>{' '}
-          <span>Internal</span>
+          <BrandLogoMark className="admin-login-logo-mark" />
+          <span className="admin-login-wordmark">Booking<em>Model</em></span>
+          <span className="admin-login-internal">Internal</span>
         </div>
         <div className="admin-login-subtitle">VEA Group — Admin Access</div>
 

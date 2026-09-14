@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase } from '@/lib/creator-data';
 import { getSessionUser } from '@/lib/auth';
 import { resolveGeo } from '@/lib/guard';
 import { config } from '@/lib/config';
@@ -15,7 +16,7 @@ export const metadata: Metadata = { title: 'Book a creator' };
 
 export default async function BookPage({ params }: { params: Promise<{ creatorId: string }> }) {
   const { creatorId } = await params;
-  const creator = await db.get('creators', creatorId);
+  const creator = await getCreatorFromDatabase(creatorId);
   if (!creator) notFound();
 
   const [user, geo] = await Promise.all([getSessionUser(), resolveGeo()]);
@@ -63,6 +64,7 @@ export default async function BookPage({ params }: { params: Promise<{ creatorId
           handle: creator.handle,
           platform: creator.platform,
           photo_url: creator.photo_url,
+          avatar_url: creator.avatar_url,
           accent_bg: creator.accent_bg,
           emoji: creator.emoji,
           unitPrice: unitPriceFor(creator),

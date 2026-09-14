@@ -6,6 +6,8 @@ import { hashPassword } from './auth';
 import { PLAN_ORDER, PLANS, revealLimitLabel } from './plans';
 import creatorsData from '@/data/creators.json';
 import campaignsData from '@/data/campaigns.json';
+import newsData from '@/data/news.json';
+import showcaseData from '@/data/showcase.json';
 import type { Creator } from './types';
 
 /**
@@ -66,18 +68,120 @@ interface SeedCampaign {
   rate: string;
 }
 
+interface SeedNewsPost {
+  slug: string;
+  ico: string;
+  bg: string;
+  cat: string;
+  author: string;
+  featured: boolean;
+  title: string;
+  date: string;
+  summary: string;
+  body: string;
+}
+
+interface SeedShowcase {
+  slug: string;
+  ico: string;
+  bg: string;
+  brand: string;
+  title: string;
+  meta: string;
+  tag: string;
+  platform: string;
+  summary: string;
+  challenge: string;
+  approach: string;
+  outcome: string;
+  metrics: { label: string; value: string }[];
+}
+
+/** The demo copy carries human dates ("Aug 14, 2026"); the columns want ISO. */
+function seedDate(value: string, fallback: string): string {
+  const parsed = new Date(`${value} UTC`);
+  return Number.isNaN(parsed.getTime()) ? fallback : parsed.toISOString();
+}
+
 let running: Promise<{ seeded: boolean; counts: Record<string, number> }> | null = null;
 
 export async function seedIfEmpty(): Promise<{ seeded: boolean; counts: Record<string, number> }> {
   if (running) return running;
   running = (async () => {
     const existing = await db.count('creators');
-    if (existing > 0) return { seeded: false, counts: { creators: existing } };
+    if (existing > 0) {
+      // An install seeded before the CMS existed still needs its articles.
+      await seedContent();
+      return { seeded: false, counts: { creators: existing } };
+    }
     return runSeed();
   })();
   const result = await running;
   running = null;
   return result;
+}
+
+/**
+ * Loads the starter News & Showcase content.
+ *
+ * Split out of runSeed so an install that was seeded before the CMS existed
+ * gets the articles too, without wiping the creators it already has. Each
+ * table is filled only when it is still empty; after that Admin → Content is
+ * the source of truth.
+ */
+export async function seedContent(now = new Date().toISOString()): Promise<void> {
+  if ((await db.count('news_posts')) === 0) {
+    const posts = newsData as unknown as SeedNewsPost[];
+    await db.insertMany(
+      'news_posts',
+      posts.map((post) => ({
+        slug: post.slug,
+        category: post.cat,
+        title: post.title,
+        excerpt: post.summary,
+        body: post.body,
+        cover_url: null,
+        emoji: post.ico,
+        accent_bg: post.bg,
+        author: post.author,
+        seo_title: null,
+        seo_description: post.summary,
+        featured: post.featured,
+        status: 'published' as const,
+        published_at: seedDate(post.date, now),
+        created_at: now,
+        updated_at: now,
+      })) as never[],
+    );
+  }
+
+  if ((await db.count('showcase_cases')) === 0) {
+    const showcase = showcaseData as unknown as SeedShowcase[];
+    await db.insertMany(
+      'showcase_cases',
+      showcase.map((item, index) => ({
+        slug: item.slug,
+        brand: item.brand,
+        title: item.title,
+        tag: item.tag,
+        summary: item.summary,
+        meta: item.meta,
+        challenge: item.challenge,
+        approach: item.approach,
+        outcome: item.outcome,
+        metrics: item.metrics,
+        platform: item.platform,
+        cover_url: null,
+        emoji: item.ico,
+        accent_bg: item.bg,
+        sort_order: index,
+        status: 'published' as const,
+        published_at: now,
+        created_at: now,
+        updated_at: now,
+      })) as never[],
+    );
+  }
 }
 
 export async function runSeed(): Promise<{ seeded: boolean; counts: Record<string, number> }> {
@@ -227,6 +331,8 @@ export async function runSeed(): Promise<{ seeded: boolean; counts: Record<strin
     }) as never[],
   );
 
+  await seedContent(now);
+
   // ── Platform settings ───────────────────────────────────────────────────
   // Mirrored from lib/plans.ts so Admin → Settings can display them. These rows
   // are a read-only reflection: the gates themselves always read lib/plans.ts.
@@ -248,6 +354,8 @@ export async function runSeed(): Promise<{ seeded: boolean; counts: Record<strin
     creators: await db.count('creators'),
     creator_portfolio: await db.count('creator_portfolio'),
     campaigns: await db.count('campaigns'),
+    news_posts: await db.count('news_posts'),
+    showcase_cases: await db.count('showcase_cases'),
   };
 
   console.info(

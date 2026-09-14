@@ -9,8 +9,9 @@ supabase/
 ├── migrations/
 │   ├── 20260904120000_initial_schema.sql        ← 15 bảng
 │   ├── 20260904120100_row_level_security.sql    ← RLS + policies
-│   └── 20260908120000_plan_tiers_and_upgrades.sql ← gói Enterprise, phí theo
-│                                                   gói, upgrade_requests
+│   ├── 20260908120000_plan_tiers_and_upgrades.sql ← gói Enterprise, phí theo
+│   │                                                   gói, upgrade_requests
+│   └── 20260911100000_creator_official_fields.sql ← cột Excel creator chính thức
 └── seed.sql                                     ← 40 creator + campaign + tài khoản demo
 ```
 
@@ -151,8 +152,14 @@ NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
 
 Chứa 40 creator, 160 ảnh portfolio, 6 campaign và 4 tài khoản demo.
 
-Toàn bộ insert đều `on conflict do nothing`, khoá theo cột unique tự nhiên
-(`users.email`, `creators.handle`), nên chạy lại nhiều lần không nhân bản dữ liệu.
+Toàn bộ insert đều `on conflict do nothing`, khoá theo các khóa tự nhiên
+(`users.email`, `creators` theo `platform + handle`), nên chạy lại nhiều lần
+không nhân bản dữ liệu.
+
+Bảng `creators` có thêm `avg_views_likes`, `location` và `avatar_filename` để
+nhận đủ dữ liệu từ `Document/BookingModel_US_20_Creator.xlsx`. Trang
+`/admin/import` tự nhận các header gốc như `Handle / Username`, `Profile URL`,
+`Followers / Subs`, `Avg Views / Likes`, `ER (%)`, `Location (US)` và `Avatar`.
 
 Riêng portfolio dùng `join ... on c.handle = v.handle` thay vì UUID cứng, nên
 không phụ thuộc id được sinh ra ở lần chạy nào.

@@ -151,6 +151,61 @@
   background: var(--brand-border);
 }
 
+.brand-dashboard-account-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 14px 8px;
+  padding: 8px 6px;
+  border: 1px solid var(--brand-border);
+  border-radius: 8px;
+  background: var(--brand-bg);
+}
+
+.brand-dashboard-account-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.brand-dashboard-account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brand-dashboard-account-summary > div:last-child {
+  min-width: 0;
+}
+
+.brand-dashboard-account-summary strong,
+.brand-dashboard-account-summary span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-dashboard-account-summary strong {
+  color: var(--brand-ink);
+  font-size: 11.5px;
+}
+
+.brand-dashboard-account-summary span {
+  margin-top: 1px;
+  color: var(--brand-muted-light);
+  font-size: 9.5px;
+}
+
 .brand-dashboard-sidebar-bottom {
   margin-top: auto;
   padding-top: 12px;
@@ -523,6 +578,259 @@
 
 .brand-dashboard-settings-card button:hover {
   background: var(--brand-blue);
+}
+
+/* ── Brand account profile ─────────────────────────────────────────────── */
+.brand-dashboard-subpage.brand-account-page {
+  max-width: 1040px;
+}
+
+.brand-account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.brand-account-card {
+  padding: 22px 24px;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  background: var(--brand-white);
+}
+
+.brand-account-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--brand-border);
+}
+
+.brand-account-section-heading h2 {
+  margin: 0 0 3px;
+  color: var(--brand-ink);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.brand-account-section-heading p {
+  margin: 0;
+  color: var(--brand-muted);
+  font-size: 12px;
+}
+
+.brand-account-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.brand-account-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 86px;
+  height: 86px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid var(--brand-border);
+  border-radius: 14px;
+  background: var(--brand-blue-light);
+  color: var(--brand-blue);
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.brand-account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brand-account-avatar-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.brand-account-avatar-controls strong {
+  color: var(--brand-ink);
+  font-size: 13px;
+}
+
+.brand-account-avatar-controls > span,
+.brand-account-avatar-controls small {
+  color: var(--brand-muted);
+  font-size: 11px;
+}
+
+.brand-account-avatar-controls small {
+  color: var(--brand-blue);
+}
+
+.brand-account-avatar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.brand-account-file-button,
+.brand-account-remove-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 31px;
+  padding: 6px 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  font: 700 11.5px var(--brand-font);
+}
+
+.brand-account-file-button {
+  background: var(--brand-ink);
+  color: #fff;
+}
+
+.brand-account-file-button:hover {
+  background: var(--brand-blue);
+}
+
+.brand-account-file-button input {
+  display: none;
+}
+
+.brand-account-remove-button {
+  border: 1px solid #FECACA;
+  background: #FFF7F7;
+  color: #B91C1C;
+}
+
+.brand-account-remove-button:hover {
+  background: #FEE2E2;
+}
+
+.brand-account-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 16px;
+}
+
+.brand-account-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.brand-account-field-wide {
+  grid-column: 1 / -1;
+}
+
+.brand-account-field > span {
+  color: var(--brand-muted-light);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .55px;
+  text-transform: uppercase;
+}
+
+.brand-account-field input,
+.brand-account-field select,
+.brand-account-field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1.5px solid var(--brand-border);
+  border-radius: 7px;
+  outline: none;
+  background: var(--brand-white);
+  color: var(--brand-ink);
+  font: 13px var(--brand-font);
+}
+
+.brand-account-field textarea {
+  min-height: 112px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.brand-account-field input:focus,
+.brand-account-field select:focus,
+.brand-account-field textarea:focus {
+  border-color: var(--brand-blue);
+}
+
+.brand-account-field input[readonly] {
+  background: var(--brand-bg);
+  color: var(--brand-muted);
+}
+
+.brand-account-form-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+}
+
+.brand-account-submit {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--brand-blue);
+  color: #fff;
+  cursor: pointer;
+  font: 700 13px var(--brand-font);
+}
+
+.brand-account-submit:hover {
+  background: #1546C0;
+}
+
+.brand-account-submit:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.brand-account-result {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.brand-account-result.success {
+  color: var(--brand-green);
+}
+
+.brand-account-result.error {
+  color: #B91C1C;
+}
+
+@media (max-width: 620px) {
+  .brand-account-card {
+    padding: 18px 16px;
+  }
+
+  .brand-account-avatar-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .brand-account-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-account-field-wide {
+    grid-column: auto;
+  }
+
+  .brand-account-avatar-buttons {
+    flex-wrap: wrap;
+  }
 }
 
 /* ── Brand overview, campaigns, brief builder and plan ─────────────────── */

@@ -20,6 +20,9 @@
 }
 
 .admin-login-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 4px;
   color: #0d0d0d;
   font-size: 20px;
@@ -27,12 +30,25 @@
   letter-spacing: -.45px;
 }
 
-.admin-login-logo em {
+.admin-login-logo-mark {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.admin-login-wordmark {
+  white-space: nowrap;
+}
+
+.admin-login-wordmark em {
   color: #1a56db;
   font-style: italic;
 }
 
-.admin-login-logo span {
+.admin-login-internal {
   color: #6b6b6b;
   font-size: 11px;
   font-weight: 500;

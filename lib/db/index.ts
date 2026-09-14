@@ -1,21 +1,25 @@
 import 'server-only';
 import { config } from '@/lib/config';
 import type { DbDriver } from './driver';
-import { jsonStore } from './json-store';
 import { supabaseStore } from './supabase-store';
 
 export type { DbDriver, QueryOptions, Filter } from './driver';
 
 /**
- * The one place the storage backend is chosen.
- *
- *   Supabase keys present -> real PostgreSQL
- *   otherwise             -> ./.data/db.json (works out of the box)
+ * The application uses the hosted database as its only runtime data source.
+ * A missing Supabase configuration is an installation error, not a reason to
+ * silently create a second local database with stale demo data.
  */
-export const db: DbDriver = config.supabase.enabled ? supabaseStore : jsonStore;
+if (!config.supabase.enabled) {
+  throw new Error(
+    'Supabase is required. Configure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY before starting BookingModel.',
+  );
+}
+
+export const db: DbDriver = supabaseStore;
 
 export const dbDriverName = db.name;
 
 export function usingLocalStore(): boolean {
-  return db.name === 'json';
+  return false;
 }

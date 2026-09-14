@@ -53,7 +53,6 @@ export const config = {
     anonKey: env('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
     serviceKey: env('SUPABASE_SERVICE_ROLE_KEY'),
     get enabled(): boolean {
-      if (env('DB_DRIVER').toLowerCase() === 'memory') return false;
       return (
         isConfigured(env('NEXT_PUBLIC_SUPABASE_URL')) &&
         isConfigured(env('SUPABASE_SERVICE_ROLE_KEY'))
@@ -123,7 +122,11 @@ export const config = {
     apiSecret: env('CLOUDINARY_API_SECRET'),
     folder: env('CLOUDINARY_FOLDER', 'bookingmodel/creators'),
     get enabled(): boolean {
-      return isConfigured(env('CLOUDINARY_CLOUD_NAME')) && isConfigured(env('CLOUDINARY_API_KEY'));
+      return (
+        isConfigured(env('CLOUDINARY_CLOUD_NAME')) &&
+        isConfigured(env('CLOUDINARY_API_KEY')) &&
+        isConfigured(env('CLOUDINARY_API_SECRET'))
+      );
     },
   },
 
@@ -140,7 +143,7 @@ export function integrationStatus() {
   return [
     {
       key: 'Database',
-      value: config.supabase.enabled ? 'Supabase (PostgreSQL)' : 'Local JSON store (.data/db.json)',
+      value: config.supabase.enabled ? 'Supabase (PostgreSQL)' : 'Supabase (not configured)',
       ok: config.supabase.enabled,
       hint: 'NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY',
     },
@@ -162,7 +165,7 @@ export function integrationStatus() {
       key: 'Media',
       value: config.cloudinary.enabled ? 'Cloudinary' : 'Direct URLs (Unsplash/CDN)',
       ok: config.cloudinary.enabled,
-      hint: 'CLOUDINARY_CLOUD_NAME + CLOUDINARY_API_KEY',
+      hint: 'CLOUDINARY_CLOUD_NAME + CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET',
     },
     {
       key: 'Geo lookup',

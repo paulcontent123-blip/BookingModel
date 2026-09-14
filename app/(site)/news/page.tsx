@@ -1,33 +1,63 @@
+import Link from 'next/link';
 import type { Metadata } from 'next';
-import newsData from '@/data/news.json';
-import showcaseData from '@/data/showcase.json';
+import { listNewsForIndex, listPublishedShowcase, newsCategoryCounts } from '@/lib/services/content';
+import { formatPublishDate, newsCardBg, showcaseCardBg } from '@/lib/content';
+import type { NewsPost } from '@/lib/types';
+import { BRAND_SHOWCASE_ENABLED } from '@/lib/features';
 
 export const metadata: Metadata = {
   title: 'News & Showcase',
   description: 'Case studies, brand campaigns and platform updates from BookingModel.',
+  alternates: { canonical: '/news' },
 };
 
-interface NewsItem {
-  ico: string;
-  bg: string;
-  cat: string;
-  title: string;
-  date: string;
-  summary: string;
+const ALL = 'All';
+
+/** The cover image when one was uploaded, otherwise the emoji tile. */
+function Cover({ src, emoji, alt }: { src: string | null; emoji: string | null; alt: string }) {
+  if (src) return <img className="news-cover" src={src} alt={alt} loading="lazy" />;
+  return <>{emoji ?? '📰'}</>;
 }
 
-interface ShowcaseItem {
-  ico: string;
-  bg: string;
-  brand: string;
-  title: string;
-  meta: string;
-  tag: string;
+function NewsCard({ post }: { post: NewsPost }) {
+  return (
+    <Link href={`/news/${post.slug}`} className="nl-card">
+      <div className="nl-img" style={{ background: newsCardBg(post) }}>
+        <Cover src={post.cover_url} emoji={post.emoji} alt={post.title} />
+      </div>
+      <div className="nl-body">
+        <div className="ns-cat">{post.category}</div>
+        <h2 className="nl-title">{post.title}</h2>
+        {post.excerpt && <p className="nl-excerpt">{post.excerpt}</p>}
+        <div className="nl-footer">
+          <div className="ns-date">{formatPublishDate(post.published_at ?? post.created_at)}</div>
+          <span className="nl-read">Read story →</span>
+        </div>
+      </div>
+    </Link>
+  );
 }
 
-export default function NewsPage() {
-  const news = newsData as NewsItem[];
-  const showcase = showcaseData as ShowcaseItem[];
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cat?: string }>;
+}) {
+  const { cat } = await searchParams;
+  const [allPosts, counts, showcase] = await Promise.all([
+    listNewsForIndex(),
+    newsCategoryCounts(),
+    BRAND_SHOWCASE_ENABLED ? listPublishedShowcase() : Promise.resolve([]),
+  ]);
+
+  const activeCategory = counts.some((c) => c.category === cat) ? cat! : ALL;
+  const posts =
+    activeCategory === ALL
+      ? allPosts
+      : allPosts.filter((post) => post.category === activeCategory);
+
+  const chipHref = (category: string) =>
+    category === ALL ? '/news' : `/news?cat=${encodeURIComponent(category)}`;
 
   return (
     <>
@@ -38,56 +68,79 @@ export default function NewsPage() {
           How brands run creator campaigns on BookingModel, and what we are shipping next.
         </p>
 
-        <div className="news-grid">
-          <article className="news-main">
-            <div className="nm-img" style={{ background: news[0]!.bg }}>{news[0]!.ico}</div>
-            <div className="nm-body">
-              <div className="nm-cat">{news[0]!.cat}</div>
-              <h2 className="nm-title">{news[0]!.title}</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 10 }}>
-                {news[0]!.summary}
-              </p>
-              <div className="nm-date">{news[0]!.date}</div>
-            </div>
-          </article>
-
-          <div className="news-side">
-            {news.slice(1).map((n, i) => (
-              <article className="ns-card" key={i}>
-                <div className="ns-img" style={{ background: n.bg }}>{n.ico}</div>
-                <div className="ns-body">
-                  <div className="ns-cat">{n.cat}</div>
-                  <div className="ns-title">{n.title}</div>
-                  <div className="ns-date">{n.date}</div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="sec-divider" />
-
-      <section className="sec">
-        <div className="sec-eye">Brand Showcase</div>
-        <h2 className="sec-h">Campaigns we <strong>delivered</strong></h2>
-
-        <div className="showcase-grid">
-          {showcase.map((s, i) => (
-            <article className="sc-card" key={i}>
-              <div className="sc-media" style={{ background: s.bg }}>
-                {s.ico}
-                <span className="sc-tag">{s.tag}</span>
-              </div>
-              <div className="sc-body">
-                <div className="sc-brand">{s.brand}</div>
-                <div className="sc-title">{s.title}</div>
-                <div className="sc-meta">{s.meta}</div>
-              </div>
-            </article>
+        <nav className="news-filters" aria-label="Filter articles by category">
+          <Link
+            href={chipHref(ALL)}
+            className={`news-chip${activeCategory === ALL ? ' on' : ''}`}
+            aria-current={activeCategory === ALL ? 'page' : undefined}
+          >
+            All<span>{allPosts.length}</span>
+          </Link>
+          {counts.map(({ category, count }) => (
+            <Link
+              key={category}
+              href={chipHref(category)}
+              className={`news-chip${activeCategory === category ? ' on' : ''}`}
+              aria-current={activeCategory === category ? 'page' : undefined}
+            >
+              {category}<span>{count}</span>
+            </Link>
           ))}
-        </div>
+        </nav>
+
+        {!posts.length ? (
+          <div className="news-empty">
+            No articles published in this category yet.{' '}
+            {activeCategory !== ALL && <Link href="/news">See everything →</Link>}
+          </div>
+        ) : (
+          <div className="news-results">
+            <div className="news-results-head">
+              <span>{posts.length} {posts.length === 1 ? 'article' : 'articles'}</span>
+              {activeCategory !== ALL && <span>Filtered by {activeCategory}</span>}
+            </div>
+            <div className="news-list">
+              {posts.map((post) => (
+                <NewsCard key={post.id} post={post} />
+              ))}
+            </div>
+          </div>
+        )}
       </section>
+
+      {BRAND_SHOWCASE_ENABLED && (
+        <>
+          <div className="sec-divider" />
+
+          <section className="sec">
+            <div className="sec-eye">Brand Showcase</div>
+            <h2 className="sec-h">Campaigns we <strong>delivered</strong></h2>
+            <p className="sec-p">
+              Real campaigns, real numbers. Open any card for the full breakdown.
+            </p>
+
+            {showcase.length === 0 ? (
+              <div className="news-empty">No case studies published yet.</div>
+            ) : (
+              <div className="showcase-grid">
+                {showcase.map((item) => (
+                  <Link key={item.id} href={`/showcase/${item.slug}`} className="sc-card">
+                    <div className="sc-media" style={{ background: showcaseCardBg(item) }}>
+                      <Cover src={item.cover_url} emoji={item.emoji} alt={item.title} />
+                      <span className="sc-tag">{item.tag}</span>
+                    </div>
+                    <div className="sc-body">
+                      <div className="sc-brand">{item.brand}</div>
+                      <div className="sc-title">{item.title}</div>
+                      <div className="sc-meta">{item.meta}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+        </>
+      )}
     </>
   );
 }

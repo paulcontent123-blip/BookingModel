@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { db } from '@/lib/db';
+import { listCreatorsFromDatabase } from '@/lib/creator-data';
 import { feePercentLabel, formatDate, formatDateTime, money } from '@/lib/utils';
 import { StatusBadge } from '@/components/status-badge';
 import type { DealStatus } from '@/lib/types';
@@ -20,7 +21,7 @@ export default async function DealsPage({
   const all = await db.list('deals', { orderBy: 'created_at', ascending: false });
   const deals = status ? all.filter((d) => d.status === status) : all;
 
-  const creators = await db.list('creators', { limit: 1000 });
+  const creators = await listCreatorsFromDatabase({ limit: 1000 });
   const creatorById = new Map(creators.map((c) => [c.id, c]));
 
   const paid = all.filter((d) => d.payment_status === 'paid');

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { db } from '@/lib/db';
+import { listCreatorsFromDatabase } from '@/lib/creator-data';
 import { getSessionUser } from '@/lib/auth';
 import { CreatorCard } from '@/components/creator-card';
 import { CATEGORIES, PLATFORMS, TIERS } from '@/lib/utils';
@@ -42,7 +42,7 @@ export default async function MarketplacePage({
 }) {
   const sp = await searchParams;
   const [all, user] = await Promise.all([
-    db.list('creators', { where: { status: 'active' }, orderBy: 'legacy_id' }),
+    listCreatorsFromDatabase({ activeOnly: true }),
     getSessionUser(),
   ]);
 

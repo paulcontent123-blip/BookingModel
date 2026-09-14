@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import { config } from '@/lib/config';
 
 const MAX_CREATOR_IMAGE_BYTES = 10 * 1024 * 1024;
+const REMOTE_IMAGE_TIMEOUT_MS = 30_000;
 const ALLOWED_IMAGE_TYPES = new Set([
   'image/jpeg',
   'image/jpg',
@@ -179,11 +180,88 @@ function ensureCloudinaryConfigured(): void {
   }
 }
 
+function extensionForContentType(contentType: string): string {
+  switch (contentType) {
+    case 'image/png': return 'png';
+    case 'image/webp': return 'webp';
+    case 'image/gif': return 'gif';
+    case 'image/avif': return 'avif';
+    case 'image/jpg':
+    case 'image/jpeg':
+    default: return 'jpg';
+  }
+}
+
+/** Download a remote image first so Drive/CDN links are stored as real assets. */
+async function downloadRemoteImage(sourceUrl: string): Promise<{ blob: Blob; filename: string }> {
+  let response: Response;
+  try {
+    response = await fetch(sourceUrl, {
+      headers: {
+        Accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+        'User-Agent': 'BookingModel creator image importer',
+      },
+      redirect: 'follow',
+      signal: AbortSignal.timeout(REMOTE_IMAGE_TIMEOUT_MS),
+    });
+  } catch {
+    throw new CloudinaryError(
+      'The avatar URL could not be downloaded. Check that the file is public and reachable.',
+      'upload_failed',
+    );
+  }
+
+  if (!response.ok) {
+    throw new CloudinaryError(
+      `The avatar URL returned HTTP ${response.status}. Check that the file is public.`,
+      'upload_failed',
+    );
+  }
+
+  const contentType = response.headers.get('content-type')?.split(';')[0]?.trim().toLowerCase();
+  if (!contentType || !ALLOWED_IMAGE_TYPES.has(contentType)) {
+    throw new CloudinaryError(
+      'The avatar URL did not return a supported image. Check the sharing permission and link.',
+      'invalid_source',
+    );
+  }
+
+  const declaredBytes = Number(response.headers.get('content-length') ?? '');
+  if (Number.isFinite(declaredBytes) && declaredBytes > MAX_CREATOR_IMAGE_BYTES) {
+    throw new CloudinaryError('The remote image must be 10 MB or smaller.', 'invalid_file');
+  }
+
+  let bytes: ArrayBuffer;
+  try {
+    bytes = await response.arrayBuffer();
+  } catch {
+    throw new CloudinaryError(
+      'The avatar image could not be read from the source URL.',
+      'upload_failed',
+    );
+  }
+
+  if (bytes.byteLength === 0) {
+    throw new CloudinaryError('The remote image is empty.', 'invalid_file');
+  }
+  if (bytes.byteLength > MAX_CREATOR_IMAGE_BYTES) {
+    throw new CloudinaryError('The remote image must be 10 MB or smaller.', 'invalid_file');
+  }
+
+  const extension = extensionForContentType(contentType);
+  return {
+    blob: new Blob([bytes], { type: contentType }),
+    filename: `creator-avatar.${extension}`,
+  };
+}
+
 /**
  * Uploads either a browser File or a public remote URL through Cloudinary's
  * signed upload endpoint. The API secret is used only on the server.
  */
 export async function uploadCreatorImage(source: File | string): Promise<CloudinaryUploadResult> {
+  let remoteUrl: string | null = null;
+
   if (typeof source === 'string') {
     const value = source.trim();
     if (!value) {
@@ -203,6 +281,7 @@ export async function uploadCreatorImage(source: File | string): Promise<Cloudin
     }
 
     assertRemoteUrl(value);
+    remoteUrl = value;
   } else {
     if (!source || source.size === 0) {
       throw new CloudinaryError('The selected image is empty.', 'invalid_file');
@@ -220,11 +299,19 @@ export async function uploadCreatorImage(source: File | string): Promise<Cloudin
 
   ensureCloudinaryConfigured();
 
+  let uploadSource: File | Blob = source as File;
+  let uploadFilename = typeof source === 'string' ? 'creator-avatar' : source.name || 'creator-image';
+  if (remoteUrl) {
+    const downloaded = await downloadRemoteImage(remoteUrl);
+    uploadSource = downloaded.blob;
+    uploadFilename = downloaded.filename;
+  }
+
   const timestamp = Math.floor(Date.now() / 1000).toString();
   const folder = config.cloudinary.folder || 'bookingmodel/creators';
   const signedParams = { folder, timestamp };
   const body = new FormData();
-  body.append('file', typeof source === 'string' ? source : source);
+  body.append('file', uploadSource, uploadFilename);
   body.append('api_key', config.cloudinary.apiKey);
   body.append('timestamp', timestamp);
   body.append('folder', folder);

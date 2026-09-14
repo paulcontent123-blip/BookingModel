@@ -139,7 +139,7 @@ export default async function DashboardPage() {
                 {campaigns.slice(0, 5).map((campaign) => (
                   <tr key={campaign.id}>
                     <td>
-                      <strong>{campaign.emoji} {campaign.title}</strong>
+                      <strong>{campaign.title}</strong>
                       <small>{campaign.category ?? 'General'} · {campaign.content_type ?? 'Campaign brief'}</small>
                     </td>
                     <td>{campaign.platform ?? '—'}</td>

@@ -7,7 +7,8 @@
 -- or paste this file into the Supabase SQL Editor.
 --
 -- Idempotent: every insert uses ON CONFLICT DO NOTHING, keyed on the natural
--- unique column (users.email, creators.handle), so re-running changes nothing.
+-- unique keys (users.email and creators platform + handle), so re-running
+-- changes nothing.
 --
 -- WARNING: the demo passwords below are public (they are in the repo README).
 -- Change them before the site is reachable from the internet:
@@ -68,7 +69,7 @@ insert into public.creators (legacy_id, name, handle, platform, channel_url, nic
   (38, 'Cole Cuchna', '@colecuchna', 'TikTok', 'https://tiktok.com/@colecuchna', 'Food Aesthetics / Restaurants', 'Food & Beverage', 'Mid', '800K', 800000, null, 300, 300, 'colecuchna@creators.bookingmodel.dev', 'Via Instagram DM / email in bio', false, 'Beautiful restaurant content, NYC food scene. Premium food brand alignment.', 'Beautiful restaurant content, NYC food scene. Premium food brand alignment.', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=70', 'https://api.dicebear.com/7.x/avataaars/svg?seed=colecuchna&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf', '#ECF2F2', '💃', 'active', 'manual'),
   (39, 'Joshua Weissman', '@joshuaweissman', 'TikTok', 'https://tiktok.com/@joshuaweissman', 'Copycat Recipes / Budget Food', 'Food & Beverage', 'Macro', '8.2M', 8200000, null, 2, 2, 'joshuaweissman@creators.bookingmodel.dev', 'Via management team', false, 'Replicate fast food at home. Huge reach, multiple platform presence.', 'Replicate fast food at home. Huge reach, multiple platform presence.', 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=800&q=70', 'https://api.dicebear.com/7.x/avataaars/svg?seed=joshua&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf', '#F2EEE8', '🧑', 'active', 'manual'),
   (40, 'Nick DiGiovanni', '@nick.digiovanni', 'TikTok', 'https://tiktok.com/@nick.digiovanni', 'Fine Dining / World Records', 'Food & Beverage', 'Macro', '12.1M', 12100000, null, 3, 3, 'nick.digiovanni@creators.bookingmodel.dev', 'Via management / website', false, 'MasterChef finalist, world record food content. Premium brand positioning.', 'MasterChef finalist, world record food content. Premium brand positioning.', 'https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=70', 'https://api.dicebear.com/7.x/avataaars/svg?seed=nickdigiovan&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf', '#EEF2EE', '👩', 'active', 'manual')
-on conflict (handle) do nothing;
+on conflict do nothing;
 
 -- ── Creator portfolio ──────────────────────────────────────────────────────
 -- Joined on handle so this block does not depend on generated UUIDs.

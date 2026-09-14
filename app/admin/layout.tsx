@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { requireAdmin } from '@/lib/auth';
-import { db, usingLocalStore } from '@/lib/db';
-import { seedIfEmpty } from '@/lib/seed';
+import { db } from '@/lib/db';
 import { config } from '@/lib/config';
 import { AdminSidebar } from '@/components/admin/sidebar';
+import { BrandLogoMark } from '@/components/brand-logo-mark';
 import '../globals.css';
 
 export const metadata = {
@@ -12,7 +12,6 @@ export const metadata = {
 };
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  if (usingLocalStore()) await seedIfEmpty();
   const user = await requireAdmin();
 
   const [allApplicants, requests, partnerships, upgrades] = await Promise.all([
@@ -33,14 +32,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div id="app" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div id="topbar">
           <Link href="/admin" className="tb-logo">
-            Booking<em>Model</em>
+            <BrandLogoMark className="tb-logo-mark" />
+            <span>Booking<em>Model</em></span>
             <span className="tb-badge">INTERNAL</span>
           </Link>
 
           <div className="tb-view">
             <span>Storage:</span>
             <span className="view-btn on">
-              {usingLocalStore() ? 'Local JSON' : 'Supabase'}
+              Supabase
             </span>
             <span>Payments:</span>
             <span className="view-btn on">{config.payments.provider}</span>

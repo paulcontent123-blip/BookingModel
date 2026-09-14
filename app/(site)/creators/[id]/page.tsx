@@ -2,10 +2,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase } from '@/lib/creator-data';
 import { getSessionUser } from '@/lib/auth';
 import { priceBooking } from '@/lib/payments';
 import { lowestPlanWith, planName } from '@/lib/plans';
 import { compactNumber, platformClass, rateLabel, unitPriceFor, money } from '@/lib/utils';
+import { creatorImageSources } from '@/lib/media';
+import { CreatorImage } from '@/components/creator-image';
 import { BookCreatorButton } from '@/components/book-creator-button';
 
 export async function generateMetadata({
@@ -14,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const creator = await db.get('creators', id);
+  const creator = await getCreatorFromDatabase(id);
   if (!creator) return { title: 'Creator not found' };
   return {
     title: `${creator.name} (${creator.handle})`,
@@ -24,13 +27,14 @@ export async function generateMetadata({
 
 export default async function CreatorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const creator = await db.get('creators', id);
+  const creator = await getCreatorFromDatabase(id);
   if (!creator || creator.status === 'rejected') notFound();
 
   const [portfolio, user] = await Promise.all([
     db.list('creator_portfolio', { where: { creator_id: id }, orderBy: 'sort_order' }),
     getSessionUser(),
   ]);
+  const imageSources = creatorImageSources(creator);
 
   const unit = unitPriceFor(creator);
   // Signed-out visitors see the Free rate, which is what the public site quotes.
@@ -48,9 +52,7 @@ export default async function CreatorPage({ params }: { params: Promise<{ id: st
               borderRadius: 8,
               border: '1px solid var(--border)',
               // 25% keeps the face in frame on a wide, short hero crop.
-              background: creator.photo_url
-                ? `#EEE url(${creator.photo_url}) center 25% / cover`
-                : (creator.accent_bg ?? 'var(--bg2)'),
+              background: imageSources.length > 0 ? '#EEE' : (creator.accent_bg ?? 'var(--bg2)'),
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -59,17 +61,21 @@ export default async function CreatorPage({ params }: { params: Promise<{ id: st
               position: 'relative',
             }}
           >
-            {!creator.photo_url && creator.emoji}
+            <CreatorImage
+              sources={imageSources}
+              alt={creator.name}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
+              fallback={<span>{creator.emoji}</span>}
+            />
             <span className={`cg-b ${platformClass(creator.platform)}`} style={{ position: 'absolute', top: 12, left: 12 }}>
               {creator.platform}
             </span>
           </div>
 
           <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 12 }}>
-            {creator.avatar_url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={creator.avatar_url}
+            {imageSources.length > 0 && (
+              <CreatorImage
+                sources={imageSources}
                 alt=""
                 style={{
                   width: 64,

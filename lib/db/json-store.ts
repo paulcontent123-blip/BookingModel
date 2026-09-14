@@ -22,6 +22,7 @@ type Store = Record<string, Row[]>;
 
 const EMPTY: Store = {
   users: [],
+  brands: [],
   creators: [],
   creator_portfolio: [],
   campaigns: [],
@@ -37,6 +38,8 @@ const EMPTY: Store = {
   contact_reveals: [],
   upgrade_requests: [],
   settings: [],
+  news_posts: [],
+  showcase_cases: [],
 };
 
 interface Cache {

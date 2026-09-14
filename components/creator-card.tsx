@@ -1,19 +1,26 @@
 import Link from 'next/link';
 import type { Creator } from '@/lib/types';
+import { creatorImageSources } from '@/lib/media';
 import { compactNumber, platformClass, rateLabel } from '@/lib/utils';
+import { CreatorImage } from '@/components/creator-image';
 
 export function CreatorCard({ creator }: { creator: Creator }) {
+  const imageSources = creatorImageSources(creator);
+
   return (
     <Link href={`/creators/${creator.id}`} className="cg-card" style={{ display: 'block' }}>
       <div
         className="cg-photo"
         style={{
-          background: creator.photo_url
-            ? `#EEE url(${creator.photo_url}) center top / cover`
-            : (creator.accent_bg ?? '#F2F2F2'),
+          background: creator.accent_bg ?? '#F2F2F2',
         }}
       >
-        {!creator.photo_url && <span>{creator.emoji ?? '👤'}</span>}
+        <CreatorImage
+          sources={imageSources}
+          alt=""
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          fallback={<span>{creator.emoji ?? '👤'}</span>}
+        />
         <div className="cg-badges">
           <span className={`cg-b ${platformClass(creator.platform)}`}>{creator.platform}</span>
         </div>
@@ -49,17 +56,22 @@ export function CreatorCard({ creator }: { creator: Creator }) {
 
 /** Compact card used by the auto-scrolling strip under the hero. */
 export function CreatorStripCard({ creator }: { creator: Creator }) {
+  const imageSources = creatorImageSources(creator);
+
   return (
     <Link href={`/creators/${creator.id}`} className="creator-scroll-card">
       <div
         className="csc-media"
         style={{
-          background: creator.photo_url
-            ? `#EEE url(${creator.photo_url}) center top / cover`
-            : (creator.accent_bg ?? '#F2F2F2'),
+          background: creator.accent_bg ?? '#F2F2F2',
         }}
       >
-        {!creator.photo_url && <span>{creator.emoji ?? '👤'}</span>}
+        <CreatorImage
+          sources={imageSources}
+          alt=""
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          fallback={<span>{creator.emoji ?? '👤'}</span>}
+        />
         <span className="csc-platform">{creator.platform}</span>
         <span className="csc-play">▶</span>
       </div>

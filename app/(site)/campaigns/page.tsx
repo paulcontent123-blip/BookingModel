@@ -56,8 +56,8 @@ export default async function CampaignsPage({
             const badge = left === 0 ? 'cb-urgent' : left <= 2 ? 'cb-hot' : 'cb-open';
             return (
               <div className="camp-card" key={c.id}>
-                <div className="camp-img" style={{ background: c.accent_bg ?? 'var(--bg2)' }}>
-                  {c.emoji ?? '🎬'}
+              <div className="camp-img" style={{ background: c.accent_bg ?? 'var(--bg2)' }}>
+                  {c.cover_url && <img className="camp-cover" src={c.cover_url} alt={c.title} />}
                   <span className={`camp-badge ${badge}`}>
                     {left === 0 ? 'Full' : left <= 2 ? 'Closing soon' : 'Open'}
                   </span>

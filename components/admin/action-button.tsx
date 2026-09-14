@@ -14,12 +14,14 @@ export function ActionButton({
   pendingLabel,
   className = 'btn btn-ghost btn-xs',
   confirm,
+  successHref,
 }: {
   action: () => Promise<ActionResult>;
   label: string;
   pendingLabel?: string;
   className?: string;
   confirm?: string;
+  successHref?: string;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -35,7 +37,10 @@ export function ActionButton({
           startTransition(async () => {
             const res = await action();
             setResult(res);
-            if (res.ok) router.refresh();
+            if (res.ok) {
+              if (successHref) router.push(successHref);
+              else router.refresh();
+            }
           });
         }}
       >

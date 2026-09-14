@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
+import { getCreatorFromDatabase } from '@/lib/creator-data';
 import { updateCreatorAction } from '@/lib/services/admin-actions';
 import { CreatorForm } from '@/components/admin/creator-form';
 import { formatDateTime, money } from '@/lib/utils';
@@ -14,7 +15,7 @@ export default async function EditCreatorPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const creator = await db.get('creators', id);
+  const creator = await getCreatorFromDatabase(id);
   if (!creator) notFound();
 
   const [portfolio, deals] = await Promise.all([
