@@ -278,6 +278,12 @@
 .bm-admin .partnership-message{margin-top:14px;padding:10px 12px;background:var(--bg);border-left:3px solid var(--blue);border-radius:5px}
 .bm-admin .partnership-message p{font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:4px}
 .bm-admin .partnership-card-actions{margin-top:14px}
+.bm-admin .partners-table{min-width:760px}
+.bm-admin .partner-table-brand{display:flex;align-items:center;gap:10px;min-width:220px}
+.bm-admin .partner-table-logo{width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex:0 0 42px;overflow:hidden;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--blue);font-size:17px;font-weight:800}
+.bm-admin .partner-table-logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.bm-admin .partner-table-brand strong{display:block;overflow-wrap:anywhere}
+.bm-admin .partner-table-brand small{display:block;max-width:280px;margin-top:2px;color:var(--muted2);font-size:11px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width: 800px){
   .bm-admin .partnership-card-head{flex-direction:column}
   .bm-admin .partnership-card-status{align-self:stretch}

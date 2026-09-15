@@ -382,7 +382,7 @@ export function applicantDecisionEmail(applicant: Applicant, approved: boolean):
 
 export function adminPartnershipEmail(request: PartnershipRequest): Message {
   return {
-    to: config.email.salesEmail,
+    to: config.email.partnershipEmail,
     template: 'admin_partnership',
     subject: `[Partnership] ${request.type ?? 'Inquiry'} — ${request.company ?? request.name ?? request.email}`,
     html: shell({

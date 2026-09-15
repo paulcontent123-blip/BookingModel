@@ -37,7 +37,8 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
   }
 
   return (
-    <nav className={`site-nav${mobileOpen ? ' mobile-open' : ''}`}>
+    <>
+      <nav className={`site-nav${mobileOpen ? ' mobile-open' : ''}`}>
       <Link href="/" className="logo" onClick={closeMobileMenu}>
         <BrandLogoMark className="logo-mark" />
         <div className="logo-text">
@@ -127,15 +128,23 @@ export function SiteNav({ user }: { user: SessionUser | null }) {
                 </span>
               )}
             </Link>
-            <Link href="/contact" className="btn-blue" onClick={closeMobileMenu}>Request Campaign</Link>
+            <Link href="/dashboard/brief" className="btn-blue" onClick={closeMobileMenu}>Request Campaign</Link>
           </>
         ) : (
           <>
             <Link href="/login" className="btn-ghost" onClick={closeMobileMenu}>Brand Login</Link>
-            <Link href="/contact" className="btn-blue" onClick={closeMobileMenu}>Request Campaign</Link>
+            <Link
+              href="/login?next=%2Fdashboard%2Fbrief&error=request_campaign"
+              className="btn-blue"
+              onClick={closeMobileMenu}
+            >
+              Request Campaign
+            </Link>
           </>
         )}
       </div>
-    </nav>
+      </nav>
+      <div className="site-nav-spacer" aria-hidden="true" />
+    </>
   );
 }

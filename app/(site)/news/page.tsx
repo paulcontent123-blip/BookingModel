@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { listNewsForIndex, listPublishedShowcase, newsCategoryCounts } from '@/lib/services/content';
-import { formatPublishDate, newsCardBg, showcaseCardBg } from '@/lib/content';
-import type { NewsPost } from '@/lib/types';
+import { showcaseCardBg } from '@/lib/content';
+import { NewsCard } from '@/components/news-card';
 import { BRAND_SHOWCASE_ENABLED } from '@/lib/features';
 
 export const metadata: Metadata = {
@@ -12,31 +12,6 @@ export const metadata: Metadata = {
 };
 
 const ALL = 'All';
-
-/** The cover image when one was uploaded, otherwise the emoji tile. */
-function Cover({ src, emoji, alt }: { src: string | null; emoji: string | null; alt: string }) {
-  if (src) return <img className="news-cover" src={src} alt={alt} loading="lazy" />;
-  return <>{emoji ?? '📰'}</>;
-}
-
-function NewsCard({ post }: { post: NewsPost }) {
-  return (
-    <Link href={`/news/${post.slug}`} className="nl-card">
-      <div className="nl-img" style={{ background: newsCardBg(post) }}>
-        <Cover src={post.cover_url} emoji={post.emoji} alt={post.title} />
-      </div>
-      <div className="nl-body">
-        <div className="ns-cat">{post.category}</div>
-        <h2 className="nl-title">{post.title}</h2>
-        {post.excerpt && <p className="nl-excerpt">{post.excerpt}</p>}
-        <div className="nl-footer">
-          <div className="ns-date">{formatPublishDate(post.published_at ?? post.created_at)}</div>
-          <span className="nl-read">Read story →</span>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 export default async function NewsPage({
   searchParams,
@@ -126,7 +101,11 @@ export default async function NewsPage({
                 {showcase.map((item) => (
                   <Link key={item.id} href={`/showcase/${item.slug}`} className="sc-card">
                     <div className="sc-media" style={{ background: showcaseCardBg(item) }}>
-                      <Cover src={item.cover_url} emoji={item.emoji} alt={item.title} />
+                      {item.cover_url ? (
+                        <img className="news-cover" src={item.cover_url} alt={item.title} loading="lazy" />
+                      ) : (
+                        (item.emoji ?? '📰')
+                      )}
                       <span className="sc-tag">{item.tag}</span>
                     </div>
                     <div className="sc-body">

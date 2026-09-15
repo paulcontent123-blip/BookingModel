@@ -81,9 +81,10 @@ export function AdminSidebar({
       title: 'Campaigns & leads',
       items: [
         { href: '/admin/campaigns', icon: '🚀', label: 'All Campaigns' },
+        { href: '/admin/partners', icon: '🤝', label: 'Partner Database' },
         {
           href: '/admin/partnership',
-          icon: '🤝',
+          icon: '📨',
           label: 'Partnership Requests',
           badge: badges.partnerships,
           tone: 'green',

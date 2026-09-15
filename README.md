@@ -103,8 +103,14 @@ giả lập bị từ chối. Đổi sang Stripe: xem [`docs/API_KEYS.md`](docs/
   handle trùng (13 cột, xem bảng mapping trên trang đó)
 - `/admin/applicants` — creator tự đăng ký qua `/apply` vào đây, admin duyệt →
   tự tạo profile công khai + gửi email báo cho creator
+- `/admin/partners` — quản lý các thẻ partnership/đối tác (CRUD), gồm icon,
+  mô tả, nhãn nút và thứ tự; chỉ partner Published mới xuất hiện ở `/partnership`
 
 Creator không thể tự đăng ký rồi lên marketplace ngay — luôn phải qua admin duyệt.
+
+Trang `/partnership` đọc toàn bộ thẻ partnership Published từ bảng `partners` và
+nhận yêu cầu hợp tác vào bảng `partnership_requests`. Request mới được thông báo
+qua email `PARTNERSHIP_NOTIFICATION_EMAIL` (mặc định `paulcontent123@gmail.com`).
 
 ---
 

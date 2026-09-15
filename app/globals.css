@@ -395,6 +395,11 @@ textarea {
     overflow: visible;
   }
 
+  .site-nav.mobile-open {
+    max-height: calc(100dvh - 8px);
+    overflow-y: auto;
+  }
+
   .site-nav .logo { margin-right: 0; }
   .nav-mobile-toggle { display: inline-flex; margin-left: auto; flex-shrink: 0; }
   .nav-c,
@@ -477,6 +482,7 @@ textarea {
   .camp-grid,
   .partner-grid,
   .showcase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .partner-directory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .creator-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .news-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-wrap { grid-template-columns: 1fr; max-width: 760px; }
@@ -518,7 +524,8 @@ textarea {
   .creator-grid,
   .partner-grid,
   .showcase-grid,
-  .news-list { grid-template-columns: 1fr; }
+  .news-list,
+  .partner-directory-grid { grid-template-columns: 1fr; }
   .nl-img { height: 170px; }
   .nl-body { min-height: 0; }
   .news-results-head { align-items: flex-start; flex-direction: column; gap: 4px; }

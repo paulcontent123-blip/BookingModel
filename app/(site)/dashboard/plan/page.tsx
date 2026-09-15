@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { requireUser, revealQuota } from '@/lib/auth';
-import { config } from '@/lib/config';
 import {
   PLAN_FEATURE_LABELS,
   PLAN_HIGHLIGHTS,
@@ -225,14 +224,6 @@ export default async function PlanPage({
         </p>
       </div>
 
-      {!selfServe && (
-        <div className="brand-dashboard-alert warning">
-          <strong>Payments are currently in demo mode.</strong> Choosing Stripe or PayPal shows a
-          successful demo payment and sends the upgrade request to the VEA team for approval. To turn
-          on real Stripe Checkout later, set <code>PAYMENT_PROVIDER=stripe</code> and a real{' '}
-          <code>STRIPE_SECRET_KEY</code>. Current provider: <strong>{config.payments.provider}</strong>.
-        </div>
-      )}
     </div>
   );
 }

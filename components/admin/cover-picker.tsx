@@ -43,10 +43,14 @@ export function CoverPicker({
   currentUrl,
   onFileChange,
   hint,
+  label = 'cover image',
+  previewAlt = 'Cover preview',
 }: {
   currentUrl: string | null;
   onFileChange: (file: File | null) => void;
   hint: string;
+  label?: string;
+  previewAlt?: string;
 }) {
   const [preview, setPreview] = useState<string | null>(currentUrl);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -56,7 +60,7 @@ export function CoverPicker({
     <>
       <div className="fg-row">
         <div className="fg">
-          <label htmlFor="cover_file">Upload cover from device</label>
+          <label htmlFor="cover_file">Upload {label} from device</label>
           <input
             id="cover_file"
             name="cover_file"
@@ -72,7 +76,7 @@ export function CoverPicker({
           <span style={{ fontSize: 11, color: 'var(--muted2)' }}>{hint}</span>
         </div>
         <div className="fg">
-          <label htmlFor="cover_url">…or paste an image URL</label>
+          <label htmlFor="cover_url">…or paste a {label} URL</label>
           <input
             id="cover_url"
             name="cover_url"
@@ -105,7 +109,7 @@ export function CoverPicker({
         >
           <img
             src={preview}
-            alt="Cover preview"
+            alt={previewAlt}
             style={{ width: 132, height: 74, borderRadius: 6, objectFit: 'cover' }}
           />
           <span style={{ fontSize: 12, color: 'var(--muted2)' }}>

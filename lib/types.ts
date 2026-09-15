@@ -255,6 +255,24 @@ export interface PartnershipRequest {
   created_at: string;
 }
 
+export type PartnerStatus = 'draft' | 'published';
+
+/** A partner profile shown in the public Partnership directory. */
+export interface Partner {
+  id: string;
+  name: string;
+  icon: string | null;
+  cta_label: string | null;
+  logo_url: string | null;
+  website_url: string | null;
+  category: string | null;
+  description: string | null;
+  sort_order: number;
+  status: PartnerStatus;
+  created_at: string;
+  updated_at: string;
+}
+
 export type BookingRequestStatus =
   | 'new'
   | 'contacted'
@@ -461,6 +479,7 @@ export interface Tables {
   settings: Setting;
   news_posts: NewsPost;
   showcase_cases: ShowcaseCase;
+  partners: Partner;
 }
 
 export type TableName = keyof Tables;

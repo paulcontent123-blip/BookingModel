@@ -40,6 +40,7 @@ const EMPTY: Store = {
   settings: [],
   news_posts: [],
   showcase_cases: [],
+  partners: [],
 };
 
 interface Cache {

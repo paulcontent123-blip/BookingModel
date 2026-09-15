@@ -4,11 +4,15 @@ import { formatDateTime } from '@/lib/utils';
 import { countryFlag } from '@/lib/geo';
 import { StatusBadge } from '@/components/status-badge';
 import { ActionButton, ActionSelect } from '@/components/admin/action-button';
-import { updatePartnershipStatusAction } from '@/lib/services/admin-actions';
+import {
+  deletePartnershipRequestAction,
+  updatePartnershipStatusAction,
+} from '@/lib/services/admin-actions';
 import type { PartnershipRequest, PartnershipStatus } from '@/lib/types';
 
 export const metadata = { title: 'Partnership Requests' };
 
+const PAGE_SIZE = 10;
 const STATUSES: PartnershipStatus[] = ['new', 'in_discussion', 'converted', 'closed'];
 
 const STATUS_LABELS: Record<PartnershipStatus, string> = {
@@ -36,47 +40,72 @@ function replyHref(request: PartnershipRequest): string {
 export default async function PartnershipPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }) {
-  const { status: rawStatus } = await searchParams;
+  const { status: rawStatus, page: rawPage } = await searchParams;
   const status = isPartnershipStatus(rawStatus) ? rawStatus : undefined;
-  const all = await db.list('partnership_requests', {
+  const [allCount, ...statusCounts] = await Promise.all([
+    db.count('partnership_requests'),
+    ...STATUSES.map((item) => db.count('partnership_requests', { status: item })),
+  ]);
+  const countByStatus = Object.fromEntries(
+    STATUSES.map((item, index) => [item, statusCounts[index]]),
+  ) as Record<PartnershipStatus, number>;
+  const matchingCount = status ? countByStatus[status] : allCount;
+  const totalPages = Math.max(1, Math.ceil(matchingCount / PAGE_SIZE));
+  const requestedPage = Number.parseInt(rawPage ?? '1', 10);
+  const currentPage = Number.isFinite(requestedPage)
+    ? Math.min(Math.max(requestedPage, 1), totalPages)
+    : 1;
+  const firstIndex = (currentPage - 1) * PAGE_SIZE;
+  const requests = await db.list('partnership_requests', {
+    where: status ? { status } : undefined,
     orderBy: 'created_at',
     ascending: false,
+    limit: PAGE_SIZE,
+    offset: firstIndex,
   });
-  const requests = status ? all.filter((request) => request.status === status) : all;
+  const firstShown = matchingCount === 0 ? 0 : firstIndex + 1;
+  const lastShown = Math.min(firstIndex + requests.length, matchingCount);
+  const pageHref = (page: number) => {
+    const params = new URLSearchParams();
+    if (status) params.set('status', status);
+    params.set('page', String(page));
+    return `/admin/partnership?${params.toString()}`;
+  };
 
   return (
     <>
       <h1 className="pg-title">Partnership Requests</h1>
       <p className="pg-sub">
         Leads submitted from the public Partnership &amp; Collaboration page. Review the brief,
-        reply by email, then move qualified requests into the campaign workflow.
+        reply by email, then move qualified requests into the campaign workflow. Showing{' '}
+        {firstShown}–{lastShown} of {matchingCount} matching requests.
       </p>
 
       <div className="stat-grid">
         <div className="stat-card">
-          <div className="sc-n">{all.filter((request) => request.status === 'new').length}</div>
+          <div className="sc-n">{countByStatus.new}</div>
           <div className="sc-l">New requests</div>
           <div className="sc-d amber">Reply within 1 business day</div>
         </div>
         <div className="stat-card">
-          <div className="sc-n">{all.filter((request) => request.status === 'in_discussion').length}</div>
+          <div className="sc-n">{countByStatus.in_discussion}</div>
           <div className="sc-l">In discussion</div>
         </div>
         <div className="stat-card">
-          <div className="sc-n">{all.filter((request) => request.status === 'converted').length}</div>
+          <div className="sc-n">{countByStatus.converted}</div>
           <div className="sc-l">Converted to campaign</div>
         </div>
         <div className="stat-card">
-          <div className="sc-n">{all.length}</div>
+          <div className="sc-n">{allCount}</div>
           <div className="sc-l">Total requests</div>
         </div>
       </div>
 
       <div className="pill-bar">
         <Link href="/admin/partnership" className={`pill${!status ? ' on' : ''}`}>
-          All ({all.length})
+          All ({allCount})
         </Link>
         {STATUSES.map((item) => (
           <Link
@@ -84,7 +113,7 @@ export default async function PartnershipPage({
             href={`/admin/partnership?status=${item}`}
             className={`pill${status === item ? ' on' : ''}`}
           >
-            {STATUS_LABELS[item]} ({all.filter((request) => request.status === item).length})
+            {STATUS_LABELS[item]} ({countByStatus[item]})
           </Link>
         ))}
       </div>
@@ -96,6 +125,39 @@ export default async function PartnershipPage({
         </div>
       ) : (
         requests.map((request) => <PartnershipCard key={request.id} request={request} />)
+      )}
+
+      {matchingCount > PAGE_SIZE && (
+        <nav className="pagination" aria-label="Partnership request pages">
+          <Link
+            href={pageHref(currentPage - 1)}
+            className={currentPage === 1 ? 'disabled' : undefined}
+            aria-label="Previous page"
+            aria-disabled={currentPage === 1}
+          >
+            ←
+          </Link>
+
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+            <Link
+              key={page}
+              href={pageHref(page)}
+              className={page === currentPage ? 'on' : undefined}
+              aria-current={page === currentPage ? 'page' : undefined}
+            >
+              {page}
+            </Link>
+          ))}
+
+          <Link
+            href={pageHref(currentPage + 1)}
+            className={currentPage === totalPages ? 'disabled' : undefined}
+            aria-label="Next page"
+            aria-disabled={currentPage === totalPages}
+          >
+            →
+          </Link>
+        </nav>
       )}
     </>
   );
@@ -173,6 +235,16 @@ function PartnershipCard({ request }: { request: PartnershipRequest }) {
             Open Campaign Builder →
           </Link>
         )}
+        <ActionButton
+          label="Delete"
+          pendingLabel="Deleting…"
+          className="btn btn-danger btn-sm"
+          confirm={`Delete the partnership request from ${request.company ?? request.email}? This cannot be undone.`}
+          action={async () => {
+            'use server';
+            return deletePartnershipRequestAction(request.id);
+          }}
+        />
       </div>
     </article>
   );

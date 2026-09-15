@@ -103,6 +103,7 @@ export const config = {
     replyTo: env('EMAIL_REPLY_TO', 'hello@bookingmodel.com'),
     adminEmail: env('ADMIN_EMAIL', 'admin@bookingmodel.com'),
     salesEmail: env('SALES_EMAIL', 'sales@bookingmodel.com'),
+    partnershipEmail: env('PARTNERSHIP_NOTIFICATION_EMAIL', 'paulcontent123@gmail.com'),
     get enabled(): boolean {
       return isConfigured(env('RESEND_API_KEY'));
     },

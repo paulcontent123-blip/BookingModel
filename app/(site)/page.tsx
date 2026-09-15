@@ -5,9 +5,9 @@ import { listCreatorsFromDatabase } from '@/lib/creator-data';
 import { config } from '@/lib/config';
 import { CreatorStripCard } from '@/components/creator-card';
 import { FaqList } from '@/components/faq-list';
+import { NewsCard } from '@/components/news-card';
 import brandsData from '@/data/brands.json';
 import { listNewsForIndex } from '@/lib/services/content';
-import { formatPublishDate, newsCardBg } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: {
@@ -70,12 +70,52 @@ const FAQ = [
   },
 ];
 
-export default async function HomePage() {
-  const [creators, campaigns, news] = await Promise.all([
+const HOME_PAGE_SIZE = 3;
+
+interface HomeSearchParams {
+  campaignPage?: string;
+  newsPage?: string;
+}
+
+function clampPage(value: string | undefined, totalItems: number): number {
+  const totalPages = Math.max(1, Math.ceil(totalItems / HOME_PAGE_SIZE));
+  const requested = Number.parseInt(value ?? '1', 10);
+  return Number.isFinite(requested)
+    ? Math.min(Math.max(requested, 1), totalPages)
+    : 1;
+}
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<HomeSearchParams>;
+}) {
+  const sp = await searchParams;
+  const [creators, allCampaigns, news] = await Promise.all([
     listCreatorsFromDatabase({ activeOnly: true, limit: 40 }),
-    db.list('campaigns', { where: { status: 'active' }, limit: 3 }),
+    db.list('campaigns', { where: { status: 'active' }, orderBy: 'created_at' }),
     listNewsForIndex(),
   ]);
+
+  const campaignTotalPages = Math.max(1, Math.ceil(allCampaigns.length / HOME_PAGE_SIZE));
+  const newsTotalPages = Math.max(1, Math.ceil(news.length / HOME_PAGE_SIZE));
+  const campaignPage = clampPage(sp.campaignPage, allCampaigns.length);
+  const newsPage = clampPage(sp.newsPage, news.length);
+  const campaigns = allCampaigns.slice(
+    (campaignPage - 1) * HOME_PAGE_SIZE,
+    campaignPage * HOME_PAGE_SIZE,
+  );
+  const visibleNews = news.slice((newsPage - 1) * HOME_PAGE_SIZE, newsPage * HOME_PAGE_SIZE);
+
+  const pageHref = (section: 'campaign' | 'news', page: number) => {
+    const params = new URLSearchParams();
+    if (section === 'campaign' && page > 1) params.set('campaignPage', String(page));
+    if (section === 'news' && page > 1) params.set('newsPage', String(page));
+    if (section === 'campaign' && newsPage > 1) params.set('newsPage', String(newsPage));
+    if (section === 'news' && campaignPage > 1) params.set('campaignPage', String(campaignPage));
+    const query = params.toString();
+    return `/${query ? `?${query}` : ''}#${section === 'campaign' ? 'open-campaigns' : 'news-showcase'}`;
+  };
 
   const strip1 = creators.slice(0, 12);
   const strip2 = creators.slice(12, 24);
@@ -192,7 +232,7 @@ export default async function HomePage() {
 
       <div className="sec-divider" />
 
-      <section className="sec">
+      <section className="sec home-section-anchor" id="open-campaigns">
         <div className="row" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
             <div className="sec-eye">Open Campaigns</div>
@@ -230,11 +270,42 @@ export default async function HomePage() {
             </Link>
           ))}
         </div>
+
+        {campaignTotalPages > 1 && (
+          <nav className="pagination" aria-label="Open campaign pages">
+            <Link
+              href={pageHref('campaign', campaignPage - 1)}
+              className={campaignPage === 1 ? 'disabled' : undefined}
+              aria-label="Previous campaign page"
+              aria-disabled={campaignPage === 1}
+            >
+              ←
+            </Link>
+            {Array.from({ length: campaignTotalPages }, (_, index) => index + 1).map((page) => (
+              <Link
+                key={page}
+                href={pageHref('campaign', page)}
+                className={page === campaignPage ? 'on' : undefined}
+                aria-current={page === campaignPage ? 'page' : undefined}
+              >
+                {page}
+              </Link>
+            ))}
+            <Link
+              href={pageHref('campaign', campaignPage + 1)}
+              className={campaignPage === campaignTotalPages ? 'disabled' : undefined}
+              aria-label="Next campaign page"
+              aria-disabled={campaignPage === campaignTotalPages}
+            >
+              →
+            </Link>
+          </nav>
+        )}
       </section>
 
       <div className="sec-divider" />
 
-      <section className="sec">
+      <section className="sec home-section-anchor" id="news-showcase">
         <div className="row" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
             <div className="sec-eye">News &amp; Showcase</div>
@@ -243,47 +314,42 @@ export default async function HomePage() {
           <Link href="/news" className="btn-ghost">All news &amp; case studies →</Link>
         </div>
 
-        <div className="news-grid">
-          {news[0] && (
-            <Link href={`/news/${news[0].slug}`} className="news-main">
-              <div className="nm-img" style={{ background: newsCardBg(news[0]) }}>
-                {news[0].cover_url ? (
-                  <img className="news-cover" src={news[0].cover_url} alt={news[0].title} />
-                ) : (
-                  (news[0].emoji ?? '📰')
-                )}
-              </div>
-              <div className="nm-body">
-                <div className="nm-cat">{news[0].category}</div>
-                <div className="nm-title">{news[0].title}</div>
-                <div className="nm-date">
-                  {formatPublishDate(news[0].published_at ?? news[0].created_at)}
-                </div>
-                <span className="nm-read">Read case study →</span>
-              </div>
+        <div className="news-list news-home-list">
+          {visibleNews.map((post) => (
+            <NewsCard key={post.id} post={post} />
+          ))}
+        </div>
+
+        {newsTotalPages > 1 && (
+          <nav className="pagination" aria-label="News and showcase pages">
+            <Link
+              href={pageHref('news', newsPage - 1)}
+              className={newsPage === 1 ? 'disabled' : undefined}
+              aria-label="Previous news page"
+              aria-disabled={newsPage === 1}
+            >
+              ←
             </Link>
-          )}
-          <div className="news-side">
-            {news.slice(1, 5).map((n) => (
-              <Link href={`/news/${n.slug}`} className="ns-card" key={n.id}>
-                <div className="ns-img" style={{ background: newsCardBg(n) }}>
-                  {n.cover_url ? (
-                    <img className="news-cover" src={n.cover_url} alt={n.title} loading="lazy" />
-                  ) : (
-                    (n.emoji ?? '📰')
-                  )}
-                </div>
-                <div className="ns-body">
-                  <div className="ns-cat">{n.category}</div>
-                  <div className="ns-title">{n.title}</div>
-                  <div className="ns-date">
-                    {formatPublishDate(n.published_at ?? n.created_at)}
-                  </div>
-                </div>
+            {Array.from({ length: newsTotalPages }, (_, index) => index + 1).map((page) => (
+              <Link
+                key={page}
+                href={pageHref('news', page)}
+                className={page === newsPage ? 'on' : undefined}
+                aria-current={page === newsPage ? 'page' : undefined}
+              >
+                {page}
               </Link>
             ))}
-          </div>
-        </div>
+            <Link
+              href={pageHref('news', newsPage + 1)}
+              className={newsPage === newsTotalPages ? 'disabled' : undefined}
+              aria-label="Next news page"
+              aria-disabled={newsPage === newsTotalPages}
+            >
+              →
+            </Link>
+          </nav>
+        )}
       </section>
 
       <div className="sec-divider" />

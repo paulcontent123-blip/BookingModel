@@ -540,6 +540,26 @@ export async function updateBookingRequestAction(
   return { ok: true, message: `${updated.request_ref} → ${status}.` };
 }
 
+export async function deleteBookingRequestAction(id: string): Promise<ActionResult> {
+  await requireAdmin();
+
+  try {
+    const request = await db.get('booking_requests', id);
+    if (!request) return { ok: false, message: 'Booking request not found.' };
+
+    await db.remove('booking_requests', id);
+    revalidatePath('/admin/booking-requests');
+    revalidatePath('/admin', 'layout');
+    return { ok: true, message: `${request.request_ref} was deleted.` };
+  } catch (error) {
+    console.error('[admin/delete-booking-request]', error);
+    return {
+      ok: false,
+      message: 'Booking request could not be deleted. Please try again.',
+    };
+  }
+}
+
 export async function updatePartnershipStatusAction(
   id: string,
   status: PartnershipStatus,
@@ -554,6 +574,26 @@ export async function updatePartnershipStatusAction(
 
   revalidatePath('/admin/partnership');
   return { ok: true, message: `Marked ${status.replace(/_/g, ' ')}.` };
+}
+
+export async function deletePartnershipRequestAction(id: string): Promise<ActionResult> {
+  await requireAdmin();
+
+  try {
+    const request = await db.get('partnership_requests', id);
+    if (!request) return { ok: false, message: 'Partnership request not found.' };
+
+    await db.remove('partnership_requests', id);
+    revalidatePath('/admin/partnership');
+    revalidatePath('/admin', 'layout');
+    return { ok: true, message: 'Partnership request deleted.' };
+  } catch (error) {
+    console.error('[admin/delete-partnership-request]', error);
+    return {
+      ok: false,
+      message: 'Partnership request could not be deleted. Please try again.',
+    };
+  }
 }
 
 // ── Campaigns ──────────────────────────────────────────────────────────────

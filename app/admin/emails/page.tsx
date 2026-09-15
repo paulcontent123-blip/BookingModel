@@ -6,6 +6,8 @@ import { EmailPreview } from '@/components/admin/email-preview';
 
 export const metadata = { title: 'Email Log' };
 
+const EMAILS_PER_PAGE = 20;
+
 /**
  * Every notification the platform produced — including the ones that were only
  * logged because RESEND_API_KEY is not set. This is how you verify requirements
@@ -14,12 +16,39 @@ export const metadata = { title: 'Email Log' };
 export default async function EmailLogPage({
   searchParams,
 }: {
-  searchParams: Promise<{ template?: string }>;
+  searchParams: Promise<{ template?: string; page?: string }>;
 }) {
-  const { template } = await searchParams;
-  const all = await db.list('email_log', { orderBy: 'created_at', ascending: false, limit: 500 });
-  const emails = template ? all.filter((e) => e.template === template) : all;
-  const templates = [...new Set(all.map((e) => e.template).filter(Boolean))] as string[];
+  const { template, page: pageParam } = await searchParams;
+  const emailWhere = template ? { template } : undefined;
+  const [totalMessages, delivered, logged, failed, templateRows, totalFiltered] = await Promise.all([
+    db.count('email_log'),
+    db.count('email_log', { status: 'sent' }),
+    db.count('email_log', { status: 'logged' }),
+    db.count('email_log', { status: 'failed' }),
+    db.list('email_log', { limit: 1000 }),
+    template ? db.count('email_log', { template }) : db.count('email_log'),
+  ]);
+  const templates = [...new Set(templateRows.map((e) => e.template).filter(Boolean))] as string[];
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / EMAILS_PER_PAGE));
+  const requestedPage = Number.parseInt(pageParam ?? '1', 10);
+  const page = Number.isFinite(requestedPage)
+    ? Math.min(Math.max(requestedPage, 1), totalPages)
+    : 1;
+  const emails = await db.list('email_log', {
+    where: emailWhere,
+    orderBy: 'created_at',
+    ascending: false,
+    limit: EMAILS_PER_PAGE,
+    offset: (page - 1) * EMAILS_PER_PAGE,
+  });
+
+  function emailHref(nextTemplate: string | undefined, nextPage: number): string {
+    const params = new URLSearchParams();
+    if (nextTemplate) params.set('template', nextTemplate);
+    if (nextPage > 1) params.set('page', String(nextPage));
+    const query = params.toString();
+    return `/admin/emails${query ? `?${query}` : ''}`;
+  }
 
   return (
     <>
@@ -37,25 +66,25 @@ export default async function EmailLogPage({
       </p>
 
       <div className="stat-grid">
-        <div className="stat-card"><div className="sc-n">{all.length}</div><div className="sc-l">Messages</div></div>
+        <div className="stat-card"><div className="sc-n">{totalMessages}</div><div className="sc-l">Messages</div></div>
         <div className="stat-card">
-          <div className="sc-n">{all.filter((e) => e.status === 'sent').length}</div>
+          <div className="sc-n">{delivered}</div>
           <div className="sc-l">Delivered</div>
         </div>
         <div className="stat-card">
-          <div className="sc-n">{all.filter((e) => e.status === 'logged').length}</div>
+          <div className="sc-n">{logged}</div>
           <div className="sc-l">Logged only</div>
         </div>
         <div className="stat-card">
-          <div className="sc-n">{all.filter((e) => e.status === 'failed').length}</div>
+          <div className="sc-n">{failed}</div>
           <div className="sc-l">Failed</div>
         </div>
       </div>
 
       <div className="pill-bar">
-        <a href="/admin/emails" className={`pill${!template ? ' on' : ''}`}>All</a>
+        <a href={emailHref(undefined, 1)} className={`pill${!template ? ' on' : ''}`}>All</a>
         {templates.map((t) => (
-          <a key={t} href={`/admin/emails?template=${t}`} className={`pill${template === t ? ' on' : ''}`}>
+          <a key={t} href={emailHref(t, 1)} className={`pill${template === t ? ' on' : ''}`}>
             {t.replace(/_/g, ' ')}
           </a>
         ))}
@@ -92,6 +121,34 @@ export default async function EmailLogPage({
             </tbody>
           </table>
         </div>
+      )}
+
+      {totalPages > 1 && (
+        <nav className="pagination" aria-label="Email log pages">
+          <a
+            className={page <= 1 ? 'disabled' : ''}
+            href={emailHref(template, page - 1)}
+            aria-label="Previous email page"
+            aria-disabled={page <= 1}
+          >
+            Prev
+          </a>
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+            pageNumber === page ? (
+              <span className="on" key={pageNumber} aria-current="page">{pageNumber}</span>
+            ) : (
+              <a key={pageNumber} href={emailHref(template, pageNumber)}>{pageNumber}</a>
+            )
+          ))}
+          <a
+            className={page >= totalPages ? 'disabled' : ''}
+            href={emailHref(template, page + 1)}
+            aria-label="Next email page"
+            aria-disabled={page >= totalPages}
+          >
+            Next
+          </a>
+        </nav>
       )}
     </>
   );

@@ -12,7 +12,8 @@
 html{scroll-behavior:smooth}
 body{font-family:var(--arial);background:var(--white);color:var(--ink);font-size:14px;line-height:1.6}
 /* NAV */
-.site-nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 48px}
+.site-nav{position:fixed;top:0;left:0;right:0;width:100%;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 48px}
+.site-nav-spacer{height:60px}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer;margin-right:40px;flex-shrink:0}
 .brand-logo-mark{display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
 .brand-logo-image{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.65)}
@@ -101,6 +102,7 @@ body{font-family:var(--arial);background:var(--white);color:var(--ink);font-size
 .sec-p{font-size:15px;color:var(--muted);line-height:1.8;max-width:560px;margin-bottom:28px}
 .sec-divider{height:1px;background:var(--border);max-width:1200px;margin:0 48px}
 .sec-white{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.home-section-anchor{scroll-margin-top:80px}
 /* SOLUTION CARDS */
 .sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:8px}
 .sol-item{background:var(--white);padding:26px 22px;cursor:pointer;transition:all .2s}
@@ -195,6 +197,22 @@ body{font-family:var(--arial);background:var(--white);color:var(--ink);font-size
 .pcard-title{font-size:14px;font-weight:700;font-family:var(--mont);color:var(--ink);margin-bottom:6px}
 .pcard-desc{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:12px}
 .pcard-btn{display:inline-block;font-size:12.5px;font-weight:700;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--mont);padding:0}
+/* PARTNER DIRECTORY */
+.partner-directory{margin-top:48px;padding-top:36px;border-top:1px solid var(--border)}
+.partner-directory-title{font-family:var(--serif);font-size:32px;font-weight:400;line-height:1.15;color:var(--ink);margin:8px 0}
+.partner-directory-title strong{font-family:var(--mont);font-size:.78em;font-weight:800;letter-spacing:-.7px}
+.partner-directory-intro{max-width:620px;color:var(--muted);font-size:13.5px;line-height:1.7;margin:0 0 20px}
+.partner-directory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.partner-brand-card{display:flex;gap:14px;align-items:flex-start;min-width:0;padding:18px;background:var(--white);border:1px solid var(--border);border-radius:8px;transition:border-color .2s,box-shadow .2s}
+.partner-brand-card:hover{border-color:var(--blue);box-shadow:var(--sh)}
+.partner-brand-logo{width:58px;height:58px;display:flex;align-items:center;justify-content:center;flex:0 0 58px;overflow:hidden;border:1px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--blue);font-family:var(--mont);font-size:22px;font-weight:800}
+.partner-brand-logo img{width:100%;height:100%;object-fit:contain;padding:7px}
+.partner-brand-copy{min-width:0}
+.partner-brand-category{font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--blue);font-family:var(--mont);margin-bottom:4px}
+.partner-brand-copy h3{font-family:var(--mont);font-size:14px;font-weight:700;color:var(--ink);line-height:1.35;margin:0 0 5px;overflow-wrap:anywhere}
+.partner-brand-copy p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 9px;overflow-wrap:anywhere}
+.partner-brand-copy a{font-size:11.5px;font-weight:700;color:var(--blue);font-family:var(--mont)}
+.partner-brand-copy a:hover{text-decoration:underline}
 /* SHOWCASE */
 .showcase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .sc-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s}

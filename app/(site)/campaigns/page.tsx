@@ -7,15 +7,49 @@ export const metadata: Metadata = {
   description: 'Browse active campaigns from verified brands and apply as a creator.',
 };
 
+interface SearchParams {
+  q?: string;
+  cat?: string;
+  platform?: string;
+  content?: string;
+}
+
 export default async function CampaignsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string }>;
+  searchParams: Promise<SearchParams>;
 }) {
-  const { cat } = await searchParams;
+  const sp = await searchParams;
   const all = await db.list('campaigns', { where: { status: 'active' }, orderBy: 'created_at' });
-  const categories = [...new Set(all.map((c) => c.category).filter(Boolean))] as string[];
-  const campaigns = cat ? all.filter((c) => c.category === cat) : all;
+  const categories = [...new Set(all.map((c) => c.category).filter(Boolean))]
+    .map(String)
+    .sort((a, b) => a.localeCompare(b));
+  const platforms = [...new Set(all.map((c) => c.platform).filter(Boolean))]
+    .map(String)
+    .sort((a, b) => a.localeCompare(b));
+  const contentTypes = [...new Set(all.map((c) => c.content_type).filter(Boolean))]
+    .map(String)
+    .sort((a, b) => a.localeCompare(b));
+  const q = (sp.q ?? '').trim().toLowerCase();
+  const campaigns = all.filter((campaign) => {
+    if (sp.cat && campaign.category !== sp.cat) return false;
+    if (sp.platform && campaign.platform !== sp.platform) return false;
+    if (sp.content && campaign.content_type !== sp.content) return false;
+    if (!q) return true;
+
+    return [
+      campaign.brand_name,
+      campaign.title,
+      campaign.category,
+      campaign.platform,
+      campaign.content_type,
+      campaign.rate_label,
+      campaign.brief_text,
+    ]
+      .filter(Boolean)
+      .some((field) => String(field).toLowerCase().includes(q));
+  });
+  const hasFilters = Boolean(sp.q || sp.cat || sp.platform || sp.content);
 
   return (
     <section className="sec">
@@ -30,18 +64,34 @@ export default async function CampaignsPage({
         <Link href="/apply" className="btn-hero">Apply as a Creator →</Link>
       </div>
 
-      <div className="mkt-controls">
-        <Link className={`filter-sel${!cat ? ' on' : ''}`} href="/campaigns">All categories</Link>
-        {categories.map((c) => (
-          <Link
-            key={c}
-            className="filter-sel"
-            href={`/campaigns?cat=${encodeURIComponent(c)}`}
-            style={cat === c ? { borderColor: 'var(--ink)', color: 'var(--ink)', fontWeight: 700 } : undefined}
-          >
-            {c}
-          </Link>
-        ))}
+      <form className="mkt-controls" method="get" action="/campaigns">
+        <input
+          className="search-inp"
+          type="search"
+          name="q"
+          placeholder="Search brand, campaign name or brief…"
+          defaultValue={sp.q ?? ''}
+        />
+        <select className="filter-sel" name="cat" defaultValue={sp.cat ?? ''}>
+          <option value="">All categories</option>
+          {categories.map((category) => <option key={category} value={category}>{category}</option>)}
+        </select>
+        <select className="filter-sel" name="platform" defaultValue={sp.platform ?? ''}>
+          <option value="">All platforms</option>
+          {platforms.map((platform) => <option key={platform} value={platform}>{platform}</option>)}
+        </select>
+        <select className="filter-sel" name="content" defaultValue={sp.content ?? ''}>
+          <option value="">All content types</option>
+          {contentTypes.map((contentType) => <option key={contentType} value={contentType}>{contentType}</option>)}
+        </select>
+        <button className="btn-search" type="submit">Search</button>
+        {hasFilters && <Link className="btn-ghost" href="/campaigns">Reset</Link>}
+      </form>
+
+      <div className="row mb-16" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+        <span style={{ fontSize: 13, color: 'var(--muted)' }}>
+          Showing <strong>{campaigns.length}</strong> of <strong>{all.length}</strong> active campaigns
+        </span>
       </div>
 
       {campaigns.length === 0 ? (
