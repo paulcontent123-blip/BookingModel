@@ -24,8 +24,14 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
           password: form.get('password'),
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Sign in failed.');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (data.verificationRequired && data.email) {
+          router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
+          return;
+        }
+        throw new Error(data.error ?? 'Sign in failed.');
+      }
 
       router.push(next ?? '/dashboard');
       router.refresh();
@@ -82,11 +88,16 @@ export function SignupForm() {
           password: form.get('password'),
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (data.requiresVerification && data.email && (res.ok || res.status === 409)) {
+        router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
+        return;
+      }
       if (!res.ok) throw new Error(data.error ?? 'Could not create the account.');
 
       router.push('/dashboard');
       router.refresh();
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not create the account.');
       setSubmitting(false);
@@ -97,7 +108,6 @@ export function SignupForm() {
     <form className="form-box" onSubmit={onSubmit}>
       <div className="form-title">Create a brand account</div>
       {error && <div className="alert alert-error">{error}</div>}
-
       <div className="fg2">
         <div className="fg">
           <label htmlFor="full_name">Your name *</label>

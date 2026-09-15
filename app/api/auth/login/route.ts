@@ -26,6 +26,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Incorrect email or password.' }, { status: 401 });
   }
 
+  if (!user.is_verified) {
+    return NextResponse.json(
+      {
+        error: 'Please verify your email before signing in.',
+        verificationRequired: true,
+        email: user.email,
+      },
+      { status: 403 },
+    );
+  }
+
   await createSession(user);
   return NextResponse.json({ ok: true, user: toSessionUser(user) });
 }

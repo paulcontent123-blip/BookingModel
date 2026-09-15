@@ -4,6 +4,7 @@
 
 - [ ] Đã tạo Supabase và chạy `npm run db:push` ([hướng dẫn](./DATABASE.md))
 - [ ] Đã có `RESEND_API_KEY` và verify domain ([hướng dẫn](./API_KEYS.md))
+- [ ] Đã áp dụng migration email verification để signup brand có OTP
 - [ ] Đã có `CRON_SECRET` để tự động xử lý booking creator không phản hồi sau 48 giờ
 - [ ] Đã quyết định cổng thanh toán (hoặc tạm giữ `mock` để demo)
 - [ ] `npm run build` chạy sạch ở máy local
@@ -87,6 +88,8 @@ yêu cầu quyền admin.
 - [ ] `.env.local` nằm trong `.gitignore` (đã có sẵn)
 
 ### Chức năng
+- [ ] Đăng ký brand gửi được OTP, nhập đúng mã mới tạo session và vào dashboard
+- [ ] Đăng nhập tài khoản chưa xác minh chuyển tới `/verify-email`
 - [ ] Vào site từ IP Mỹ (hoặc VPN Mỹ) → booking + thanh toán chạy được
 - [ ] Vào site từ IP Việt Nam → banner hiện, modal liên hệ hoạt động, lead vào `/admin/booking-requests`
 - [ ] Admin → Settings → GEO test switcher: bật để kiểm thử `US`/`VN`, sau đó tắt trước khi go-live; khi tắt, khu vực tự nhận diện từ IP

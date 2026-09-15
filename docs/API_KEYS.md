@@ -46,8 +46,13 @@ Xem hướng dẫn chi tiết tại [`SUPABASE_SETUP.md`](./SUPABASE_SETUP.md).
 
 ## 3. Resend (gửi email)
 
-Email là phần cốt lõi của yêu cầu #2 (báo lead), #5 (báo creator khi được book)
-và luồng creator **Đồng ý / Từ chối** sau khi brand thanh toán.
+Email là phần cốt lõi của yêu cầu #2 (báo lead), #5 (báo creator khi được book),
+luồng xác minh OTP khi brand đăng ký tài khoản, và luồng creator **Đồng ý / Từ chối**
+sau khi brand thanh toán.
+
+Khi brand đăng ký, BookingModel gửi mã OTP 6 số qua Resend. Mã có hiệu lực 10 phút
+và không được lưu dạng plaintext; nếu chưa có `RESEND_API_KEY`, email sẽ được ghi
+vào console và **Admin → Email Log** để kiểm tra local.
 
 1. Đăng ký tại <https://resend.com> (free tier: 3.000 email/tháng, 100/ngày)
 2. **API Keys** → **Create API Key** → quyền `Sending access` → copy `re_...`

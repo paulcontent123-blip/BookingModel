@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createSession, registerUser, toSessionUser } from '@/lib/auth';
+import { registerUser } from '@/lib/auth';
+import { db } from '@/lib/db';
 import { resolveGeo } from '@/lib/guard';
-import { brandWelcomeEmail, sendEmail } from '@/lib/email';
+import { issueVerificationCode, normalizeVerificationEmail } from '@/lib/services/email-verification';
 
 export const runtime = 'nodejs';
 
@@ -24,11 +25,47 @@ export async function POST(req: Request) {
   }
 
   const geo = await resolveGeo();
-  const { user, error } = await registerUser({ ...parsed.data, country: geo.country });
+  const email = normalizeVerificationEmail(parsed.data.email);
+  const existing = await db.findOne('users', { email });
+  if (existing) {
+    if (!existing.is_verified) {
+      return NextResponse.json(
+        {
+          error: 'This email is awaiting verification. Enter the code we sent or request a new one.',
+          requiresVerification: true,
+          email: existing.email,
+        },
+        { status: 409 },
+      );
+    }
+    return NextResponse.json(
+      { error: 'An account with this email already exists.' },
+      { status: 409 },
+    );
+  }
+
+  const { user, error } = await registerUser({ ...parsed.data, email, country: geo.country });
   if (!user) return NextResponse.json({ error }, { status: 409 });
 
-  await createSession(user);
-  await sendEmail(brandWelcomeEmail(user.email, user.full_name), { type: 'user', id: user.id });
+  const verification = await issueVerificationCode(user);
+  if (!verification.ok) {
+    return NextResponse.json(
+      {
+        error: verification.error ?? 'We could not send the verification email. Please try again.',
+        requiresVerification: true,
+        email: user.email,
+      },
+      { status: 502 },
+    );
+  }
 
-  return NextResponse.json({ ok: true, user: toSessionUser(user) }, { status: 201 });
+  return NextResponse.json(
+    {
+      ok: true,
+      requiresVerification: true,
+      email: user.email,
+      message: 'We sent a 6-digit verification code to your email.',
+    },
+    { status: 201 },
+  );
 }

@@ -418,6 +418,26 @@ export function brandWelcomeEmail(email: string, name: string | null): Message {
   };
 }
 
+export function brandVerificationEmail(
+  email: string,
+  name: string | null,
+  code: string,
+): Message {
+  return {
+    to: email,
+    template: 'brand_verification',
+    subject: 'Verify your BookingModel email',
+    html: shell({
+      preheader: `Your BookingModel verification code is ${code}.`,
+      heading: 'Verify your email',
+      body: `<p>Hi ${esc((name ?? 'there').split(' ')[0])},</p>
+      <p>Use the verification code below to finish creating your BookingModel brand account.</p>
+      <p style="margin:20px 0;text-align:center;font-size:30px;line-height:1;letter-spacing:8px;font-weight:800;color:#0057FF;">${esc(code)}</p>
+      <p>This code expires in 10 minutes. If you did not request this account, you can ignore this email.</p>`,
+    }),
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Plan upgrades
 // ---------------------------------------------------------------------------

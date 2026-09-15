@@ -208,6 +208,10 @@ export async function registerUser(input: {
     // Every newly registered Brand starts on Free; upgrading is explicit.
     plan: 'free',
     is_verified: false,
+    verification_code_hash: null,
+    verification_expires_at: null,
+    verification_sent_at: null,
+    verification_attempts: 0,
     stripe_customer_id: null,
     created_at: new Date().toISOString(),
   });

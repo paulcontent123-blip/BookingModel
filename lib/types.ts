@@ -16,6 +16,11 @@ export interface User {
   stripe_customer_id: string | null;
   plan: Plan;
   is_verified: boolean;
+  /** Hashed one-time code used during brand email verification. */
+  verification_code_hash?: string | null;
+  verification_expires_at?: string | null;
+  verification_sent_at?: string | null;
+  verification_attempts?: number;
   created_at: string;
 }
 
