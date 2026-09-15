@@ -12,13 +12,14 @@ export const metadata: Metadata = {
 };
 
 const ALL = 'All';
+const NEWS_PER_PAGE = 12;
 
 export default async function NewsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string }>;
+  searchParams: Promise<{ cat?: string; page?: string }>;
 }) {
-  const { cat } = await searchParams;
+  const { cat, page: pageParam } = await searchParams;
   const [allPosts, counts, showcase] = await Promise.all([
     listNewsForIndex(),
     newsCategoryCounts(),
@@ -30,9 +31,29 @@ export default async function NewsPage({
     activeCategory === ALL
       ? allPosts
       : allPosts.filter((post) => post.category === activeCategory);
+  const totalPages = Math.max(1, Math.ceil(posts.length / NEWS_PER_PAGE));
+  const requestedPage = Number.parseInt(pageParam ?? '1', 10);
+  const page = Number.isFinite(requestedPage)
+    ? Math.min(Math.max(requestedPage, 1), totalPages)
+    : 1;
+  const visiblePosts = posts.slice((page - 1) * NEWS_PER_PAGE, page * NEWS_PER_PAGE);
+  const rangeStart = visiblePosts.length ? (page - 1) * NEWS_PER_PAGE + 1 : 0;
+  const rangeEnd = visiblePosts.length ? rangeStart + visiblePosts.length - 1 : 0;
 
-  const chipHref = (category: string) =>
-    category === ALL ? '/news' : `/news?cat=${encodeURIComponent(category)}`;
+  const chipHref = (category: string) => {
+    const params = new URLSearchParams();
+    if (category !== ALL) params.set('cat', category);
+    const query = params.toString();
+    return `/news${query ? `?${query}` : ''}`;
+  };
+
+  const pageHref = (nextPage: number) => {
+    const params = new URLSearchParams();
+    if (activeCategory !== ALL) params.set('cat', activeCategory);
+    if (nextPage > 1) params.set('page', String(nextPage));
+    const query = params.toString();
+    return `/news${query ? `?${query}` : ''}`;
+  };
 
   return (
     <>
@@ -71,14 +92,45 @@ export default async function NewsPage({
         ) : (
           <div className="news-results">
             <div className="news-results-head">
-              <span>{posts.length} {posts.length === 1 ? 'article' : 'articles'}</span>
+              <span>
+                Showing {rangeStart}{visiblePosts.length > 1 ? `–${rangeEnd}` : ''} of {posts.length}{' '}
+                {posts.length === 1 ? 'article' : 'articles'}
+              </span>
               {activeCategory !== ALL && <span>Filtered by {activeCategory}</span>}
             </div>
             <div className="news-list">
-              {posts.map((post) => (
+              {visiblePosts.map((post) => (
                 <NewsCard key={post.id} post={post} />
               ))}
             </div>
+
+            {totalPages > 1 && (
+              <nav className="pagination" aria-label="News article pages">
+                <a
+                  className={page <= 1 ? 'disabled' : ''}
+                  href={pageHref(page - 1)}
+                  aria-label="Previous news page"
+                  aria-disabled={page <= 1}
+                >
+                  Prev
+                </a>
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                  pageNumber === page ? (
+                    <span className="on" key={pageNumber} aria-current="page">{pageNumber}</span>
+                  ) : (
+                    <a key={pageNumber} href={pageHref(pageNumber)}>{pageNumber}</a>
+                  )
+                ))}
+                <a
+                  className={page >= totalPages ? 'disabled' : ''}
+                  href={pageHref(page + 1)}
+                  aria-label="Next news page"
+                  aria-disabled={page >= totalPages}
+                >
+                  Next
+                </a>
+              </nav>
+            )}
           </div>
         )}
       </section>

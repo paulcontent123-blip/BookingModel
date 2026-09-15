@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: 'Brand Login' };
 
 const ERRORS: Record<string, string> = {
   session_expired: 'Your session expired. Please sign in again.',
-  request_campaign: 'Bạn có thể đăng nhập để thực hiện chức năng này.',
+  request_campaign: 'Please sign in to use this feature.',
 };
 
 export default async function LoginPage({

@@ -7,11 +7,14 @@ export const metadata: Metadata = {
   description: 'Browse active campaigns from verified brands and apply as a creator.',
 };
 
+const CAMPAIGNS_PER_PAGE = 12;
+
 interface SearchParams {
   q?: string;
   cat?: string;
   platform?: string;
   content?: string;
+  page?: string;
 }
 
 export default async function CampaignsPage({
@@ -31,7 +34,7 @@ export default async function CampaignsPage({
     .map(String)
     .sort((a, b) => a.localeCompare(b));
   const q = (sp.q ?? '').trim().toLowerCase();
-  const campaigns = all.filter((campaign) => {
+  const filteredCampaigns = all.filter((campaign) => {
     if (sp.cat && campaign.category !== sp.cat) return false;
     if (sp.platform && campaign.platform !== sp.platform) return false;
     if (sp.content && campaign.content_type !== sp.content) return false;
@@ -50,6 +53,28 @@ export default async function CampaignsPage({
       .some((field) => String(field).toLowerCase().includes(q));
   });
   const hasFilters = Boolean(sp.q || sp.cat || sp.platform || sp.content);
+  const totalPages = Math.max(1, Math.ceil(filteredCampaigns.length / CAMPAIGNS_PER_PAGE));
+  const requestedPage = Number.parseInt(sp.page ?? '1', 10);
+  const page = Number.isFinite(requestedPage)
+    ? Math.min(Math.max(requestedPage, 1), totalPages)
+    : 1;
+  const campaigns = filteredCampaigns.slice(
+    (page - 1) * CAMPAIGNS_PER_PAGE,
+    page * CAMPAIGNS_PER_PAGE,
+  );
+  const rangeStart = campaigns.length ? (page - 1) * CAMPAIGNS_PER_PAGE + 1 : 0;
+  const rangeEnd = campaigns.length ? rangeStart + campaigns.length - 1 : 0;
+
+  const pageHref = (nextPage: number) => {
+    const params = new URLSearchParams();
+    if (sp.q) params.set('q', sp.q);
+    if (sp.cat) params.set('cat', sp.cat);
+    if (sp.platform) params.set('platform', sp.platform);
+    if (sp.content) params.set('content', sp.content);
+    if (nextPage > 1) params.set('page', String(nextPage));
+    const query = params.toString();
+    return `/campaigns${query ? `?${query}` : ''}`;
+  };
 
   return (
     <section className="sec">
@@ -90,7 +115,8 @@ export default async function CampaignsPage({
 
       <div className="row mb-16" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
         <span style={{ fontSize: 13, color: 'var(--muted)' }}>
-          Showing <strong>{campaigns.length}</strong> of <strong>{all.length}</strong> active campaigns
+          Showing <strong>{rangeStart}{campaigns.length > 1 ? `–${rangeEnd}` : ''}</strong> of{' '}
+          <strong>{filteredCampaigns.length}</strong> matching active campaigns
         </span>
       </div>
 
@@ -145,6 +171,34 @@ export default async function CampaignsPage({
             );
           })}
         </div>
+      )}
+
+      {totalPages > 1 && (
+        <nav className="pagination" aria-label="Open campaign pages">
+          <a
+            className={page <= 1 ? 'disabled' : ''}
+            href={pageHref(page - 1)}
+            aria-label="Previous campaign page"
+            aria-disabled={page <= 1}
+          >
+            Prev
+          </a>
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+            pageNumber === page ? (
+              <span className="on" key={pageNumber} aria-current="page">{pageNumber}</span>
+            ) : (
+              <a key={pageNumber} href={pageHref(pageNumber)}>{pageNumber}</a>
+            )
+          ))}
+          <a
+            className={page >= totalPages ? 'disabled' : ''}
+            href={pageHref(page + 1)}
+            aria-label="Next campaign page"
+            aria-disabled={page >= totalPages}
+          >
+            Next
+          </a>
+        </nav>
       )}
     </section>
   );
