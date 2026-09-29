@@ -328,6 +328,25 @@ export interface ContactMessage {
   created_at: string;
 }
 
+export type PublicRequestType = 'contact' | 'partnership' | 'booking_request' | 'applicant';
+
+/**
+ * Temporary, server-only record used to confirm the email on a public request
+ * before the request is written to its final table.
+ */
+export interface RequestEmailVerification {
+  id: string;
+  request_type: PublicRequestType;
+  email: string;
+  payload: Record<string, unknown>;
+  code_hash: string;
+  expires_at: string;
+  sent_at: string;
+  attempts: number;
+  verified_at: string | null;
+  created_at: string;
+}
+
 export interface ImportBatch {
   id: string;
   filename: string | null;
@@ -476,6 +495,7 @@ export interface Tables {
   partnership_requests: PartnershipRequest;
   booking_requests: BookingRequest;
   contact_messages: ContactMessage;
+  request_email_verifications: RequestEmailVerification;
   import_batches: ImportBatch;
   email_log: EmailLog;
   saved_creators: SavedCreator;

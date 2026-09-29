@@ -11,6 +11,11 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
+// Admin pages read authenticated session state and live Supabase data. Keep
+// them server-rendered at request time so production builds do not try to
+// contact the database while prerendering the internal dashboard.
+export const dynamic = 'force-dynamic';
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await requireAdmin();
 

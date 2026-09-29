@@ -7,6 +7,8 @@ import { SiteFooter } from '@/components/site-footer';
 import { GeoProvider } from '@/components/geo-provider';
 import { GeoBar, GeoStatusPanel } from '@/components/geo-bar';
 import { RestrictedRegionModal } from '@/components/restricted-region-modal';
+import { GoogleAnalytics } from '@/components/google-analytics';
+import { config } from '@/lib/config';
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const [user, geo, geoStatusPanelVisible] = await Promise.all([
@@ -23,6 +25,9 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <SiteFooter />
       <RestrictedRegionModal />
       <GeoStatusPanel visible={geoStatusPanelVisible} />
+      {config.analytics.gaEnabled && (
+        <GoogleAnalytics measurementId={config.analytics.gaMeasurementId} />
+      )}
     </GeoProvider>
   );
 }

@@ -32,6 +32,7 @@ const EMPTY: Store = {
   partnership_requests: [],
   booking_requests: [],
   contact_messages: [],
+  request_email_verifications: [],
   import_batches: [],
   email_log: [],
   saved_creators: [],

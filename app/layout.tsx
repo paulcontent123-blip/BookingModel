@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { config } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: {
@@ -19,6 +20,10 @@ export const metadata: Metadata = {
     shortcut: '/logo-booking-model.png',
     apple: '/logo-booking-model.png',
   },
+  // Google Search Console ownership: <meta name="google-site-verification" />
+  ...(config.analytics.gscEnabled
+    ? { verification: { google: config.analytics.gscVerification } }
+    : {}),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

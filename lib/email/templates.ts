@@ -438,6 +438,26 @@ export function brandVerificationEmail(
   };
 }
 
+export function requestEmailVerificationEmail(
+  email: string,
+  code: string,
+  requestLabel: string,
+): Message {
+  return {
+    to: email,
+    template: 'request_email_verification',
+    subject: 'Confirm your email for BookingModel',
+    html: shell({
+      preheader: `Your BookingModel confirmation code is ${code}.`,
+      heading: 'Confirm your email',
+      body: `<p>Use the verification code below to confirm the email address for your ${esc(requestLabel)}.</p>
+      <p style="margin:20px 0;text-align:center;font-size:30px;line-height:1;letter-spacing:8px;font-weight:800;color:#0057FF;">${esc(code)}</p>
+      <p>Your request will be saved only after this email is confirmed. This code expires in 10 minutes.</p>
+      <p>If you did not submit this request, you can safely ignore this email.</p>`,
+    }),
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Plan upgrades
 // ---------------------------------------------------------------------------

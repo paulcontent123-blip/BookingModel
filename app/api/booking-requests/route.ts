@@ -1,24 +1,9 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
 import { resolveGeo } from '@/lib/guard';
-import { createBookingRequest } from '@/lib/services/booking';
+import { bookingRequestSchema } from '@/lib/services/public-request-schemas';
+import { startRequestEmailVerification } from '@/lib/services/request-email-verification';
 
 export const runtime = 'nodejs';
-
-const schema = z.object({
-  creatorId: z.string().nullish(),
-  campaignId: z.string().nullish(),
-  fullName: z.string().min(1).max(160),
-  email: z.string().email(),
-  phone: z.string().max(60).nullish(),
-  company: z.string().max(160).nullish(),
-  website: z.string().max(300).nullish(),
-  preferredContact: z.string().max(40).nullish(),
-  budget: z.string().max(80).nullish(),
-  contentType: z.string().max(120).nullish(),
-  quantity: z.coerce.number().int().min(1).max(500).nullish(),
-  message: z.string().max(4000).nullish(),
-});
 
 /**
  * POST /api/booking-requests — requirement #2.
@@ -35,38 +20,36 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid JSON body.' }, { status: 400 });
   }
 
-  const parsed = schema.safeParse(body);
+  const parsed = bookingRequestSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
-      { error: 'Please fill in your name and a valid email.', issues: parsed.error.flatten().fieldErrors },
+      { error: 'Please fill in your name and enter a real email address you can access.', issues: parsed.error.flatten().fieldErrors },
       { status: 400 },
     );
   }
 
   const geo = await resolveGeo();
   const input = parsed.data;
-
-  const result = await createBookingRequest({
-    creatorId: input.creatorId ?? null,
-    campaignId: input.campaignId ?? null,
-    fullName: input.fullName,
-    email: input.email,
-    phone: input.phone ?? null,
-    company: input.company ?? null,
-    website: input.website ?? null,
-    preferredContact: input.preferredContact ?? 'email',
-    budget: input.budget ?? null,
-    contentType: input.contentType ?? null,
-    quantity: input.quantity ?? null,
-    message: input.message ?? null,
+  const verification = await startRequestEmailVerification('booking_request', input.email, {
+    ...input,
     country: geo.country,
     regionBlocked: !geo.canTransact,
   });
-
-  if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
+  if (!verification.ok) {
+    return NextResponse.json(
+      { error: verification.error },
+      { status: verification.retryAfterSeconds ? 429 : verification.invalidEmail ? 400 : 502 },
+    );
+  }
 
   return NextResponse.json(
-    { ok: true, request_ref: result.request.request_ref },
-    { status: 201 },
+    {
+      ok: true,
+      verificationRequired: true,
+      verificationId: verification.verificationId,
+      email: verification.email,
+      message: 'We sent a 6-digit verification code to your email. Your request will be saved after you confirm it.',
+    },
+    { status: 202 },
   );
 }

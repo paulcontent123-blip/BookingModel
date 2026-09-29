@@ -131,6 +131,19 @@ export const config = {
     },
   },
 
+  analytics: {
+    // GA4 Measurement ID, e.g. G-ABC123XYZ9. Empty/invalid => no tracking.
+    gaMeasurementId: env('NEXT_PUBLIC_GA_MEASUREMENT_ID'),
+    // Google Search Console "HTML tag" verification token (the content="..." value only).
+    gscVerification: env('GOOGLE_SITE_VERIFICATION'),
+    get gaEnabled(): boolean {
+      return /^G-[A-Z0-9]+$/i.test(env('NEXT_PUBLIC_GA_MEASUREMENT_ID'));
+    },
+    get gscEnabled(): boolean {
+      return isConfigured(env('GOOGLE_SITE_VERIFICATION'));
+    },
+  },
+
   seed: {
     adminEmail: env('SEED_ADMIN_EMAIL', 'admin@bookingmodel.com'),
     adminPassword: env('SEED_ADMIN_PASSWORD', 'Admin@BM2026'),
@@ -175,6 +188,20 @@ export function integrationStatus() {
         : 'Platform headers only (Vercel / Cloudflare)',
       ok: true,
       hint: 'IPINFO_TOKEN (optional)',
+    },
+    {
+      key: 'Google Analytics',
+      value: config.analytics.gaEnabled
+        ? `GA4 (${config.analytics.gaMeasurementId})`
+        : 'Not configured',
+      ok: config.analytics.gaEnabled,
+      hint: 'NEXT_PUBLIC_GA_MEASUREMENT_ID',
+    },
+    {
+      key: 'Search Console',
+      value: config.analytics.gscEnabled ? 'Verification meta tag set' : 'Not configured',
+      ok: config.analytics.gscEnabled,
+      hint: 'GOOGLE_SITE_VERIFICATION',
     },
   ];
 }

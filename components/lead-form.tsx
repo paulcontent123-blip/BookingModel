@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
+import { RequestEmailVerification } from './request-email-verification';
 
 export interface FieldDef {
   name: string;
@@ -40,6 +41,7 @@ export function LeadForm({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [verification, setVerification] = useState<{ id: string; email: string } | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -60,6 +62,10 @@ export function LeadForm({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error ?? 'Could not submit the form.');
+      if (data.verificationRequired && data.verificationId && data.email) {
+        setVerification({ id: data.verificationId, email: data.email });
+        return;
+      }
       setDone(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
@@ -74,10 +80,28 @@ export function LeadForm({
       <div className="form-box">
         <div className="form-title">{successTitle}</div>
         <div className="alert alert-ok">{successBody}</div>
-        <button className="submit-btn" onClick={() => setDone(false)}>
+        <button className="submit-btn" onClick={() => { setDone(false); setVerification(null); }}>
           Submit another
         </button>
       </div>
+    );
+  }
+
+  if (verification) {
+    return (
+      <RequestEmailVerification
+        email={verification.email}
+        verificationId={verification.id}
+        onVerified={() => {
+          setVerification(null);
+          setDone(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onChangeEmail={() => {
+          setVerification(null);
+          setError(null);
+        }}
+      />
     );
   }
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { countryFlag, countryName } from '@/lib/geo';
 import { useGeo } from './geo-provider';
+import { RequestEmailVerification } from './request-email-verification';
 
 /**
  * Requirement #2
@@ -35,11 +36,13 @@ export function RestrictedRegionModal() {
   const { geo, manager, restrictedOpen, closeRestricted, prefill } = useGeo();
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState<{ ref: string } | null>(null);
+  const [verification, setVerification] = useState<{ id: string; email: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (restrictedOpen) {
       setDone(null);
+      setVerification(null);
       setError(null);
     }
   }, [restrictedOpen]);
@@ -73,7 +76,11 @@ export function RestrictedRegionModal() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Could not submit your request.');
-      setDone({ ref: data.request_ref });
+      if (data.verificationRequired && data.verificationId && data.email) {
+        setVerification({ id: data.verificationId, email: data.email });
+      } else {
+        setDone({ ref: data.request_ref });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please email us directly.');
     } finally {
@@ -86,7 +93,7 @@ export function RestrictedRegionModal() {
       <div className="modal-box rr-modal">
         <div className="modal-head">
           <div className="modal-title">
-            {done ? 'Request received' : 'Booking assistance required'}
+            {done ? 'Request received' : verification ? 'Confirm your email' : 'Booking assistance required'}
           </div>
           <button className="modal-close" onClick={closeRestricted} aria-label="Close">✕</button>
         </div>
@@ -104,6 +111,20 @@ export function RestrictedRegionModal() {
             </>
           ) : (
             <>
+              {verification ? (
+                <RequestEmailVerification
+                  email={verification.email}
+                  verificationId={verification.id}
+                  onVerified={(result) => {
+                    setVerification(null);
+                    setDone({ ref: result.request_ref ?? 'received' });
+                  }}
+                  onChangeEmail={() => {
+                    setVerification(null);
+                    setError(null);
+                  }}
+                />
+              ) : <>
               <div className="rr-alert">
                 <strong>
                   {countryFlag(geo.country)} Online checkout is not available in{' '}
@@ -215,6 +236,7 @@ export function RestrictedRegionModal() {
                   We reply within one business day. No payment is taken on this form.
                 </p>
               </form>
+              </>}
             </>
           )}
         </div>
